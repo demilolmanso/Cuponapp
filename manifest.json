@@ -1,0 +1,22 @@
+{
+  "short_name": "Cuponapp",
+  "name": "Cuponapp MDP",
+  "description": "Tu plataforma local de beneficios y comisiones",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='120' fill='%234CB5F9'/><text x='50%' y='58%' dominant-baseline='middle' text-anchor='middle' font-size='300'>🌊</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='120' fill='%234CB5F9'/><text x='50%' y='58%' dominant-baseline='middle' text-anchor='middle' font-size='300'>🌊</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#F4EBD0",
+  "theme_color": "#4CB5F9",
+  "display": "standalone",
+  "orientation": "portrait"
+}
