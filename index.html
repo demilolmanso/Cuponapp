@@ -1,942 +1,689 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cuponapp Mdp</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#4CB5F9">
-  
-  <!-- Fuente Lexend -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Firebase & QR Libraries -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-  <style>
-    :root { 
-      --sand: #F4EBD0; 
-      --sea-blue: #4CB5F9; 
-      --sky-light: #90E0EF;
-      --sun-orange: #FF9F1C;
-      --white: #FFFFFF;
-      --navy: #03045E; 
-      --alert-red: #EF476F; 
-      --success-green: #06D6A0; 
-      --wsp: #25D366;
-      --border-width: 3px;
-      --shadow-offset: 4px;
-    }
-
-    * { box-sizing: border-box; }
-
-    body { 
-      font-family: 'Lexend', system-ui, sans-serif; 
-      background: var(--sand); 
-      background-image: radial-gradient(var(--sky-light) 2px, transparent 2px);
-      background-size: 30px 30px;
-      color: var(--navy); 
-      margin: 0; 
-      padding: 15px 10px; 
-      display: flex; 
-      justify-content: center; 
-    }
-
-    .container { 
-      width: 100%; 
-      max-width: 430px; 
-      background: var(--sand); 
-      padding: 0;
-      border-radius: 24px; 
-      overflow: hidden;
-      border: var(--border-width) solid var(--navy);
-      box-shadow: 8px 8px 0px var(--navy);
-    }
-
-    .neo-header {
-      background: var(--sea-blue);
-      padding: 25px 20px 20px;
-      text-align: center;
-      border-bottom: var(--border-width) solid var(--navy);
-      border-top-left-radius: 21px;
-      border-top-right-radius: 21px;
-    }
-
-    h1 { margin: 0; font-size: 32px; font-weight: 800; color: var(--white); text-transform: uppercase; letter-spacing: -1px; text-shadow: 3px 3px 0px var(--navy); }
-    h2, h3, h4, h5 { color: var(--navy); margin-top: 0; }
-
-    .neo-card { 
-      background: var(--white); padding: 16px; border-radius: 16px; border: var(--border-width) solid var(--navy); margin-bottom: 15px; box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--navy); position: relative; word-wrap: break-word; overflow: hidden;
-    }
-
-    .neo-banner { background: var(--sky-light); padding: 15px; border-radius: 16px; border: var(--border-width) solid var(--navy); margin-bottom: 15px; text-align: center; }
-    .neo-banner.alert { background: var(--alert-red); color: white; }
-    .neo-banner.success { background: var(--success-green); }
-    .neo-banner.dark { background: var(--navy); color: white; }
-
-    button, .btn-link { 
-      width: 100%; padding: 14px; border: var(--border-width) solid var(--navy); border-radius: 12px; font-family: 'Lexend', sans-serif; font-weight: 700; font-size: 16px; cursor: pointer; background: var(--white); color: var(--navy); margin-top: 10px; transition: all 0.1s ease-in-out; box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--navy); text-align: center; text-decoration: none; display: inline-block; 
-    }
-
-    button:active, .btn-link:active { transform: translate(var(--shadow-offset), var(--shadow-offset)); box-shadow: 0px 0px 0px var(--navy); }
-    button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
-    
-    button.accent { background: var(--sun-orange); color: var(--navy); }
-    button.primary { background: var(--sea-blue); color: var(--navy); }
-    button.secondary { background: var(--sand); }
-    button.danger { background: var(--alert-red); color: white; }
-    .btn-wsp { background: var(--wsp); color: var(--navy); }
-
-    input, select { 
-      width: 100%; padding: 14px; border-radius: 10px; border: var(--border-width) solid var(--navy); background: var(--white); color: var(--navy); font-family: 'Lexend', sans-serif; font-weight: 600; margin-bottom: 12px; font-size: 15px; box-shadow: 2px 2px 0px var(--navy); transition: all 0.2s;
-    }
-    input:focus, select:focus { outline: none; box-shadow: 4px 4px 0px var(--navy); background: #FAFAFA; }
-
-    .hidden { display: none; }
-    #qrcode img { margin: 15px auto; border: var(--border-width) solid var(--navy); border-radius: 12px; padding: 10px; background: white; }
-    
-    .timer { font-size: 32px; font-weight: 800; color: var(--alert-red); margin: 10px 0; text-align: center; text-shadow: 2px 2px 0px var(--navy); letter-spacing: 2px; font-variant-numeric: tabular-nums; }
-    
-    .badge { background: var(--sun-orange); color: var(--navy); padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 800; border: 2px solid var(--navy); }
-    .badge.dark { background: var(--navy); color: var(--white); }
-    
-    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: var(--white); border-bottom: var(--border-width) solid var(--navy); }
-    .instruction-box { font-size: 14px; color: var(--navy); font-weight: 600; background: var(--sky-light); padding: 15px; border-radius: 12px; border: var(--border-width) solid var(--navy); margin-bottom: 15px; }
-    
-    .scroll-container { max-height: 50vh; overflow-y: auto; padding: 5px; margin-top: 10px; }
-    .scroll-container::-webkit-scrollbar { width: 8px; }
-    .scroll-container::-webkit-scrollbar-track { background: var(--sand); border-left: 2px solid var(--navy); }
-    .scroll-container::-webkit-scrollbar-thumb { background: var(--sea-blue); border: 2px solid var(--navy); border-radius: 10px; }
-    
-    .sticky-header { position: sticky; top: 0; background: var(--sea-blue); color: var(--white); padding: 10px 15px; font-weight: 800; border: var(--border-width) solid var(--navy); z-index: 10; font-size: 16px; border-radius: 10px; margin: 15px 0 10px 0; text-shadow: 1px 1px 0px var(--navy); }
-    .view-padding { padding: 15px; }
-
-    #qr-backdrop { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(3,4,94,0.7); backdrop-filter: blur(4px); z-index: 99; }
-    .ticket-card { background: var(--white); border: 2px dashed var(--navy); border-radius: 12px; padding: 12px; margin-bottom: 10px; text-align: center; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cuponapp Mdp</title>
+<meta name="theme-color" content="#0ea5e9">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌊</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',system-ui,sans-serif;background:linear-gradient(165deg,#075985,#0ea5e9 45%,#7dd3fc) fixed;min-height:100vh;color:#0f172a;padding-bottom:95px}
+#topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);box-shadow:0 2px 12px rgba(2,60,105,.18)}
+.logo{font-weight:900;font-size:1.05rem;color:#0369a1}
+.logo small{display:block;font-size:.58rem;letter-spacing:2.5px;color:#f59e0b;font-weight:800}
+.chipuser{background:#e0f2fe;color:#0369a1;border-radius:999px;padding:6px 12px;font-weight:800;font-size:.8rem}
+.miniout{border:none;background:#fee2e2;color:#b91c1c;border-radius:999px;padding:6px 12px;font-family:inherit;font-weight:800;cursor:pointer;margin-left:6px;font-size:.8rem}
+main{max-width:640px;margin:0 auto;padding:16px 14px}
+.view{display:none}
+.view.active{display:block;animation:pop .28s ease}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{background:#fff;border-radius:18px;padding:18px;box-shadow:0 8px 24px rgba(3,58,102,.18);margin-bottom:14px}
+.center{text-align:center}
+.hero{text-align:center;color:#fff;padding:26px 10px 16px}
+.hero-logo{font-size:3.2rem;filter:drop-shadow(0 4px 8px rgba(0,40,80,.3))}
+.hero h1{font-size:2.3rem;font-weight:900;text-shadow:0 2px 8px rgba(0,40,80,.35)}
+.hero-city{letter-spacing:4px;font-weight:800;color:#fde68a;font-size:.8rem}
+.muted{color:#64748b;font-size:.9rem}
+.small{font-size:.78rem;color:#64748b;margin-top:4px}
+.hint{font-size:.72rem;color:#94a3b8;margin-top:12px}
+.danger{color:#dc2626}
+.big{font-size:3rem}
+.money{font-size:2.4rem;font-weight:900;color:#16a34a;margin:4px 0}
+.money.danger{color:#dc2626}
+.money.pts{color:#d97706}
+.gain{font-size:.85rem;color:#15803d;background:#f0fdf4;border-radius:10px;padding:6px 10px;margin:6px 0}
+.prize-box{background:#fffbeb;border:2px dashed #f59e0b;border-radius:12px;padding:10px;margin-top:12px;font-size:.85rem;font-weight:700;color:#92400e}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:14px;padding:13px 18px;font-weight:800;font-family:inherit;font-size:.95rem;cursor:pointer;transition:.15s;width:100%;text-decoration:none;margin-top:8px}
+.btn:active{transform:scale(.97)}
+.btn-google{background:#fff;color:#1f2937;box-shadow:0 3px 10px rgba(0,0,0,.18)}
+.btn-primary{background:linear-gradient(135deg,#f97316,#fb7185);color:#fff;box-shadow:0 6px 16px rgba(249,115,22,.4)}
+.btn-sky{background:linear-gradient(135deg,#0ea5e9,#22d3ee);color:#fff;box-shadow:0 6px 16px rgba(14,165,233,.35)}
+.btn-ghost{background:#f1f5f9;color:#334155}
+.btn-danger{background:#fee2e2;color:#b91c1c}
+.btn-ok{background:linear-gradient(135deg,#16a34a,#4ade80);color:#fff}
+.glogo{width:22px;height:22px;border-radius:50%;background:conic-gradient(#ea4335 0 25%,#fbbc05 0 50%,#34a853 0 75%,#4285f4 0);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:900;font-size:.75rem;flex:none}
+.role-btn{display:block;width:100%;background:#f8fafc;border:2px solid #e2e8f0;border-radius:16px;padding:16px;font-family:inherit;font-size:1rem;cursor:pointer;text-align:left;margin-bottom:10px;transition:.15s}
+.role-btn:hover,.role-btn:active{border-color:#38bdf8;background:#f0f9ff}
+.role-btn small{display:block;color:#64748b;font-size:.75rem;font-weight:700;margin-top:2px}
+.role-btn.new{border-color:#bbf7d0;background:#f0fdf4}
+input,select,textarea{width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:12px;font-family:inherit;font-size:.95rem;margin-bottom:10px;background:#fff}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#38bdf8}
+.lbl{font-size:.78rem;font-weight:800;color:#475569;display:block;margin-bottom:4px}
+.bigcode{letter-spacing:12px;text-align:center;font-size:1.6rem;font-weight:900}
+.rule{background:#fffbeb;border:2px dashed #f59e0b;font-size:.88rem;font-weight:700;color:#92400e}
+.info{margin-top:10px;text-align:left;font-size:.85rem}
+.info summary{font-weight:800;cursor:pointer;color:#0369a1}
+.info p{margin-top:6px;color:#475569}
+.promo{border:2px solid #f1f5f9;border-radius:14px;padding:12px;margin:10px 0;background:#fff}
+.promo.pausada{opacity:.55}
+.promo-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.68rem;font-weight:800;white-space:nowrap}
+.b-publica{background:#dcfce7;color:#15803d}
+.b-prom{background:#e0f2fe;color:#0369a1}
+.b-used{background:#f1f5f9;color:#64748b}
+.b-exp{background:#fee2e2;color:#b91c1c}
+.b-active{background:#fef9c3;color:#a16207}
+.row{display:flex;gap:8px}.row .btn{flex:1}
+.cup{background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:.85rem;display:flex;gap:8px;align-items:center;flex-wrap:wrap;cursor:pointer}
+.tabs{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;padding-bottom:6px}
+.tab{white-space:nowrap;border:none;background:rgba(255,255,255,.7);border-radius:999px;padding:10px 14px;font-family:inherit;font-weight:800;cursor:pointer;color:#334155;font-size:.85rem}
+.tab.active{background:#fff;color:#0369a1;box-shadow:0 4px 12px rgba(0,0,0,.18)}
+.tabpane{display:none}.tabpane.active{display:block;animation:pop .25s ease}
+.pill{background:#fb7185;color:#fff;border-radius:999px;font-size:.68rem;padding:2px 7px;margin-left:6px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+.stat{background:#f0f9ff;border-radius:12px;padding:9px;text-align:center}
+.stat small{display:block;font-size:.62rem;font-weight:800;color:#64748b}
+.stat b{color:#0369a1;font-size:1rem}
+.mod-box{background:#f8fafc;border-radius:14px;padding:12px;margin:6px 0 10px}
+.mod-box label{display:block;font-size:.83rem;font-weight:700;margin:8px 0;cursor:pointer}
+.modal{position:fixed;inset:0;background:rgba(3,40,70,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+.modal.open{display:flex}
+.modal-box{background:#fff;border-radius:20px;padding:22px;width:100%;max-width:420px;max-height:90vh;overflow:auto;animation:pop .2s;text-align:center}
+canvas.qr{display:block;margin:12px auto;border-radius:14px;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+.spinner{width:38px;height:38px;border:4px solid #e2e8f0;border-top-color:#0ea5e9;border-radius:50%;margin:16px auto;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.bigcode2{font-size:2.2rem;font-weight:900;letter-spacing:.35em;color:#0f172a;margin:6px 0}
+#cupTimer{font-size:1.3rem;font-weight:900;color:#dc2626}
+.inst{text-align:left;background:#f8fafc;border-radius:12px;padding:10px 12px;font-size:.85rem;margin-bottom:8px}
+#fabInstall{position:fixed;right:14px;bottom:14px;z-index:90;background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;border:none;border-radius:999px;padding:13px 18px;font-weight:900;font-family:inherit;font-size:.9rem;box-shadow:0 8px 22px rgba(245,158,11,.55);cursor:pointer}
+#fabInstall.ready{background:linear-gradient(135deg,#16a34a,#4ade80)}
+#toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);background:#0f172a;color:#fff;padding:11px 18px;border-radius:12px;font-weight:700;font-size:.85rem;opacity:0;pointer-events:none;transition:.3s;z-index:200;max-width:92%;text-align:center}
+#toast.show{opacity:1}
+</style>
 </head>
 <body>
 
-<div class="container">
-  
-  <div class="neo-header">
-    <h1>🌊 Cuponapp</h1>
-    <span class="badge" style="margin-top: 10px; display: inline-block;">MAR DEL PLATA</span>
+<header id="topbar">
+  <div class="logo">🌊 Cuponapp<small>MAR DEL PLATA</small></div>
+  <div><span id="sessChip"></span></div>
+</header>
+
+<main>
+
+<!-- ══════════ LOGIN ══════════ -->
+<section id="v-login" class="view">
+  <div class="hero">
+    <div class="hero-logo">🌊</div>
+    <h1>Cuponapp</h1>
+    <div class="hero-city">MAR DEL PLATA</div>
+  </div>
+  <div class="card center">
+    <h2>¡Bienvenido a la Costa! ☀️</h2>
+    <p class="muted" style="margin:8px 0 14px">Ingresá con tu cuenta para acceder a promociones exclusivas o empezar a trabajar con nosotros.</p>
+    <button class="btn btn-google" onclick="openModal('m-google')"><span class="glogo">G</span> Ingresar con Google 🚀</button>
+    <button class="btn btn-sky" onclick="instalar()">📲 Instalar la App</button>
+    <p class="hint">Demo: usá <b>admin@cuponapp.com</b> para entrar al 👑 Panel Admin</p>
+  </div>
+</section>
+
+<!-- ══════════ ELECCIÓN DE ROL ══════════ -->
+<section id="v-role" class="view">
+  <div class="card">
+    <h2 style="text-align:center;margin-bottom:14px">¿Cómo vas a usar la app?</h2>
+    <button class="role-btn" onclick="chooseRole('promotor')">💼 <b>Quiero Trabajar (Promotor)</b><small>Ofrecé promos y ganá comisiones directo a tu cuenta</small></button>
+    <button class="role-btn" onclick="toggleComercioForm()">🏪 <b>Soy un Comercio</b><small>Publicá promos y sumá clientes a tu local</small></button>
+    <div id="comercioForm" style="display:none">
+      <label class="lbl">Nombre del local</label><input id="regNombre" placeholder="Ej: Heladería Costanera">
+      <label class="lbl">Rubro</label><input id="regRubro" placeholder="Ej: Gastronomía">
+      <button class="btn btn-primary" onclick="registrarComercio()">Registrar local 🏪</button>
+    </div>
+    <button class="role-btn new" onclick="chooseRole('cliente')">🛍️ <b>Soy Cliente / Turista (Ver Promos y Puntos)</b><small>Ver y reclamar cupones públicos gratis, directo en la app</small></button>
+  </div>
+</section>
+
+<!-- ══════════ COMERCIO: CUENTA EN REVISIÓN ══════════ -->
+<section id="v-pending" class="view">
+  <div class="card center">
+    <div class="big">⏳</div>
+    <h2>Cuenta en Revisión</h2>
+    <p class="muted" style="margin:8px 0">Tu local está pendiente de autorización por el administrador.</p>
+    <p class="small">Local: <b id="pendNombre"></b></p>
+    <a class="btn btn-ok" target="_blank" href="https://wa.me/5492236960547?text=Hola!%20Registré%20mi%20local%20y%20espero%20autorización">💬 Contactar por WhatsApp</a>
+    <button class="btn btn-ghost" onclick="logout()">Salir</button>
+  </div>
+</section>
+
+<!-- ══════════ COMERCIO: BLOQUEADO ══════════ -->
+<section id="v-blocked" class="view">
+  <div class="card center">
+    <div class="big">🚫</div>
+    <h2>Local Bloqueado</h2>
+    <p class="muted" style="margin:8px 0">Tu cuenta se encuentra suspendida por saldo o regularización pendiente.</p>
+    <p class="small">Deuda actual: <b class="danger" id="blockDeuda">$0</b></p>
+    <a class="btn btn-danger" target="_blank" href="https://wa.me/5492236960547?text=Hola!%20Quiero%20regularizar%20mi%20deuda%20para%20desbloquear%20mi%20local">💬 Regularizar vía WhatsApp</a>
+    <button class="btn btn-ghost" onclick="logout()">Salir</button>
+  </div>
+</section>
+
+<!-- ══════════ PANEL ADMIN ══════════ -->
+<section id="v-admin" class="view">
+  <div class="card"><h2>👑 Panel Admin</h2>
+    <div class="stats" id="adminStats"></div>
+  </div>
+  <div class="tabs" id="adminTabs">
+    <button class="tab" data-t="t-premio">🏆 Configurar Premio (Top 1 Clientes)</button>
+    <button class="tab" data-t="t-rank">🏅 Ranking Clientes</button>
+    <button class="tab active" data-t="t-aut">🏪 Autorizar Comercios<span class="pill" id="pendPill"></span></button>
+    <button class="tab" data-t="t-new">🎟️ Crear Nueva Promo</button>
+    <button class="tab" data-t="t-pr">📋 Promos Activas</button>
+    <button class="tab" data-t="t-prom">💼 Promotores</button>
+    <button class="tab" data-t="t-com">💰 Comercios</button>
   </div>
 
-  <!-- LOGIN -->
-  <div id="view-login" class="view-padding">
-    <div class="neo-banner">
-      <h2>¡Bienvenido a la Costa! ☀️</h2>
-      <p style="font-size: 14px; font-weight: 600;">Ingresá con tu cuenta para acceder a promociones exclusivas o empezar a trabajar con nosotros.</p>
-    </div>
-    <button onclick="loginGoogle()" class="accent" style="font-size: 18px;">Ingresar con Google 🚀</button>
-  </div>
-
-  <!-- SELECCIÓN DE ROL -->
-  <div id="view-role" class="hidden view-padding">
-    <div class="neo-card" style="text-align:center;">
-      <h3>¿Cómo vas a usar la app?</h3>
-      <button onclick="setRole('promotor')" class="accent">💼 Quiero Trabajar (Promotor)</button>
-      <button onclick="setRole('comercio')" class="primary">🏪 Soy un Comercio</button>
-      <button onclick="setRole('cliente')" class="btn-wsp">🛍️ Soy Cliente (Ver Promos y Puntos)</button>
-    </div>
-  </div>
-
-  <!-- PANTALLAS DE ESTADO -->
-  <div id="view-espera" class="hidden view-padding" style="text-align:center;">
-    <div class="neo-banner dark">
-      <h3 style="color: white;">⏳ Cuenta en Revisión</h3>
-      <p>Tu local está pendiente de autorización por el administrador.</p>
-      <button onclick="logout()" class="secondary">Salir</button>
-    </div>
-  </div>
-
-  <div id="view-bloqueado" class="hidden view-padding" style="text-align:center;">
-    <div class="neo-banner alert">
-      <h3 style="color: white;">🚫 Local Bloqueado</h3>
-      <p>Tu cuenta se encuentra suspendida por saldo o regularización pendiente.</p>
-      <button onclick="logout()" class="secondary">Salir</button>
-    </div>
-  </div>
-
-  <!-- PANTALLA ADMIN -->
-  <div id="view-admin" class="hidden">
-    <div class="nav-bar">
-      <span class="badge dark" id="admin-email"></span>
-      <button onclick="logout()" class="secondary" style="width:auto; padding:8px 15px; margin:0; box-shadow: 2px 2px 0 var(--navy);">Salir</button>
-    </div>
-
-    <div class="view-padding">
-      <div class="neo-banner dark" style="margin-bottom: 20px;">
-        <h3 style="margin:0; color:var(--white);">👑 Panel Admin</h3>
-      </div>
-      
-      <div class="neo-card">
-        <h4>🏆 Configurar Premio (Top 1 Clientes)</h4>
-        <input type="text" id="admin-premio-texto" placeholder="Ej: Cena gratis para 2 personas">
-        <button onclick="guardarPremioAdmin()" class="accent">Guardar Premio Actual</button>
-        <h5 style="margin-top:20px;">Ranking Clientes</h5>
-        <div id="admin-ranking-list" class="scroll-container"></div>
-      </div>
-
-      <div class="neo-card">
-        <h4>🏪 Autorizar Comercios</h4>
-        <div id="admin-pendientes-list"></div>
-      </div>
-
-      <div class="neo-card">
-        <h4>🎟️ Crear Nueva Promo</h4>
-        <select id="admin-select-comercio"><option value="">Seleccionar comercio...</option></select>
-        <input type="text" id="admin-promo-titulo" placeholder="Título (ej: 2x1 en Pintas)">
-        
-        <select id="admin-promo-tipo" style="margin-bottom: 12px;" onchange="togglePuntosInput()">
-          <option value="promotor">👥 Vía Promotores (Escaneo QR)</option>
-          <option value="publica">🌐 Pública (Visible para Clientes)</option>
-        </select>
-
-        <input type="number" id="admin-promo-comision" placeholder="Comisión para Promotor / App ($)">
-        <input type="number" id="admin-promo-precio" placeholder="Cobro al Comercio ($)">
-        <input type="number" id="admin-promo-puntos" placeholder="Puntos para el Cliente (Ej: 10)" class="hidden">
-        <input type="number" id="admin-promo-limite" placeholder="Límite de Cupones (0 = Sin límite)">
-        
-        <button onclick="crearPromoAdmin()" class="accent">Publicar Promo ✨</button>
-      </div>
-
-      <div class="neo-card">
-        <h4>📋 Promos Activas</h4>
-        <div id="admin-promos-list" class="scroll-container"></div>
-      </div>
-
-      <div class="neo-card">
-        <h4>💼 Promotores</h4>
-        <div id="admin-promotores-list" class="scroll-container"></div>
-      </div>
-
-      <div class="neo-card">
-        <h4>💰 Comercios</h4>
-        <div id="admin-deudas-list" class="scroll-container"></div>
-      </div>
+  <div id="t-premio" class="tabpane">
+    <div class="card">
+      <h3>🏆 Configurar Premio (Top 1 Clientes)</h3>
+      <p class="muted" style="margin:8px 0">El cliente con más puntos al cierre del finde se lleva este premio. Los puntos se suman automáticamente cada vez que un comercio valida su cupón (<b>+100 pts por canje</b> ⭐).</p>
+      <label class="lbl">Premio Top 1 del Finde</label>
+      <input id="premioInput" placeholder="Ej: 2 pizzas de regalo en Costanera 🍕">
+      <button class="btn btn-primary" onclick="guardarPremio()">Guardar Premio Actual</button>
+      <button class="btn btn-ghost" onclick="resetPuntos()">🔄 Reiniciar puntos (nuevo finde)</button>
     </div>
   </div>
 
-  <!-- PANTALLA PROMOTOR -->
-  <div id="view-promotor" class="hidden">
-    <div class="nav-bar">
-      <span class="badge dark" id="user-email"></span>
-      <button onclick="logout()" class="secondary" style="width:auto; padding:8px 15px; margin:0; box-shadow: 2px 2px 0 var(--navy);">Salir</button>
-    </div>
+  <div id="t-rank" class="tabpane">
+    <div class="card"><h3>🏅 Ranking Clientes</h3><div id="rankList" style="margin-top:10px"></div></div>
+  </div>
 
-    <div class="view-padding">
-      <div class="instruction-box">
-        💡 <strong>Reglas del Juego:</strong> Elegí una promo, generá el QR, mostralo y ganá comisiones directo a tu cuenta.
-      </div>
-      <div class="neo-card" style="text-align:center; background: var(--sun-orange);">
-        <small style="font-weight: 700;">Tu Saldo Acumulado</small>
-        <h2 style="font-size:42px; margin:5px 0; font-weight: 800;" id="promotor-saldo">$0</h2>
-      </div>
-      <div class="neo-card">
-        <h4>💳 Datos de Cobro</h4>
-        <input type="text" id="promotor-input-nombre" placeholder="Nombre Completo">
-        <input type="text" id="promotor-input-alias" placeholder="Alias MP / CBU">
-        <input type="text" id="promotor-input-telefono" placeholder="Teléfono">
-        <button onclick="guardarPerfilPromotor()" class="primary">Guardar Datos 💾</button>
-      </div>
-      <h3 style="margin-top: 20px;">🔥 Promociones para Ofrecer</h3>
-      <div id="promotor-unified-list" class="scroll-container"></div>
-    </div>
+  <div id="t-aut" class="tabpane active"><div class="card"><div id="pendList"></div></div></div>
 
-    <!-- MODAL QR -->
-    <div id="qr-backdrop" class="hidden" onclick="closeQR()"></div>
-    <div id="qr-modal" class="neo-card hidden" style="text-align:center; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 350px; z-index: 100; border-width: 4px; box-shadow: 10px 10px 0px rgba(3,4,94,0.8); margin: 0;">
-      <h3>¡Mostrá este QR! 🎯</h3>
-      <div id="qrcode"></div>
-      <p style="font-size:14px; font-weight: 600; color: var(--navy); margin-top: 15px;">Válido para 1 solo escaneo.</p>
-      <button onclick="closeQR()" class="danger">Cerrar</button>
+  <div id="t-new" class="tabpane">
+    <div class="card">
+      <h3>🎟️ Crear Nueva Promo</h3><br>
+      <label class="lbl">Comercio</label>
+      <select id="npComercio"><option value="">Seleccionar comercio...</option></select>
+      <label class="lbl">Título</label><input id="npTitulo" placeholder="Ej: 2x1 en pizzas">
+      <label class="lbl">Descripción</label><textarea id="npDesc" rows="2" placeholder="Detalles de la promo..."></textarea>
+      <label class="lbl">Descuento</label><input id="npDescuento" placeholder="Ej: 20% OFF / 2x1">
+      <label class="lbl">Comisión total que paga el comercio por cupón ($)</label>
+      <input id="npComision" type="number" min="0" placeholder="Ej: 1500">
+      <div class="mod-box">
+        <b style="font-size:.85rem">¿Cómo se distribuye esta promo?</b>
+        <label><input type="radio" name="npMod" value="promotor" checked> 👥 <b>Vía Promotores (Escaneo QR)</b> — la ofrecen en la calle y ganan su comisión</label>
+        <label><input type="radio" name="npMod" value="publica"> 🌐 <b>Pública (Visible para Clientes)</b> — aparece directo en la app para clientes. <b style="color:#15803d">La comisión queda 100% para la app</b> 💰</label>
+        <div id="npPromotorBox">
+          <label class="lbl">Comisión del promotor por cupón ($)</label>
+          <input id="npComisionPromotor" type="number" min="0" placeholder="Ej: 700">
+          <p class="small">Ganancia de la app por cupón: <b id="npAppCut">—</b></p>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="crearPromo()">Publicar Promo ✨</button>
     </div>
   </div>
 
-  <!-- PANTALLA DASHBOARD CLIENTE (NUEVO) -->
-  <div id="view-cliente-dash" class="hidden">
-    <div class="nav-bar">
-      <span class="badge dark" id="dash-cliente-email"></span>
-      <button onclick="logout()" class="secondary" style="width:auto; padding:8px 15px; margin:0; box-shadow: 2px 2px 0 var(--navy);">Salir</button>
-    </div>
-    <div class="view-padding">
-      <div class="neo-card" style="background: var(--sun-orange); text-align:center; border-width: 4px;">
-        <small style="font-weight: 700; font-size: 14px;">Mis Puntos Acumulados</small>
-        <h2 style="font-size:48px; margin:5px 0; font-weight: 900; letter-spacing: -2px;" id="dash-cliente-puntos">0</h2>
-      </div>
-      
-      <div class="neo-banner" style="background: var(--sky-light);">
-        <p style="margin:0 0 5px 0; font-weight: 800; font-size: 14px;">🏆 Premio Top 1 del Finde:</p>
-        <p id="dash-cliente-premio" style="margin:0; font-size:18px; font-weight:bold; color:var(--alert-red);">Cargando premio...</p>
-      </div>
+  <div id="t-pr" class="tabpane"><div id="promosList"></div></div>
+  <div id="t-prom" class="tabpane"><div id="promList"></div></div>
+  <div id="t-com" class="tabpane"><div id="comList"></div></div>
 
-      <div class="instruction-box" style="background: var(--white);">
-        🛍️ <strong>¿Cómo funciona?</strong> Reclamá cupones públicos, mostrá el código de 6 dígitos en la caja del local, y una vez que lo validen, ¡sumarás puntos automáticamente!
-      </div>
+  <button class="btn btn-ghost" onclick="logout()">Salir</button>
+</section>
 
-      <h3 style="margin-top: 20px;">🌐 Cupones Públicos Disponibles</h3>
-      <div id="dash-cliente-promos" class="scroll-container" style="max-height: 40vh;"></div>
-      
-      <h3 style="margin-top: 20px;">🎟️ Mis Códigos Activos</h3>
-      <div id="dash-cliente-tickets" class="scroll-container" style="max-height: 30vh;"></div>
-    </div>
+<!-- ══════════ PROMOTOR ══════════ -->
+<section id="v-promotor" class="view">
+  <div class="card rule">💡 Reglas del Juego: Elegí una promo, generá el QR, mostralo y ganá comisiones directo a tu cuenta.</div>
+  <div class="card center">
+    <h2>¡Hola <span id="promNombre"></span>! 🌊</h2>
+    <p class="muted" style="margin-top:10px">Tu Saldo Acumulado</p>
+    <div class="money" id="promSaldo">$0</div>
+    <details class="info"><summary>📅 ¿Cuándo y cómo cobro?</summary>
+      <p>Se te paga todos los martes todo lo que generaste de lunes a domingo de la semana anterior (sistema a semana vencida) directo a tu Alias/CBU.</p>
+    </details>
   </div>
-
-  <!-- PANTALLA CLIENTE VÍA QR (EXISTENTE) -->
-  <div id="view-cliente" class="hidden view-padding">
-    <div class="neo-card" style="text-align:center; border-width: 4px;">
-      <span class="badge" style="font-size: 16px;">🎟️ OFERTA DESBLOQUEADA</span>
-      <h2 id="cliente-promo-titulo" style="margin-top:20px; font-size: 28px;">Cargando...</h2>
-      <p id="cliente-promo-desc" style="font-weight: 600; font-size: 16px;"></p>
-      
-      <div class="neo-banner" style="margin-top: 20px;">
-        <p style="margin:0 0 5px 0; font-weight: 700;">El cupón vence en:</p>
-        <div class="timer" id="countdown">--:--:--</div>
-      </div>
-
-      <div id="ticket-area" class="hidden neo-banner success" style="margin-top:20px;">
-        <p style="font-size:15px; font-weight: 700; margin-top: 0;">Presentá este código en caja:</p>
-        <div style="background:var(--white); color:var(--navy); font-size:38px; font-weight:800; padding:15px; border-radius:12px; border:4px solid var(--navy); letter-spacing: 5px;" id="ticket-code">------</div>
-      </div>
-
-      <button id="btn-reclamar" onclick="reclamarCupon()" class="accent" style="margin-top:20px; font-size: 20px;">🎁 Reclamar Ahora</button>
-      <div id="cliente-msg" style="margin-top:15px; font-weight:800; font-size:16px;"></div>
-      <button onclick="window.location.href = window.location.pathname" class="secondary" style="margin-top:15px;">Ir a mi inicio</button>
-    </div>
+  <div class="card">
+    <h3>💳 Datos de Cobro</h3><br>
+    <label class="lbl">Alias</label><input id="promAlias" placeholder="tu.alias.cbu">
+    <label class="lbl">CBU</label><input id="promCbu" placeholder="22 dígitos">
+    <button class="btn btn-sky" onclick="guardarCobro()">Guardar Datos 💾</button>
   </div>
-
-  <!-- PANTALLA COMERCIO -->
-  <div id="view-comercio" class="hidden">
-    <div class="nav-bar">
-      <span class="badge dark" id="comercio-nombre"></span>
-      <button onclick="logout()" class="secondary" style="width:auto; padding:8px 15px; margin:0; box-shadow: 2px 2px 0 var(--navy);">Salir</button>
-    </div>
-
-    <div class="view-padding">
-      <div class="instruction-box">
-        🛒 <strong>Caja:</strong> Ingresá el código de 6 dígitos que presente el turista/cliente para aplicar el descuento y sumar sus puntos.
-      </div>
-
-      <div class="neo-card" style="text-align:center;">
-        <h4>Validar Cupón 🎯</h4>
-        <input type="text" id="input-ticket" placeholder="Ej: 123456" style="text-align:center; font-size:28px; font-weight: 800; letter-spacing:6px; height: 60px;">
-        <button id="btn-validar" onclick="validarTicket()" class="accent" style="font-size: 18px;">Validar Venta</button>
-        <div id="comercio-msg" style="margin-top:15px; text-align:center; font-weight:800;"></div>
-      </div>
-
-      <div class="neo-card" style="text-align:center; background: var(--alert-red); color: white;">
-        <small style="font-weight: 700;">Deuda de Comisiones a Liquidar</small>
-        <h3 style="color:white; font-size:36px; margin:5px 0; font-weight: 800;" id="comercio-deuda">$0</h3>
-      </div>
-      
-      <div class="neo-card">
-        <h4>📍 Perfil del Comercio</h4>
-        <input type="text" id="comercio-input-contacto" placeholder="Nombre Encargado">
-        <input type="text" id="comercio-input-telefono" placeholder="Teléfono de Contacto">
-        <input type="text" id="comercio-input-direccion" placeholder="Dirección / Barrio">
-        <button onclick="guardarPerfilComercio()" class="primary">Actualizar Datos</button>
-      </div>
-    </div>
+  <div class="card">
+    <h3>🔥 Promociones para Ofrecer</h3>
+    <p class="hint">🌐 Las promos públicas van directo a los clientes y no aparecen acá.</p>
+    <div id="promPromos"></div>
   </div>
+  <div class="card"><h3>🎟️ Mis Cupones</h3><div id="promCupones"></div></div>
+  <a class="btn btn-ghost" target="_blank" href="https://wa.me/5492236960547?text=Hola!%20Soy%20promotor%20y%20tengo%20una%20consulta">💬 Soporte vía WhatsApp</a>
+  <button class="btn btn-ghost" onclick="logout()">Salir</button>
+</section>
 
+<!-- ══════════ COMERCIO ══════════ -->
+<section id="v-comercio" class="view">
+  <div class="card center"><h2>🏪 <span id="comNombre"></span></h2></div>
+  <div class="card">
+    <h3>🛒 Caja</h3>
+    <p class="muted" style="margin:8px 0">Ingresá el código de 6 dígitos que presente el turista/cliente para aplicar el descuento y sumar sus puntos.</p>
+    <input id="cajaCode" maxlength="6" inputmode="numeric" placeholder="••••••" class="bigcode">
+    <button class="btn btn-primary" onclick="validarCupon()">Validar Cupón 🎯</button>
+  </div>
+  <div class="card center">
+    <p class="muted">Deuda de Comisiones a Liquidar</p>
+    <div class="money danger" id="comDeuda">$0</div>
+    <details class="info"><summary>📅 ¿Cómo y cuándo abono mi deuda?</summary>
+      <p>Debés pagar todos los lunes el total acumulado de las comisiones adeudadas hasta el domingo anterior para mantener tu local activo y sin bloqueos.</p>
+    </details>
+    <a id="comRegLink" class="btn btn-danger" style="display:none" target="_blank" href="https://wa.me/5492236960547?text=Hola!%20Quiero%20regularizar%20mi%20deuda%20para%20desbloquear%20mi%20local">💬 Regularizar vía WhatsApp</a>
+  </div>
+  <div class="card">
+    <h3>📍 Perfil del Comercio</h3><br>
+    <label class="lbl">Nombre</label><input id="comPNombre">
+    <label class="lbl">Rubro</label><input id="comPRubro">
+    <label class="lbl">Dirección</label><input id="comPDir">
+    <label class="lbl">Teléfono</label><input id="comPTel">
+    <label class="lbl">Alias de pago</label><input id="comPAlias">
+    <button class="btn btn-sky" onclick="actualizarPerfil()">Actualizar Datos</button>
+  </div>
+  <a class="btn btn-ghost" target="_blank" href="https://wa.me/5492236960547?text=Hola!%20Tengo%20una%20consulta%20desde%20mi%20comercio">💬 Soporte WhatsApp</a>
+  <button class="btn btn-ghost" onclick="logout()">Salir</button>
+</section>
+
+<!-- ══════════ CLIENTE (Promos + Puntos) ══════════ -->
+<section id="v-cliente" class="view">
+  <div class="card center"><h2>¡Hola <span id="cliNombre"></span>! ☀️</h2></div>
+  <div class="card rule">🛍️ ¿Cómo funciona? Reclamá cupones públicos, mostrá el código de 6 dígitos en la caja del local, y una vez que lo validen, ¡sumarás puntos automáticamente!</div>
+  <div class="card center">
+    <p class="muted">Mis Puntos Acumulados</p>
+    <div class="money pts" id="cliPuntos">0</div>
+    <p class="small">⭐ Sumás +100 puntos por cada cupón validado en caja</p>
+    <div class="prize-box">🏆 Premio Top 1 del Finde:<br><b id="cliPremio">Cargando premio...</b></div>
+    <p class="small" id="cliPosicion"></p>
+  </div>
+  <div class="card">
+    <h3>🌐 Cupones Públicos Disponibles</h3>
+    <p class="hint">Estos son los cupones públicos oficiales de Cuponapp: reclámalo gratis, mostrá el código en caja y disfrutá el descuento. 🏖️</p>
+    <div id="cliPromos"></div>
+  </div>
+  <div class="card"><h3>🎟️ Mis Códigos Activos</h3><div id="cliCupones"></div></div>
+  <a class="btn btn-ghost" target="_blank" href="https://wa.me/5492236960547?text=Hola!%20Soy%20cliente%20y%20tengo%20una%20consulta">💬 Soporte vía WhatsApp</a>
+  <button class="btn btn-ghost" onclick="logout()">Salir</button>
+</section>
+
+</main>
+
+<button id="fabInstall" onclick="instalar()">📲 Instalar App</button>
+
+<!-- ══════════ MODALES ══════════ -->
+<div class="modal" id="m-google" onclick="if(event.target===this)closeModal('m-google')">
+  <div class="modal-box">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:6px"><span class="glogo" style="width:28px;height:28px">G</span><b>Iniciar sesión con Google</b></div>
+    <p class="muted">para continuar en <b>Cuponapp MDP</b></p><br>
+    <input id="gNombre" placeholder="Tu nombre">
+    <input id="gEmail" type="email" placeholder="tu@email.com">
+    <button class="btn btn-sky" onclick="googleIn()">Continuar 🚀</button>
+    <p class="hint">Demo: simula la cuenta de Google</p>
+  </div>
 </div>
 
+<div class="modal" id="m-qr" onclick="if(event.target===this)cerrarQR()">
+  <div class="modal-box">
+    <h2>¡Mostrá este QR! 🎯</h2>
+    <canvas id="qrCanvas" class="qr" width="220" height="220"></canvas>
+    <p class="muted">Válido para 1 solo escaneo.</p>
+    <p style="font-weight:900;margin:6px 0" id="qrCodigo"></p>
+    <button class="btn btn-primary" onclick="cerrarQR()">Cerrar</button>
+  </div>
+</div>
+
+<div class="modal" id="m-cupon" onclick="if(event.target===this)salirCupon()">
+  <div class="modal-box">
+    <h2 id="cupTitle">🎟️ OFERTA DESBLOQUEADA</h2>
+    <div id="cupLoading"><div class="spinner"></div><p class="muted">Cargando...</p></div>
+    <div id="cupBody" style="display:none">
+      <p class="muted" style="margin-top:8px">El cupón vence en:</p>
+      <div id="cupTimer" data-exp="0">--:--:--</div>
+      <canvas id="cupQr" class="qr" width="170" height="170"></canvas>
+      <p class="muted">Presentá este código en caja:</p>
+      <div class="bigcode2" id="cupCodigo">------</div>
+      <button class="btn btn-primary" onclick="reclamar()">🎁 Reclamar Ahora</button>
+      <button class="btn btn-sky" onclick="irInicio()">Ir a mi inicio</button>
+      <button class="btn btn-ghost" onclick="salirCupon()">Salir</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="m-valid" onclick="if(event.target===this)closeModal('m-valid')">
+  <div class="modal-box">
+    <h2>🛒 Confirmar canje</h2>
+    <div id="validBody" style="margin:12px 0"></div>
+    <button class="btn btn-ok" onclick="confirmarVenta()">Validar Venta ✅</button>
+    <button class="btn btn-ghost" onclick="closeModal('m-valid')">Cancelar</button>
+  </div>
+</div>
+
+<div class="modal" id="m-install" onclick="if(event.target===this)closeModal('m-install')">
+  <div class="modal-box">
+    <h2>📲 Instalar Cuponapp</h2>
+    <p class="muted" style="margin:8px 0">Elegí tu plataforma:</p>
+    <div class="inst">🤖 <b>Android (Chrome):</b> abrí el menú ⋮ → “Instalar aplicación” o “Agregar a pantalla de inicio”.</div>
+    <div class="inst">🍎 <b>iPhone / iPad (Safari):</b> tocá Compartir ⬆️ → “Agregar a inicio”.</div>
+    <div class="inst">💻 <b>Computadora:</b> buscá el ícono de instalar ⊕ en la barra de direcciones.</div>
+    <p class="hint">Si el navegador muestra el cartel de instalación, tocá “Instalar” y listo ✨</p>
+    <button class="btn btn-ghost" onclick="closeModal('m-install')">Cerrar</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
 <script>
-  const CORREO_ADMIN = "demiancepeda2005@gmail.com"; 
+/* ═══════════ DATOS ═══════════ */
+const KEY='cuponapp_mdp_v4', SKEY='cuponapp_session_v4';
+const PUNTOS_CANJE=100;
+let db=null, sess=null, currentCupon=null, pendingVenta=null, deferredPrompt=null;
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDZZy7HK-yzXhO7GAAkevvhoL13N-15jQI",
-    authDomain: "agorlabcupones.firebaseapp.com",
-    databaseURL: "https://agorlabcupones-default-rtdb.firebaseio.com",
-    projectId: "agorlabcupones",
-    storageBucket: "agorlabcupones.firebasestorage.app",
-    messagingSenderId: "121448551425",
-    appId: "1:121448551425:web:0ac1d094a0ae81d0095c00"
-  };
+function seed(){return{
+ comercios:[
+  {id:'c1',nombre:'Heladería Costanera',email:'costanera@demo.com',rubro:'Heladería',direccion:'Bv. Marítimo 2140',telefono:'223 555-1234',alias:'HELADERIA.COSTA',estado:'activo',deuda:0},
+  {id:'c2',nombre:'Parador Luna Roja',email:'lunaroja@demo.com',rubro:'Gastronomía',direccion:'Playa Grande, Balneario 3',telefono:'',alias:'',estado:'pendiente',deuda:0}
+ ],
+ promotores:[{id:'p1',nombre:'Lautaro Demo',email:'promotor@cuponapp.com',saldo:0,alias:'',cbu:''}],
+ clientes:[],
+ promos:[
+  {id:'pr1',comercioId:'c1',titulo:'2x1 en cucuruchos artesanales',desc:'Válido de lunes a jueves, presentando el cupón en caja.',descuento:'2x1',comisionTotal:1500,comisionPromotor:700,tipo:'promotor',activa:true},
+  {id:'pr2',comercioId:'c1',titulo:'20% OFF en cafés con vista al mar',desc:'Para cualquier bebida de la carta de cafetería.',descuento:'20% OFF',comisionTotal:1200,comisionPromotor:0,tipo:'publica',activa:true},
+  {id:'pr3',comercioId:'c1',titulo:'Menú playa: hamburguesa + papas + gaseosa',desc:'Promo pública exclusiva Cuponapp.',descuento:'Precio promo $9.900',comisionTotal:2000,comisionPromotor:0,tipo:'publica',activa:true}
+ ],
+ cupones:[],pagos:[],premio:{texto:'',actualizado:0}
+};}
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d){if(!d.premio)d.premio={texto:'',actualizado:0};return d}return seed()}catch{return seed()}}
+function save(){localStorage.setItem(KEY,JSON.stringify(db))}
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+const uid=()=>Math.random().toString(36).slice(2,9);
+const fmt=n=>'$'+Math.round(n||0).toLocaleString('es-AR');
+const comByEmail=e=>db.comercios.find(c=>c.email===e);
+const promByEmail=e=>db.promotores.find(p=>p.email===e);
+const clienteByEmail=e=>db.clientes.find(c=>c.email===e);
+const promById=id=>db.promotores.find(p=>p.id===id);
+const comById=id=>db.comercios.find(c=>c.id===id);
+const clienteById=id=>db.clientes.find(c=>c.id===id);
+const promoById=id=>db.promos.find(p=>p.id===id);
+const fmtTime=ms=>{const s=Math.floor(ms/1000);return String(Math.floor(s/3600)).padStart(2,'0')+':'+String(Math.floor(s%3600/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+function refreshCupon(c){if(c.estado==='activo'&&c.expira<Date.now())c.estado='vencido'}
+let toastT;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2800)}
+function openModal(id){$('#'+id).classList.add('open')}
+function closeModal(id){$('#'+id).classList.remove('open')}
+function go(v){$$('.view').forEach(x=>x.classList.remove('active'));$('#'+v).classList.add('active');window.scrollTo(0,0)}
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
+/* ═══════════ QR (dibujo determinístico) ═══════════ */
+function drawQR(cv,txt){
+  const n=25,ctx=cv.getContext('2d'),s=cv.width/n;
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);
+  let seed=7;for(const ch of txt)seed=(seed*31+ch.charCodeAt(0))>>>0;
+  const rnd=()=>{seed^=seed<<13;seed^=seed>>>17;seed^=seed<<5;seed>>>=0;return seed/4294967296};
+  const inF=(x,y)=>(x<8&&y<8)||(x>=n-8&&y<8)||(x<8&&y>=n-8);
+  ctx.fillStyle='#0f172a';
+  for(let y=0;y<n;y++)for(let x=0;x<n;x++){if(inF(x,y))continue;if(rnd()<0.44)ctx.fillRect(x*s,y*s,s,s)}
+  const finder=(fx,fy)=>{ctx.fillStyle='#0f172a';ctx.fillRect(fx*s,fy*s,7*s,7*s);ctx.fillStyle='#fff';ctx.fillRect((fx+1)*s,(fy+1)*s,5*s,5*s);ctx.fillStyle='#0f172a';ctx.fillRect((fx+2)*s,(fy+2)*s,3*s,3*s)};
+  finder(0,0);finder(n-7,0);finder(0,n-7);
+}
 
-  let currentUser = null;
-  let currentRole = null;
-  let activePromo = null;
-  let urlParams = new URLSearchParams(window.location.search);
+/* ═══════════ SESIÓN / LOGIN ═══════════ */
+function setSession(s){sess=s;localStorage.setItem(SKEY,JSON.stringify(s))}
+function updateTopbar(){
+  const chip=$('#sessChip');
+  if(!sess||!sess.role){chip.innerHTML='';return}
+  const em={admin:'👑',promotor:'💼',comercio:'🏪',cliente:'🛍️'}[sess.role]||'🙂';
+  chip.innerHTML='<span class="chipuser">'+em+' '+sess.nombre.split(' ')[0]+'</span><button class="miniout" onclick="logout()">Salir</button>';
+}
+function googleIn(){
+  const nombre=$('#gNombre').value.trim(),email=$('#gEmail').value.trim().toLowerCase();
+  if(!nombre||!email.includes('@'))return toast('Completá nombre y un email válido ✋');
+  setSession({nombre,email,role:null});
+  if(email.startsWith('admin')){sess.role='admin';setSession(sess);renderAdmin();go('v-admin');updateTopbar();toast('👑 ¡Hola Admin!');return}
+  const p=promByEmail(email);if(p){sess.role='promotor';setSession(sess);closeModal('m-google');route();return}
+  const c=comByEmail(email);if(c){sess.role='comercio';setSession(sess);closeModal('m-google');route();return}
+  const cl=clienteByEmail(email);if(cl){sess.role='cliente';setSession(sess);closeModal('m-google');route();return}
+  closeModal('m-google');go('v-role');
+}
+function chooseRole(r){
+  if(r==='promotor'){db.promotores.push({id:uid(),nombre:sess.nombre,email:sess.email,saldo:0,alias:'',cbu:''});save();sess.role='promotor';setSession(sess);renderPromotor();go('v-promotor');updateTopbar();toast('¡Bienvenido al equipo! 💼🌊')}
+  if(r==='cliente'){db.clientes.push({id:uid(),nombre:sess.nombre,email:sess.email,puntos:0});save();sess.role='cliente';setSession(sess);renderCliente();go('v-cliente');updateTopbar();toast('¡A cazar cupones y puntos! 🛍️⭐')}
+}
+function toggleComercioForm(){const f=$('#comercioForm');f.style.display=f.style.display==='none'?'block':'none'}
+function registrarComercio(){
+  const nombre=$('#regNombre').value.trim();if(!nombre)return toast('Poné el nombre de tu local 🏪');
+  db.comercios.push({id:uid(),nombre,email:sess.email,rubro:$('#regRubro').value.trim(),direccion:'',telefono:'',alias:'',estado:'pendiente',deuda:0});save();
+  sess.role='comercio';setSession(sess);$('#pendNombre').textContent=nombre;go('v-pending');updateTopbar();toast('⏳ ¡Local registrado! Esperá la autorización');
+}
+function logout(){localStorage.removeItem(SKEY);sess=null;updateTopbar();go('v-login')}
+function route(){
+  updateTopbar();
+  if(sess.role==='admin'){renderAdmin();go('v-admin');return}
+  if(sess.role==='promotor'){renderPromotor();go('v-promotor');return}
+  if(sess.role==='comercio'){const c=comByEmail(sess.email);if(!c)return logout();
+    if(c.estado==='pendiente'){$('#pendNombre').textContent=c.nombre;go('v-pending')}
+    else if(c.estado==='bloqueado'){$('#blockDeuda').textContent=fmt(c.deuda||0);go('v-blocked')}
+    else{renderComercio();go('v-comercio')}return}
+  if(sess.role==='cliente'){renderCliente();go('v-cliente');return}
+  go('v-login');
+}
 
-  auth.onAuthStateChanged(async (user) => {
-    if (user) {
-      currentUser = user;
-      
-      if (user.email && user.email.toLowerCase().trim() === CORREO_ADMIN.toLowerCase().trim()) {
-        currentRole = 'admin';
-        document.getElementById('admin-email').innerText = user.email;
-        showView('view-admin');
-        loadAdminData();
-        return;
-      }
+/* ═══════════ ADMIN ═══════════ */
+function renderAdmin(){
+  const usados=db.cupones.filter(c=>c.estado==='usado');
+  const ganancia=usados.reduce((a,c)=>a+(c.appFee||0),0);
+  const porCobrar=db.comercios.reduce((a,c)=>a+(c.deuda||0),0);
+  const cobrado=db.pagos.reduce((a,p)=>a+p.monto,0);
+  $('#adminStats').innerHTML=
+   '<div class="stat"><small>💰 Ganancia App</small><b>'+fmt(ganancia)+'</b></div>'+
+   '<div class="stat"><small>🧾 Por cobrar</small><b>'+fmt(porCobrar)+'</b></div>'+
+   '<div class="stat"><small>✅ Cupones canjeados</small><b>'+usados.length+'</b></div>'+
+   '<div class="stat"><small>🏦 Cobrado a comercios</small><b>'+fmt(cobrado)+'</b></div>';
+  $('#premioInput').value=(db.premio&&db.premio.texto)||'';
+  renderRanking();
+  const pend=db.comercios.filter(c=>c.estado==='pendiente');
+  $('#pendPill').textContent=pend.length||'';
+  $('#pendList').innerHTML=pend.length?pend.map(c=>'<div class="promo"><b>🏪 '+c.nombre+'</b><p class="muted">'+c.email+(c.rubro?' · '+c.rubro:'')+'</p><button class="btn btn-ok" onclick="autorizar(\''+c.id+'\')">Autorizar ✅</button></div>').join(''):'<p class="muted">No hay comercios esperando autorización ✨</p>';
+  const act=db.comercios.filter(c=>c.estado!=='pendiente');
+  $('#npComercio').innerHTML='<option value="">Seleccionar comercio...</option>'+act.map(c=>'<option value="'+c.id+'">'+c.nombre+'</option>').join('');
+  $('#promosList').innerHTML=db.promos.length?db.promos.map(p=>{
+    const com=comById(p.comercioId),uN=db.cupones.filter(c=>c.promoId===p.id&&c.estado==='usado').length;
+    const cm=p.tipo==='publica'?'100% App: <b>'+fmt(p.comisionTotal)+'</b> 💰':'Promotor: <b>'+fmt(p.comisionPromotor)+'</b> · App: <b>'+fmt(p.comisionTotal-p.comisionPromotor)+'</b>';
+    return '<div class="card promo '+(p.activa?'':'pausada')+'"><div class="promo-top"><b>'+p.titulo+'</b><span class="badge '+(p.tipo==='publica'?'b-publica':'b-prom')+'">'+(p.tipo==='publica'?'🌐 Pública':'👥 Promotores')+'</span></div>'+
+    '<p class="muted">'+(com?com.nombre:'?')+' · '+p.descuento+'</p><p class="small">'+cm+' · 🎟️ '+uN+' canjeados</p>'+
+    '<div class="row"><button class="btn '+(p.activa?'btn-ghost':'btn-ok')+'" onclick="togglePromo(\''+p.id+'\')">'+(p.activa?'⏸️ Pausar':'▶️ Activar')+'</button>'+
+    '<button class="btn btn-danger" onclick="borrarPromo(\''+p.id+'\')">🗑️</button></div></div>'}).join('')
+    :'<div class="card"><p class="muted">Todavía no hay promos. ¡Creá la primera! ✨</p></div>';
+  $('#promList').innerHTML=db.promotores.length?db.promotores.map(pr=>'<div class="card promo"><b>💼 '+pr.nombre+'</b><p class="muted">'+pr.email+'</p><p class="small">Saldo: <b>'+fmt(pr.saldo)+'</b>'+(pr.alias?' · Alias: '+pr.alias:'')+'</p>'+(pr.saldo>0?'<button class="btn btn-ok" onclick="pagarSaldo(\''+pr.id+'\')">💸 Pagar saldo (martes)</button>':'')+'</div>').join('')
+    :'<div class="card"><p class="muted">Sin promotores registrados todavía.</p></div>';
+  $('#comList').innerHTML=db.comercios.map(c=>{
+    const bcls=c.estado==='activo'?'b-active':c.estado==='pendiente'?'b-prom':'b-exp';
+    let btns=c.estado==='pendiente'?'<button class="btn btn-ok" onclick="autorizar(\''+c.id+'\')">Autorizar ✅</button>'
+      :'<button class="btn '+(c.estado==='bloqueado'?'btn-ok':'btn-danger')+'" onclick="toggleBloqueo(\''+c.id+'\')">'+(c.estado==='bloqueado'?'🔓 Desbloquear':'🚫 Bloquear')+'</button>';
+    if(c.deuda>0)btns+='<button class="btn btn-sky" onclick="cobrarDeuda(\''+c.id+'\')">💰 Registrar pago</button>';
+    return '<div class="card promo"><div class="promo-top"><b>🏪 '+c.nombre+'</b><span class="badge '+bcls+'">'+c.estado+'</span></div><p class="muted">'+c.email+'</p><p class="small">Deuda: <b class="'+(c.deuda>0?'danger':'')+'">'+fmt(c.deuda)+'</b></p><div class="row">'+btns+'</div></div>'}).join('');
+}
+function renderRanking(){
+  const cls=[...db.clientes].sort((a,b)=>(b.puntos||0)-(a.puntos||0));
+  $('#rankList').innerHTML=cls.length?cls.map((c,i)=>{
+    const med=['🥇','🥈','🥉'][i]||('#'+(i+1));
+    return '<div class="cup"><b>'+med+'</b> '+c.nombre+' <span class="small">'+c.email+'</span> <span class="badge b-active" style="margin-left:auto">⭐ '+(c.puntos||0)+' pts</span></div>'}).join('')
+    :'<p class="muted">Todavía no hay clientes registrados 🏖️</p>';
+}
+function guardarPremio(){
+  const t=$('#premioInput').value.trim();if(!t)return toast('Escribí el premio 🏆');
+  db.premio={texto:t,actualizado:Date.now()};save();
+  toast('🏆 ¡Premio guardado! Los clientes ya lo ven en su inicio');
+}
+function resetPuntos(){
+  if(!confirm('¿Reiniciar los puntos de todos los clientes para un nuevo finde?'))return;
+  db.clientes.forEach(c=>c.puntos=0);save();renderAdmin();
+  toast('🔄 Puntos reiniciados. ¡Nuevo finde, nuevo ranking!');
+}
+function crearPromo(){
+  const comercioId=$('#npComercio').value;if(!comercioId)return toast('Seleccioná un comercio 🏪');
+  const titulo=$('#npTitulo').value.trim();if(!titulo)return toast('Poné un título ✍️');
+  const descuento=$('#npDescuento').value.trim();if(!descuento)return toast('Indicá el descuento 🎁');
+  const comisionTotal=parseFloat($('#npComision').value)||0;if(comisionTotal<=0)return toast('Indicá la comisión que paga el comercio 💵');
+  const tipo=document.querySelector('input[name=npMod]:checked').value;
+  let comisionPromotor=0;
+  if(tipo==='promotor'){comisionPromotor=parseFloat($('#npComisionPromotor').value)||0;
+    if(comisionPromotor>comisionTotal)return toast('La comisión del promotor no puede superar el total ⚠️')}
+  db.promos.push({id:uid(),comercioId,titulo,desc:$('#npDesc').value.trim(),descuento,comisionTotal,comisionPromotor,tipo,activa:true});
+  save();['#npTitulo','#npDesc','#npDescuento','#npComision','#npComisionPromotor'].forEach(s=>$(s).value='');
+  renderAdmin();toast(tipo==='publica'?'🌐 ¡Promo pública publicada! La comisión es 100% tuya 💰':'✨ ¡Promo publicada para promotores!');
+}
+function updateModUI(){const t=document.querySelector('input[name=npMod]:checked').value;$('#npPromotorBox').style.display=t==='promotor'?'block':'none'}
+function updateAppCut(){const tot=parseFloat($('#npComision').value)||0,pr=parseFloat($('#npComisionPromotor').value)||0;$('#npAppCut').textContent=tot>0?fmt(Math.max(0,tot-pr)):'—'}
+function togglePromo(id){const p=promoById(id);p.activa=!p.activa;save();renderAdmin()}
+function borrarPromo(id){if(!confirm('¿Eliminar esta promo? Sus cupones activos dejarán de validarse.'))return;db.promos=db.promos.filter(p=>p.id!==id);save();renderAdmin();toast('🗑️ Promo eliminada')}
+function autorizar(id){comById(id).estado='activo';save();renderAdmin();toast('✅ Comercio autorizado')}
+function toggleBloqueo(id){const c=comById(id);c.estado=c.estado==='bloqueado'?'activo':'bloqueado';save();renderAdmin();toast(c.estado==='bloqueado'?'🚫 Local bloqueado':'🔓 Local desbloqueado')}
+function cobrarDeuda(id){const c=comById(id);if(c.deuda<=0)return;db.pagos.push({comercioId:id,monto:c.deuda,fecha:Date.now()});c.deuda=0;save();renderAdmin();toast('💰 Deuda registrada como cobrada')}
+function pagarSaldo(id){const p=promById(id);p.saldo=0;save();renderAdmin();toast('💸 Saldo pagado al promotor (martes ✅)')}
 
-      if (urlParams.has('promotor') && urlParams.has('promo')) {
-        showView('view-cliente');
-        loadClienteView();
-        return;
-      }
+/* ═══════════ CUPONES ═══════════ */
+function crearCupon(promoId,ownerType,ownerId){
+  const p=promoById(promoId);let codigo;
+  do{codigo=String(Math.floor(100000+Math.random()*900000))}while(db.cupones.some(c=>c.codigo===codigo));
+  const c={id:uid(),promoId,codigo,estado:'activo',ownerType,ownerId,creado:Date.now(),expira:Date.now()+30*60*1000,appFee:p.comisionTotal-p.comisionPromotor,promFee:p.comisionPromotor};
+  db.cupones.push(c);save();return c;
+}
+function generarQR(promoId){
+  const pr=promByEmail(sess.email);const c=crearCupon(promoId,'promotor',pr.id);
+  currentCupon=c.id;openModal('m-qr');
+  drawQR($('#qrCanvas'),'CUPONAPP-MDP:'+c.codigo);$('#qrCodigo').textContent='Código en caja: '+c.codigo;
+}
+function cerrarQR(){closeModal('m-qr');abrirCupon(currentCupon)}
+function abrirCupon(id){
+  const c=db.cupones.find(x=>x.id===id);if(!c)return;refreshCupon(c);
+  if(c.estado==='usado')return toast('⚠️ Este cupón ya fue utilizado');
+  if(c.estado==='vencido')return toast('⌛ Este cupón está vencido, generá uno nuevo');
+  $('#cupTitle').textContent=c.ownerType==='promotor'?'🎟️ OFERTA DESBLOQUEADA':'🎁 TU CUPÓN RECLAMADO';
+  $('#cupLoading').style.display='block';$('#cupBody').style.display='none';
+  openModal('m-cupon');
+  drawQR($('#cupQr'),'CUPONAPP-MDP:'+c.codigo);
+  $('#cupCodigo').textContent=c.codigo;$('#cupTimer').dataset.exp=c.expira;
+  setTimeout(()=>{$('#cupLoading').style.display='none';$('#cupBody').style.display='block'},900);
+}
+function reclamar(){toast('🎉 ¡Listo! Presentá el código en caja antes de que venza')}
+function irInicio(){closeModal('m-cupon');route()}
+function salirCupon(){closeModal('m-cupon');route()}
+function renderMisCupones(ownerType,sel,ownerId){
+  db.cupones.forEach(refreshCupon);
+  const list=db.cupones.filter(c=>c.ownerType===ownerType&&c.ownerId===ownerId).reverse();
+  $(sel).innerHTML=list.length?list.map(c=>{
+    const p=promoById(c.promoId);if(!p)return'';
+    const st=c.estado==='activo'?'<span class="badge b-active" data-exp="'+c.expira+'">--:--:--</span>'
+      :c.estado==='usado'?'<span class="badge b-used">✅ Usado</span>':'<span class="badge b-exp">⌛ Vencido</span>';
+    return '<div class="cup" onclick="'+(c.estado==='activo'?'abrirCupon(\''+c.id+'\')':'')+'"><b>#'+c.codigo+'</b> <span class="small">'+p.titulo+'</span> '+st+'</div>'}).join('')
+    :'<p class="muted">Todavía no tenés cupones 🎟️</p>';
+}
 
-      const userDoc = await db.collection('usuarios').doc(user.uid).get();
-      if (userDoc.exists) {
-        const data = userDoc.data();
-        currentRole = data.rol;
-        
-        if (currentRole === 'comercio') {
-          if (data.bloqueado === true) { showView('view-bloqueado'); return; }
-          if (data.estado === 'pendiente') { showView('view-espera'); return; }
-        }
-        
-        const userEmailSpan = document.getElementById('user-email');
-        if(userEmailSpan) userEmailSpan.innerText = user.email;
-        
-        loadRoleView();
-      } else {
-        showView('view-role');
-      }
-    } else {
-      if (urlParams.has('promotor') && urlParams.has('promo')) {
-        showView('view-cliente');
-        loadClienteView();
-      } else {
-        showView('view-login');
-      }
-    }
+/* ═══════════ PROMOTOR ═══════════ */
+function renderPromotor(){
+  const pr=promByEmail(sess.email);if(!pr)return logout();
+  $('#promNombre').textContent=pr.nombre.split(' ')[0];
+  $('#promSaldo').textContent=fmt(pr.saldo);
+  $('#promAlias').value=pr.alias||'';$('#promCbu').value=pr.cbu||'';
+  const promos=db.promos.filter(p=>p.activa&&p.tipo==='promotor'&&comById(p.comercioId)&&comById(p.comercioId).estado==='activo');
+  $('#promPromos').innerHTML=promos.length?promos.map(p=>{const c=comById(p.comercioId);
+    return '<div class="promo"><div class="promo-top"><b>'+p.titulo+'</b><span class="badge b-prom">👥</span></div>'+
+    '<p class="muted">'+c.nombre+' · '+p.descuento+'</p><p class="small">'+(p.desc||'')+'</p>'+
+    '<p class="gain">Ganás <b>'+fmt(p.comisionPromotor)+'</b> por cupón 🤑</p>'+
+    '<button class="btn btn-primary" onclick="generarQR(\''+p.id+'\')">Generar QR 🎯</button></div>'}).join('')
+    :'<p class="muted">No hay promos activas para ofrecer ahora 🏖️</p>';
+  renderMisCupones('promotor','#promCupones',pr.id);
+}
+function guardarCobro(){const pr=promByEmail(sess.email);pr.alias=$('#promAlias').value.trim();pr.cbu=$('#promCbu').value.trim();save();toast('💾 ¡Datos de cobro guardados!')}
+
+/* ═══════════ CLIENTE ═══════════ */
+function renderCliente(){
+  const cl=clienteByEmail(sess.email);if(!cl)return logout();
+  $('#cliNombre').textContent=cl.nombre.split(' ')[0];
+  $('#cliPuntos').textContent=cl.puntos||0;
+  $('#cliPremio').textContent=(db.premio&&db.premio.texto)?db.premio.texto:'Cargando premio...';
+  const sorted=[...db.clientes].sort((a,b)=>(b.puntos||0)-(a.puntos||0));
+  const pos=sorted.findIndex(x=>x.id===cl.id)+1;
+  $('#cliPosicion').textContent=pos?'Tu posición en el ranking: <b>#'+pos+'</b> '+(['🥇','🥈','🥉'][pos-1]||''):'';
+  const pubs=db.promos.filter(p=>p.activa&&p.tipo==='publica'&&comById(p.comercioId)&&comById(p.comercioId).estado==='activo');
+  $('#cliPromos').innerHTML=pubs.length?pubs.map(p=>{const c=comById(p.comercioId);
+    return '<div class="promo"><div class="promo-top"><b>'+p.titulo+'</b><span class="badge b-publica">🌐 PÚBLICA</span></div>'+
+    '<p class="muted">'+c.nombre+' · '+p.descuento+'</p><p class="small">'+(p.desc||'')+'</p>'+
+    '<p class="small">⭐ Este canje suma <b>+'+PUNTOS_CANJE+' puntos</b> si lo validan en caja</p>'+
+    '<button class="btn btn-primary" onclick="obtenerPublica(\''+p.id+'\')">🎁 Obtener Cupón Gratis</button></div>'}).join('')
+    :'<p class="muted">Por ahora no hay cupones públicos nuevos. ¡Volvé pronto! ☀️</p>';
+  renderMisCupones('cliente','#cliCupones',cl.id);
+}
+function obtenerPublica(promoId){
+  const cl=clienteByEmail(sess.email);
+  const previo=db.cupones.find(c=>c.promoId===promoId&&c.ownerId===cl.id&&c.estado==='activo'&&c.expira>Date.now());
+  if(previo){abrirCupon(previo.id);return toast('ℹ️ Ya tenías un cupón activo de esta promo')}
+  const c=crearCupon(promoId,'cliente',cl.id);abrirCupon(c.id);
+}
+
+/* ═══════════ COMERCIO ═══════════ */
+function renderComercio(){
+  const com=comByEmail(sess.email);if(!com)return logout();
+  $('#comNombre').textContent=com.nombre;
+  $('#comDeuda').textContent=fmt(com.deuda);
+  $('#comRegLink').style.display=com.deuda>0?'inline-flex':'none';
+  $('#comPNombre').value=com.nombre;$('#comPRubro').value=com.rubro||'';$('#comPDir').value=com.direccion||'';$('#comPTel').value=com.telefono||'';$('#comPAlias').value=com.alias||'';
+}
+function actualizarPerfil(){
+  const com=comByEmail(sess.email);
+  com.nombre=$('#comPNombre').value.trim()||com.nombre;com.rubro=$('#comPRubro').value.trim();
+  com.direccion=$('#comPDir').value.trim();com.telefono=$('#comPTel').value.trim();com.alias=$('#comPAlias').value.trim();
+  save();renderComercio();toast('✅ Perfil actualizado');
+}
+function validarCupon(){
+  const code=$('#cajaCode').value.trim();
+  if(!/^\d{6}$/.test(code))return toast('Ingresá el código de 6 dígitos 🔢');
+  const c=db.cupones.find(x=>x.codigo===code);if(!c)return toast('❌ Código no encontrado');
+  refreshCupon(c);
+  const com=comByEmail(sess.email),p=promoById(c.promoId),comPromo=comById(p.comercioId);
+  if(c.estado==='usado')return toast('⚠️ Este cupón ya fue utilizado');
+  if(c.estado==='vencido')return toast('⌛ El cupón está vencido');
+  if(comPromo&&comPromo.id!==com.id)return toast('⚠️ Este cupón pertenece a otro comercio');
+  pendingVenta=c.id;
+  const de=c.ownerType==='cliente'?'🛍️ Cliente directo (promo pública)':'💼 Promotor: '+((promById(c.ownerId)||{}).nombre||'-');
+  const feeTxt=p.tipo==='publica'?' · 100% app 💰':' (promotor '+fmt(p.comisionPromotor)+' · app '+fmt(p.comisionTotal-p.comisionPromotor)+')';
+  const ptsTxt=c.ownerType==='cliente'?'<p class="small">⭐ Este canje suma <b>+'+PUNTOS_CANJE+' puntos</b> al cliente</p>':'';
+  $('#validBody').innerHTML='<p><b>'+p.titulo+'</b></p><p class="muted">'+p.descuento+'</p>'+
+   '<p class="small">Origen: '+de+'</p>'+ptsTxt+'<p class="small">Comisión a liquidar: <b>'+fmt(p.comisionTotal)+'</b>'+feeTxt+'</p>';
+  openModal('m-valid');
+}
+function confirmarVenta(){
+  const c=db.cupones.find(x=>x.id===pendingVenta);if(!c)return;
+  const com=comByEmail(sess.email),p=promoById(c.promoId);
+  c.estado='usado';c.usadoEn=Date.now();
+  com.deuda=(com.deuda||0)+p.comisionTotal;
+  if(p.tipo==='promotor'){const pr=promById(c.ownerId);if(pr)pr.saldo=(pr.saldo||0)+c.promFee}
+  if(c.ownerType==='cliente'){const cl=clienteById(c.ownerId);if(cl)cl.puntos=(cl.puntos||0)+PUNTOS_CANJE}
+  save();closeModal('m-valid');$('#cajaCode').value='';renderComercio();
+  toast(c.ownerType==='cliente'?'✅ ¡Venta validada! El cliente sumó +'+PUNTOS_CANJE+' puntos 🏆':'✅ ¡Venta validada! Descuento aplicado 🎉');
+}
+
+/* ═══════════ INSTALAR APP (PWA) ═══════════ */
+function injectManifest(){
+  const icon='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="96" fill="#0ea5e9"/><text x="256" y="350" font-size="260" text-anchor="middle">🌊</text></svg>');
+  const m={name:'Cuponapp MDP',short_name:'Cuponapp',start_url:location.href,display:'standalone',background_color:'#0ea5e9',theme_color:'#0ea5e9',icons:[{src:icon,sizes:'512x512',type:'image/svg+xml',purpose:'any'}]};
+  const l=document.createElement('link');l.rel='manifest';l.href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/json'}));document.head.appendChild(l);
+}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;const f=$('#fabInstall');f.classList.add('ready');f.textContent='📲 Instalar App ✨'});
+window.addEventListener('appinstalled',()=>toast('🌊 ¡Cuponapp instalada!'));
+function instalar(){
+  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(r=>{if(r.outcome==='accepted')toast('🎉 ¡App instalada!');deferredPrompt=null;$('#fabInstall').classList.remove('ready');$('#fabInstall').textContent='📲 Instalar App'});return}
+  openModal('m-install');
+}
+
+/* ═══════════ INICIO ═══════════ */
+window.addEventListener('DOMContentLoaded',()=>{
+  db=load();save();
+  injectManifest();
+  $$('#adminTabs .tab').forEach(b=>b.onclick=()=>{
+    $$('#adminTabs .tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+    $$('#v-admin .tabpane').forEach(p=>p.classList.remove('active'));$('#'+b.dataset.t).classList.add('active');
   });
-
-  function loginGoogle() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider).catch(error => { console.error("Error:", error.message); });
-  }
-
-  function logout() { auth.signOut().then(() => window.location.href = window.location.pathname); }
-
-  async function setRole(rol) {
-    let data = { email: currentUser.email, rol: rol };
-    if (rol === 'comercio') {
-      const nombreLocal = prompt("Ingresá el nombre oficial de tu comercio:");
-      if (!nombreLocal) return;
-      data.nombre = nombreLocal;
-      data.estado = 'pendiente';
-      data.bloqueado = false;
-      data.deuda = 0;
-    } else if (rol === 'cliente') {
-      data.puntos = 0;
-      data.nombre = currentUser.displayName || 'Cliente';
-    } else {
-      data.saldo = 0;
-      data.alias = '';
-    }
-    await db.collection('usuarios').doc(currentUser.uid).set(data, { merge: true });
-    window.location.reload();
-  }
-
-  function showView(viewId) {
-    ['view-login', 'view-role', 'view-espera', 'view-bloqueado', 'view-promotor', 'view-cliente', 'view-cliente-dash', 'view-comercio', 'view-admin'].forEach(id => {
-      document.getElementById(id).classList.add('hidden');
-    });
-    document.getElementById(viewId).classList.remove('hidden');
-  }
-
-  function loadRoleView() {
-    if (currentRole === 'promotor') { showView('view-promotor'); loadPromotorData(); }
-    else if (currentRole === 'comercio') { showView('view-comercio'); loadComercioData(); }
-    else if (currentRole === 'cliente') { showView('view-cliente-dash'); loadClienteDashData(); }
-  }
-
-  function togglePuntosInput() {
-    const tipo = document.getElementById('admin-promo-tipo').value;
-    const puntosInput = document.getElementById('admin-promo-puntos');
-    if (tipo === 'publica') { puntosInput.classList.remove('hidden'); } 
-    else { puntosInput.classList.add('hidden'); puntosInput.value = ''; }
-  }
-
-  async function loadUnifiedPromos(role, containerId) {
-    const list = document.getElementById(containerId);
-    list.innerHTML = '<p style="text-align:center; font-weight:700;">Cargando promos... 🏖️</p>';
-
-    try {
-      let comerciosRef = db.collection('usuarios').where('rol', '==', 'comercio').where('estado', '==', 'aprobado');
-      const comerciosSnap = await comerciosRef.get();
-      const comerciosValidos = {};
-      comerciosSnap.forEach(doc => {
-        const c = doc.data();
-        if (role === 'admin' || !c.bloqueado) comerciosValidos[doc.id] = c;
-      });
-
-      const promosSnap = await db.collection('promos').get();
-      const agrupado = {};
-      
-      promosSnap.forEach(doc => {
-        const p = doc.data();
-        p.id = doc.id;
-        if (!comerciosValidos[p.comercioId]) return;
-        
-        // Filtros según rol
-        if (role === 'promotor' && (!p.activa || p.tipo === 'publica')) return;
-        if (role === 'cliente' && (!p.activa || p.tipo !== 'publica')) return;
-
-        const nombreLocal = comerciosValidos[p.comercioId].nombre || p.nombreComercio;
-        if (!agrupado[nombreLocal]) agrupado[nombreLocal] = [];
-        agrupado[nombreLocal].push(p);
-      });
-
-      const locales = Object.keys(agrupado).sort();
-      if (locales.length === 0) {
-        list.innerHTML = '<p style="text-align:center; font-weight:700;">No hay promos disponibles.</p>'; return;
-      }
-
-      list.innerHTML = '';
-      locales.forEach(local => {
-        list.innerHTML += `<div class="sticky-header">🏪 ${local}</div>`;
-        const promosDelLocal = agrupado[local].sort((a, b) => (a.activa === b.activa ? 0 : a.activa ? -1 : 1));
-
-        promosDelLocal.forEach(p => {
-           let actionButtons = '';
-           if (role === 'admin') {
-             const tagTipo = p.tipo === 'publica' ? '🌐 Pública' : '👥 Promotor';
-             actionButtons = `
-               <span class="badge dark" style="font-size:10px; margin-top:5px; display:inline-block;">${tagTipo}</span>
-               <div style="display:flex; gap:8px; margin-top:12px;">
-                 <button onclick="togglePausaPromo('${p.id}', ${p.activa})" class="secondary" style="font-size:12px; padding:8px; flex:1; border: 2px solid var(--navy);">
-                   ${p.activa ? '⏸️ Pausar' : '▶️ Activar'}
-                 </button>
-                 <button onclick="eliminarPromo('${p.id}')" class="danger" style="font-size:12px; padding:8px; flex:1;">🗑️ Borrar</button>
-               </div>`;
-           } else if (role === 'promotor') {
-             actionButtons = `<button onclick="generarQR('${p.id}')" class="primary" style="margin-top:12px;">Generar QR 🎯</button>`;
-           } else if (role === 'cliente') {
-             actionButtons = `<button onclick="reclamarPromoPublica('${p.id}')" class="primary" style="margin-top:12px;">Reclamar Cupón 🎁</button>`;
-           }
-
-           const limiteTexto = p.limite 
-             ? `🎟️ Quedan: ${Math.max(0, p.limite - (p.usados || 0))} de ${p.limite}` 
-             : '🎟️ Sin límite';
-             
-           const puntosBadge = p.puntos ? `<span style="float:right; color:var(--alert-red); font-weight:900;">⭐ +${p.puntos} Pts</span>` : '';
-
-           list.innerHTML += `
-             <div class="neo-card" style="opacity: ${p.activa ? '1' : '0.6'}; border-width: 2px; padding: 12px;">
-               <strong style="font-size:16px;">${p.titulo}</strong> ${!p.activa ? '<span class="badge" style="background:var(--alert-red); color:white; float:right; font-size:10px;">PAUSADA</span>' : ''}<br>
-               ${role === 'promotor' ? `<span style="color:var(--success-green); font-weight:800; font-size: 15px;">Comisión: $${p.comision}</span><br>` : ''}
-               ${puntosBadge}
-               <small style="font-weight:800; color: var(--navy);">${limiteTexto}</small>
-               ${actionButtons}
-             </div>`;
-        });
-      });
-    } catch (error) {
-      list.innerHTML = `<p style="color:var(--alert-red); text-align:center; font-weight:bold;">Error: ${error.message}</p>`;
-    }
-  }
-
-  // ================= LÓGICA DASHBOARD CLIENTE =================
-  async function loadClienteDashData() {
-    document.getElementById('dash-cliente-email').innerText = currentUser.email;
-    
-    // Escuchar Puntos
-    db.collection('usuarios').doc(currentUser.uid).onSnapshot(doc => {
-      if(doc.exists) { document.getElementById('dash-cliente-puntos').innerText = doc.data().puntos || 0; }
-    });
-
-    // Escuchar Premio
-    db.collection('config').doc('premio').onSnapshot(doc => {
-      if (doc.exists) { document.getElementById('dash-cliente-premio').innerText = doc.data().texto || "Premio sorpresa..."; }
-    });
-
-    // Cargar Catálogo Público
-    loadUnifiedPromos('cliente', 'dash-cliente-promos');
-
-    // Escuchar Mis Tickets Activos
-    db.collection('tickets')
-      .where('clienteId', '==', currentUser.uid)
-      .where('estado', '==', 'emitido')
-      .onSnapshot(async (snapshot) => {
-        const tContainer = document.getElementById('dash-cliente-tickets');
-        if (snapshot.empty) {
-          tContainer.innerHTML = '<p style="text-align:center; font-weight:600;">No tenés cupones activos hoy.</p>'; return;
-        }
-
-        let html = '';
-        for (const doc of snapshot.docs) {
-           const t = doc.data();
-           // Buscar nombre comercio para mejor UI
-           const promoDoc = await db.collection('promos').doc(t.promoId).get();
-           const nombreLocal = promoDoc.exists ? promoDoc.data().nombreComercio : 'Local';
-           html += `
-            <div class="ticket-card">
-              <span class="badge" style="background:var(--success-green); margin-bottom:5px; display:inline-block;">Activo</span>
-              <p style="margin:5px 0; font-weight:800; font-size:14px;">${nombreLocal}</p>
-              <div style="font-size:32px; font-weight:900; letter-spacing:5px; color:var(--navy);">${t.codigo}</div>
-              <small>Mostrá este código en caja.</small>
-            </div>`;
-        }
-        tContainer.innerHTML = html;
-      });
-  }
-
-  async function reclamarPromoPublica(promoId) {
-    try {
-      const doc = await db.collection('promos').doc(promoId).get();
-      const promo = doc.data();
-
-      // Chequeo de límite
-      if (promo.limite && (promo.usados || 0) >= promo.limite) {
-        alert("⚠️ Promoción Agotada."); return;
-      }
-
-      // Evitar que reclame dos veces la misma promo en el día (si ya tiene uno emitido)
-      const check = await db.collection('tickets')
-        .where('promoId', '==', promoId)
-        .where('clienteId', '==', currentUser.uid)
-        .where('estado', '==', 'emitido').get();
-        
-      if (!check.empty) {
-        alert("Ya tenés un cupón activo para esta promoción. Revisá 'Mis Códigos Activos'."); return;
-      }
-
-      const codigo = Math.floor(100000 + Math.random() * 900000).toString();
-      
-      await db.collection('tickets').add({
-        codigo: codigo,
-        promotorId: 'publico',
-        clienteId: currentUser.uid,
-        promoId: promoId,
-        comercioId: promo.comercioId,
-        estado: 'emitido',
-        puntosOtorga: promo.puntos || 0,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      });
-
-      await db.collection('promos').doc(promoId).update({ usados: firebase.firestore.FieldValue.increment(1) });
-      alert(`✅ ¡Cupón reclamado con éxito! Buscalo en 'Mis Códigos Activos'`);
-    } catch (e) {
-      alert("Error al reclamar: " + e.message);
-    }
-  }
-
-  // ================= LÓGICA ADMIN (ACTUALIZADA) =================
-  async function loadAdminData() {
-    // Comercio pendiente, promotores, etc.
-    db.collection('usuarios').where('rol', '==', 'comercio').where('estado', '==', 'pendiente').onSnapshot(snap => {
-      const list = document.getElementById('admin-pendientes-list');
-      list.innerHTML = snap.empty ? '<p style="font-weight:600;">No hay locales pendientes.</p>' : '';
-      snap.forEach(doc => {
-        const c = doc.data();
-        list.innerHTML += `<div class="neo-card" style="display:flex; justify-content:space-between; align-items:center; border-width:2px; padding:10px;">
-          <span style="font-weight:700;">${c.nombre} <br><small style="font-weight:400;">${c.email}</small></span>
-          <div style="display:flex; gap:8px;">
-            <button onclick="aprobarComercio('${doc.id}')" class="accent" style="width:auto; padding:6px 12px; margin:0;">✔</button>
-          </div>
-        </div>`;
-      });
-    });
-
-    db.collection('usuarios').where('rol', '==', 'comercio').where('estado', '==', 'aprobado').onSnapshot(snap => {
-      const select = document.getElementById('admin-select-comercio');
-      const contaList = document.getElementById('admin-deudas-list');
-      select.innerHTML = '<option value="">Seleccioná un local...</option>';
-      contaList.innerHTML = snap.empty ? '<p style="font-weight:600;">No hay locales activos.</p>' : '';
-      snap.forEach(doc => {
-        const c = doc.data();
-        select.innerHTML += `<option value="${doc.id}">${c.nombre}</option>`;
-        contaList.innerHTML += `<div class="neo-card" style="border-width:2px; padding:12px;">
-          <strong style="font-size:16px;">🏪 ${c.nombre}</strong><br>
-          <span style="font-size:14px; font-weight:800;">Deuda: <span style="color:var(--alert-red);">$${c.deuda || 0}</span></span>
-          <button onclick="saldarDeuda('${doc.id}')" class="success" style="background:var(--success-green); margin-top:5px;">Saldar Deuda</button>
-        </div>`;
-      });
-    });
-
-    db.collection('usuarios').where('rol', '==', 'promotor').onSnapshot(snap => {
-      const promList = document.getElementById('admin-promotores-list');
-      promList.innerHTML = snap.empty ? '<p style="font-weight:600;">No hay promotores.</p>' : '';
-      snap.forEach(doc => {
-        const p = doc.data();
-        promList.innerHTML += `<div class="neo-card" style="border-width:2px; padding:12px;">
-          <strong style="font-size:16px;">👤 ${p.nombre || 'Sin nombre'}</strong> <small>(${p.email})</small><br>
-          <span style="font-size:14px; font-weight:800;">Saldo a Pagar: <span style="color:var(--success-green); font-size:18px;">$${p.saldo || 0}</span></span>
-          <button onclick="liquidarSaldoPromotor('${doc.id}', ${p.saldo || 0})" class="accent" style="margin-top:5px;">Pagar Saldo</button>
-        </div>`;
-      });
-    });
-    
-    // Premio
-    db.collection('config').doc('premio').onSnapshot(doc => {
-      if(doc.exists) document.getElementById('admin-premio-texto').value = doc.data().texto;
-    });
-
-    // Ranking Clientes
-    db.collection('usuarios').where('rol', '==', 'cliente').orderBy('puntos', 'desc').limit(10).onSnapshot(snap => {
-      const rList = document.getElementById('admin-ranking-list');
-      rList.innerHTML = snap.empty ? '<p>No hay clientes sumando puntos aún.</p>' : '';
-      let rank = 1;
-      snap.forEach(doc => {
-        const cl = doc.data();
-        rList.innerHTML += `
-          <div style="display:flex; justify-content:space-between; padding:8px; border-bottom: 2px solid var(--navy);">
-            <span><b>#${rank}</b> ${cl.nombre} <br><small>${cl.email}</small></span>
-            <strong style="color:var(--alert-red); font-size:18px;">${cl.puntos || 0} pts</strong>
-          </div>`;
-        rank++;
-      });
-    });
-
-    loadUnifiedPromos('admin', 'admin-promos-list');
-  }
-
-  async function guardarPremioAdmin() {
-    const texto = document.getElementById('admin-premio-texto').value.trim();
-    if(!texto) return;
-    await db.collection('config').doc('premio').set({ texto }, { merge: true });
-    alert("✅ Premio actualizado.");
-  }
-
-  async function liquidarSaldoPromotor(uid, saldoActual) {
-    if (saldoActual <= 0) return;
-    if (confirm(`¿Reiniciar el saldo de $${saldoActual} a $0?`)) { await db.collection('usuarios').doc(uid).update({ saldo: 0 }); }
-  }
-
-  async function saldarDeuda(uid) {
-    if(confirm("¿Saldar la deuda y reiniciarla a $0?")) await db.collection('usuarios').doc(uid).update({ deuda: 0 });
-  }
-
-  async function aprobarComercio(uid) {
-    if(confirm("¿Aprobar local?")) await db.collection('usuarios').doc(uid).update({ estado: 'aprobado', bloqueado: false });
-  }
-
-  async function eliminarPromo(id) {
-    if(confirm("⚠️ ¿Eliminar permanente?")) { await db.collection('promos').doc(id).delete(); loadUnifiedPromos('admin', 'admin-promos-list'); }
-  }
-
-  async function togglePausaPromo(id, estadoActual) {
-    if(confirm(estadoActual ? "¿Pausar oferta?" : "¿Reactivar oferta?")) {
-      await db.collection('promos').doc(id).update({ activa: !estadoActual });
-      loadUnifiedPromos('admin', 'admin-promos-list');
-    }
-  }
-
-  async function crearPromoAdmin() {
-    const comercioId = document.getElementById('admin-select-comercio').value;
-    const titulo = document.getElementById('admin-promo-titulo').value;
-    const tipo = document.getElementById('admin-promo-tipo').value;
-    const comision = parseInt(document.getElementById('admin-promo-comision').value);
-    const precioComercio = parseInt(document.getElementById('admin-promo-precio').value);
-    const puntos = parseInt(document.getElementById('admin-promo-puntos').value) || 0;
-    const limiteInput = parseInt(document.getElementById('admin-promo-limite').value);
-    
-    if(!comercioId || !titulo || isNaN(comision) || isNaN(precioComercio)) { alert("Completá todos los campos obligatorios."); return; }
-    
-    let limite = null;
-    if (!isNaN(limiteInput) && limiteInput > 0) limite = limiteInput;
-    const cDoc = await db.collection('usuarios').doc(comercioId).get();
-    
-    await db.collection('promos').add({
-      comercioId, nombreComercio: cDoc.data().nombre, titulo, comision, precioComercio, activa: true, limite: limite, usados: 0, tipo: tipo, puntos: puntos
-    });
-    
-    document.getElementById('admin-promo-titulo').value = '';
-    loadUnifiedPromos('admin', 'admin-promos-list');
-  }
-
-
-  // ================= LÓGICA COMERCIO (ACTUALIZADA PARA PUNTOS) =================
-  async function loadComercioData() {
-    db.collection('usuarios').doc(currentUser.uid).onSnapshot(doc => {
-      const data = doc.data();
-      document.getElementById('comercio-nombre').innerText = "🏪 " + (data.nombre || 'Local');
-      document.getElementById('comercio-deuda').innerText = '$' + (data.deuda || 0);
-    });
-  }
-
-  async function validarTicket() {
-    const input = document.getElementById('input-ticket');
-    const msg = document.getElementById('comercio-msg');
-    const codigo = input.value.trim();
-    if(codigo.length !== 6) { msg.innerHTML = "<span style='color:var(--alert-red);'>❌ Ingrese 6 números</span>"; return; }
-    
-    const btn = document.getElementById('btn-validar');
-    btn.disabled = true;
-    
-    try {
-      const snap = await db.collection('tickets').where('codigo', '==', codigo).where('comercioId', '==', currentUser.uid).get();
-      if(snap.empty) {
-        msg.innerHTML = "<span style='color:var(--alert-red);'>❌ Código Inválido o no pertenece a tu local</span>"; btn.disabled = false; return;
-      }
-
-      const ticketDoc = snap.docs[0];
-      const tData = ticketDoc.data();
-      if(tData.estado === 'validado') {
-        msg.innerHTML = "<span style='color:var(--alert-red);'>⚠️ Este código ya fue usado</span>"; btn.disabled = false; return;
-      }
-
-      const promoId = tData.promoId;
-      const promoDoc = await db.collection('promos').doc(promoId).get();
-      const pData = promoDoc.data();
-      const comRef = db.collection('usuarios').doc(currentUser.uid);
-
-      await db.runTransaction(async (transaction) => {
-        const comDoc = await transaction.get(comRef);
-        const nDeuda = (comDoc.data().deuda || 0) + (pData.precioComercio || 0);
-        transaction.update(comRef, { deuda: nDeuda });
-        
-        // Sumar saldo a promotor si existe
-        if (tData.promotorId && tData.promotorId !== 'sin_promotor' && tData.promotorId !== 'publico') {
-          const promRef = db.collection('usuarios').doc(tData.promotorId);
-          const promDoc = await transaction.get(promRef);
-          if (promDoc.exists) {
-            transaction.update(promRef, { saldo: (promDoc.data().saldo || 0) + (pData.comision || 0) });
-          }
-        }
-
-        // Sumar puntos al cliente si es promo publica/cliente
-        if (tData.clienteId && tData.puntosOtorga > 0) {
-          const cliRef = db.collection('usuarios').doc(tData.clienteId);
-          const cliDoc = await transaction.get(cliRef);
-          if (cliDoc.exists) {
-            transaction.update(cliRef, { puntos: (cliDoc.data().puntos || 0) + tData.puntosOtorga });
-          }
-        }
-        
-        transaction.update(ticketDoc.ref, { estado: 'validado', validadoEn: firebase.firestore.FieldValue.serverTimestamp() });
-      });
-
-      msg.innerHTML = `<span style='color:var(--success-green); font-size:20px;'>✅ ¡Venta registrada! ${tData.clienteId ? '+'+tData.puntosOtorga+' pts al cliente.' : ''}</span>`;
-      input.value = '';
-      setTimeout(() => msg.innerHTML = "", 5000);
-      
-    } catch(err) {
-      msg.innerHTML = `<span style='color:var(--alert-red);'>Error: ${err.message}</span>`;
-    }
-    btn.disabled = false;
-  }
-
-  // ================= RESTO FUNCIONES (PERFILES / QR) =================
-  async function guardarPerfilPromotor() {
-    const nombre = document.getElementById('promotor-input-nombre').value.trim();
-    const alias = document.getElementById('promotor-input-alias').value.trim();
-    await db.collection('usuarios').doc(currentUser.uid).set({ nombre, alias }, { merge: true });
-    alert("✅ Datos guardados.");
-  }
-
-  async function guardarPerfilComercio() {
-    const contacto = document.getElementById('comercio-input-contacto').value.trim();
-    await db.collection('usuarios').doc(currentUser.uid).set({ contacto }, { merge: true });
-    alert("✅ Perfil actualizado.");
-  }
-
-  async function generarQR(promoId) {
-    const promoDoc = await db.collection('promos').doc(promoId).get();
-    const promo = promoDoc.data();
-    if (promo.limite && (promo.usados || 0) >= promo.limite) { alert("⚠️ Promoción Agotada."); return; }
-    
-    document.getElementById('qr-backdrop').classList.remove('hidden');
-    document.getElementById('qr-modal').classList.remove('hidden');
-    
-    const uniqueToken = Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
-    const link = `${window.location.origin}${window.location.pathname}?promotor=${currentUser.uid}&promo=${promoId}&token=${uniqueToken}`;
-    
-    document.getElementById('qrcode').innerHTML = '';
-    new QRCode(document.getElementById("qrcode"), { text: link, width: 250, height: 250 });
-  }
-
-  function closeQR() { 
-    document.getElementById('qr-backdrop').classList.add('hidden'); document.getElementById('qr-modal').classList.add('hidden'); 
-  }
-
-  // --- Lógica Cliente vía URL (QR Escaneado) Sigue intacta aquí ---
-  let countDownInterval;
-  let ticketListener = null; 
-  async function loadClienteView() {
-    const promoId = urlParams.get('promo');
-    const qrToken = urlParams.get('token'); 
-    
-    const doc = await db.collection('promos').doc(promoId).get();
-    if(!doc.exists || !doc.data().activa) {
-      document.getElementById('cliente-promo-titulo').innerText = "❌ Oferta no disponible"; return;
-    }
-    activePromo = doc.data();
-
-    if (activePromo.limite && (activePromo.usados || 0) >= activePromo.limite) {
-       document.getElementById('cliente-promo-titulo').innerText = "⚠️ Agotada"; return;
-    }
-
-    const now = new Date();
-    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0).getTime();
-    
-    if (qrToken) {
-      const tokenCheck = await db.collection('tickets').where('qrToken', '==', qrToken).get();
-      if (!tokenCheck.empty) {
-         document.getElementById('cliente-promo-titulo').innerText = "⚠️ QR Ya Utilizado";
-         document.getElementById('btn-reclamar').classList.add('hidden'); return;
-      }
-    }
-    document.getElementById('cliente-promo-titulo').innerText = activePromo.titulo;
-    document.getElementById('cliente-promo-desc').innerText = `Válido en: ${activePromo.nombreComercio}`;
-    startCountdown(midnight);
-  }
-
-  function escucharEstadoTicket(codigoTicket) {
-    if (ticketListener) ticketListener(); 
-    ticketListener = db.collection('tickets').where('codigo', '==', codigoTicket).onSnapshot(snapshot => {
-      if (!snapshot.empty && snapshot.docs[0].data().estado === 'validado') {
-          clearInterval(countDownInterval);
-          document.getElementById('ticket-area').className = "neo-banner success";
-          document.getElementById('cliente-msg').innerHTML = "<span style='color:var(--success-green); font-size: 20px;'>🎉 ¡CUPÓN CANJEADO!</span>";
-          document.getElementById('countdown').innerText = "00:00:00";
-      }
-    });
-  }
-
-  function startCountdown(expiresAt) {
-    const cdElement = document.getElementById('countdown');
-    clearInterval(countDownInterval);
-    countDownInterval = setInterval(() => {
-      let timeLeft = Math.floor((expiresAt - Date.now()) / 1000);
-      if(timeLeft <= 0) { clearInterval(countDownInterval); cdElement.innerText = "00:00:00"; return; }
-      let h = Math.floor(timeLeft / 3600); let m = Math.floor((timeLeft % 3600) / 60); let s = timeLeft % 60;
-      cdElement.innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-    }, 1000);
-  }
-
-  async function reclamarCupon() {
-    if(document.getElementById('btn-reclamar').disabled) return;
-    const promoId = urlParams.get('promo');
-    const qrToken = urlParams.get('token'); 
-    
-    document.getElementById('btn-reclamar').disabled = true;
-    document.getElementById('btn-reclamar').innerText = "Generando...";
-    const codigo = Math.floor(100000 + Math.random() * 900000).toString();
-    
-    await db.collection('tickets').add({
-      codigo: codigo,
-      promotorId: urlParams.get('promotor') || 'sin_promotor',
-      promoId: promoId,
-      comercioId: activePromo.comercioId,
-      estado: 'emitido',
-      qrToken: qrToken || null, 
-      timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-    await db.collection('promos').doc(promoId).update({ usados: firebase.firestore.FieldValue.increment(1) });
-    document.getElementById('btn-reclamar').classList.add('hidden');
-    document.getElementById('ticket-area').classList.remove('hidden');
-    document.getElementById('ticket-code').innerText = codigo;
-    escucharEstadoTicket(codigo); 
-  }
+  $$('input[name=npMod]').forEach(r=>r.onchange=updateModUI);updateModUI();
+  $('#npComision').addEventListener('input',updateAppCut);$('#npComisionPromotor').addEventListener('input',updateAppCut);
+  setInterval(()=>{$$('[data-exp]').forEach(el=>{
+    const t=+el.dataset.exp-Date.now();
+    el.textContent=t<=0?'00:00:00':fmtTime(t);
+    if(t<=0&&el.id==='cupTimer'){setTimeout(()=>{closeModal('m-cupon');toast('⌛ El cupón venció');route()},800)}
+  })},1000);
+  try{sess=JSON.parse(localStorage.getItem(SKEY))}catch(e){sess=null}
+  if(sess&&sess.role)route();else go('v-login');
+});
 </script>
-
 </body>
 </html>
