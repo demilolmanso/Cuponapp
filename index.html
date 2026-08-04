@@ -8,6 +8,7 @@
   <meta name="theme-color" content="#4CB5F9">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="favicon.ico">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,7 +22,6 @@
 
   <style>
     :root { 
-      /* Paleta Neobrutalista Costera Mejorada */
       --sand: #F4EBD0; 
       --sand-dark: #E8D9B0;
       --sea-blue: #4CB5F9; 
@@ -32,21 +32,17 @@
       --white: #FFFFFF;
       --navy: #03045E; 
       --navy-light: #14213D;
-      
       --alert-red: #EF476F; 
       --success-green: #06D6A0; 
       --wsp: #25D366;
       --pokeball-red: #FF0000;
-
       --border-width: 3px;
       --shadow-offset: 5px;
       --radius-lg: 24px;
       --radius-md: 16px;
       --radius-sm: 10px;
     }
-
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
     body { 
       font-family: 'Lexend', system-ui, sans-serif; 
       background-color: var(--sand); 
@@ -62,9 +58,7 @@
       justify-content: center; 
       min-height: 100vh;
     }
-
     h1, h2, h3, h4 { font-family: 'Fredoka', sans-serif; letter-spacing: -0.5px; }
-
     .container { 
       width: 100%; 
       max-width: 450px; 
@@ -77,13 +71,7 @@
       position: relative;
       animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-
-    @keyframes slideUp {
-      from { transform: translateY(30px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    /* HEADER NEOBRUTALISTA */
+    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     .neo-header {
       background: linear-gradient(135deg, var(--sea-blue) 0%, var(--sea-deep) 100%);
       padding: 30px 20px 25px;
@@ -92,7 +80,6 @@
       position: relative;
       overflow: hidden;
     }
-
     .neo-header::before {
       content: '';
       position: absolute;
@@ -101,20 +88,8 @@
       border-top: var(--border-width) solid var(--navy);
       border-radius: 50% 50% 0 0;
     }
-
-    h1 { 
-      margin: 0; 
-      font-size: 36px; 
-      font-weight: 700;
-      color: var(--white); 
-      text-transform: uppercase; 
-      text-shadow: 4px 4px 0px var(--navy);
-      line-height: 1;
-    }
-
+    h1 { margin: 0; font-size: 36px; font-weight: 700; color: var(--white); text-transform: uppercase; text-shadow: 4px 4px 0px var(--navy); line-height: 1; }
     h2, h3, h4 { color: var(--navy); margin-top: 0; }
-
-    /* TARJETAS Y CONTENEDORES */
     .neo-card { 
       background: var(--white); 
       padding: 20px; 
@@ -127,9 +102,7 @@
       overflow: hidden;
       transition: transform 0.2s;
     }
-    
     .neo-card:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0px var(--navy); }
-
     .neo-banner {
       background: var(--sky-light);
       padding: 18px;
@@ -137,34 +110,10 @@
       border: var(--border-width) solid var(--navy);
       margin-bottom: 18px;
       text-align: center;
-      position: relative;
     }
-
     .neo-banner.alert { background: var(--alert-red); color: white; }
     .neo-banner.success { background: var(--success-green); }
     .neo-banner.dark { background: var(--navy); color: white; }
-    .neo-banner.pokeball { 
-      background: linear-gradient(to bottom, var(--pokeball-red) 50%, var(--white) 50%); 
-      position: relative;
-    }
-    .neo-banner.pokeball::after {
-      content: '';
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 40px; height: 40px;
-      background: var(--white);
-      border: var(--border-width) solid var(--navy);
-      border-radius: 50%;
-    }
-    .neo-banner.pokeball::before {
-      content: '';
-      position: absolute;
-      top: 50%; left: 0; right: 0; height: var(--border-width);
-      background: var(--navy);
-    }
-
-    /* BOTONES GAMIFICADOS */
     button, .btn-link { 
       width: 100%; 
       padding: 15px; 
@@ -185,21 +134,14 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-
-    button:active, .btn-link:active { 
-      transform: translate(var(--shadow-offset), var(--shadow-offset)); 
-      box-shadow: 0px 0px 0px var(--navy); 
-    }
-    button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--navy); }
-    
+    button:active, .btn-link:active { transform: translate(var(--shadow-offset), var(--shadow-offset)); box-shadow: 0px 0px 0px var(--navy); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
     button.accent { background: var(--sun-orange); color: var(--navy); }
     button.accent:hover:not(:disabled) { background: var(--sun-glow); }
     button.primary { background: var(--sea-blue); color: var(--navy); }
     button.secondary { background: var(--sand); }
     button.danger { background: var(--alert-red); color: white; }
     .btn-wsp { background: var(--wsp); color: var(--navy); }
-    
-    /* Botón PWA Install Flotante */
     #install-btn {
       display: none;
       background: var(--sun-orange);
@@ -224,8 +166,6 @@
       50% { transform: scale(1.05); box-shadow: 6px 6px 0px var(--navy); }
       100% { transform: scale(1); box-shadow: 4px 4px 0px var(--navy); }
     }
-
-    /* INPUTS */
     input, select, textarea { 
       width: 100%; 
       padding: 14px; 
@@ -240,148 +180,36 @@
       box-shadow: 3px 3px 0px var(--navy);
       transition: all 0.2s;
     }
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      box-shadow: 5px 5px 0px var(--sun-orange);
-      background: #FAFAFA;
-    }
-
-    /* UTILIDADES */
+    input:focus, select:focus, textarea:focus { outline: none; box-shadow: 5px 5px 0px var(--sun-orange); background: #FAFAFA; }
     .hidden { display: none !important; }
     #qrcode img { margin: 15px auto; border: var(--border-width) solid var(--navy); border-radius: var(--radius-sm); padding: 10px; background: white; box-shadow: 4px 4px 0px var(--navy); }
-    
-    .timer { 
-      font-family: 'Fredoka', monospace;
-      font-size: 36px; 
-      font-weight: 700; 
-      color: var(--alert-red); 
-      margin: 10px 0; 
-      text-align: center; 
-      text-shadow: 3px 3px 0px var(--navy); 
-      letter-spacing: 2px; 
-      font-variant-numeric: tabular-nums; 
-    }
-    
-    .badge { 
-      display: inline-block;
-      background: var(--sun-orange); 
-      color: var(--navy); 
-      padding: 6px 12px; 
-      border-radius: 20px; 
-      font-size: 12px; 
-      font-weight: 700; 
-      border: 2px solid var(--navy); 
-      text-transform: uppercase;
-      box-shadow: 2px 2px 0px var(--navy);
-    }
+    .timer { font-family: 'Fredoka', monospace; font-size: 36px; font-weight: 700; color: var(--alert-red); margin: 10px 0; text-align: center; text-shadow: 3px 3px 0px var(--navy); letter-spacing: 2px; font-variant-numeric: tabular-nums; }
+    .badge { display: inline-block; background: var(--sun-orange); color: var(--navy); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 2px solid var(--navy); text-transform: uppercase; box-shadow: 2px 2px 0px var(--navy); }
     .badge.dark { background: var(--navy); color: var(--white); }
     .badge.success { background: var(--success-green); color: var(--navy); }
     .badge.alert { background: var(--alert-red); color: white; }
-    
-    .nav-bar { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      padding: 12px 15px; 
-      background: var(--white); 
-      border-bottom: var(--border-width) solid var(--navy); 
-    }
-    
-    .instruction-box { 
-      font-size: 14px; 
-      color: var(--navy); 
-      font-weight: 500; 
-      background: var(--sky-light); 
-      padding: 15px; 
-      border-radius: var(--radius-sm); 
-      border: var(--border-width) solid var(--navy); 
-      margin-bottom: 15px;
-      box-shadow: 3px 3px 0px var(--navy);
-    }
-    
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: var(--white); border-bottom: var(--border-width) solid var(--navy); }
+    .instruction-box { font-size: 14px; color: var(--navy); font-weight: 500; background: var(--sky-light); padding: 15px; border-radius: var(--radius-sm); border: var(--border-width) solid var(--navy); margin-bottom: 15px; box-shadow: 3px 3px 0px var(--navy); }
     .scroll-container { max-height: 50vh; overflow-y: auto; padding: 5px; margin-top: 10px; }
     .scroll-container::-webkit-scrollbar { width: 8px; }
     .scroll-container::-webkit-scrollbar-track { background: var(--sand); border-left: 2px solid var(--navy); }
     .scroll-container::-webkit-scrollbar-thumb { background: var(--sea-blue); border: 2px solid var(--navy); border-radius: 10px; }
-    
     .view-padding { padding: 20px; }
-
-    #qr-backdrop {
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(3,4,94,0.85);
-      backdrop-filter: blur(6px);
-      z-index: 99;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: fadeIn 0.3s;
-    }
-
+    #qr-backdrop { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(3,4,94,0.85); backdrop-filter: blur(6px); z-index: 99; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-    /* Radar Pokémon GO */
-    .radar-container {
-      position: relative;
-      width: 200px;
-      height: 200px;
-      margin: 20px auto;
-      border-radius: 50%;
-      background: radial-gradient(circle, var(--sky-light) 0%, var(--sea-blue) 100%);
-      border: var(--border-width) solid var(--navy);
-      box-shadow: 0 0 20px var(--sea-blue);
-      overflow: hidden;
-    }
-    .radar-sweep {
-      position: absolute;
-      top: 50%; left: 50%;
-      width: 50%; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--success-green));
-      transform-origin: left center;
-      animation: sweep 3s linear infinite;
-    }
+    .radar-container { position: relative; width: 200px; height: 200px; margin: 20px auto; border-radius: 50%; background: radial-gradient(circle, var(--sky-light) 0%, var(--sea-blue) 100%); border: var(--border-width) solid var(--navy); box-shadow: 0 0 20px var(--sea-blue); overflow: hidden; }
+    .radar-sweep { position: absolute; top: 50%; left: 50%; width: 50%; height: 2px; background: linear-gradient(90deg, transparent, var(--success-green)); transform-origin: left center; animation: sweep 3s linear infinite; }
     @keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    .radar-center {
-      position: absolute;
-      top: 50%; left: 50%;
-      width: 15px; height: 15px;
-      background: var(--sun-orange);
-      border: 2px solid var(--navy);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 2;
-      box-shadow: 0 0 10px var(--sun-orange);
-    }
-    .radar-ring {
-      position: absolute;
-      border: 1px dashed var(--navy);
-      border-radius: 50%;
-      opacity: 0.4;
-    }
+    .radar-center { position: absolute; top: 50%; left: 50%; width: 15px; height: 15px; background: var(--sun-orange); border: 2px solid var(--navy); border-radius: 50%; transform: translate(-50%, -50%); z-index: 2; box-shadow: 0 0 10px var(--sun-orange); }
+    .radar-ring { position: absolute; border: 1px dashed var(--navy); border-radius: 50%; opacity: 0.4; }
     .radar-ring.r1 { width: 33%; height: 33%; top: 33.5%; left: 33.5%; }
     .radar-ring.r2 { width: 66%; height: 66%; top: 17%; left: 17%; }
-
-    .promo-pin {
-      position: absolute;
-      width: 24px; height: 24px;
-      background: var(--pokeball-red);
-      border: 2px solid var(--navy);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      cursor: pointer;
-      z-index: 3;
-      animation: bounce 1s infinite alternate;
-    }
-    @keyframes bounce {
-      from { transform: translate(-50%, -50%) scale(1); }
-      to { transform: translate(-50%, -50%) scale(1.2); }
-    }
   </style>
 </head>
 <body>
 
 <div class="container">
   
-  <!-- ENCABEZADO GLOBAL -->
   <div class="neo-header">
     <h1>🌊 Cuponapp</h1>
     <span class="badge dark" style="margin-top: 10px;">MAR DEL PLATA</span>
@@ -443,12 +271,14 @@
         <h3 style="margin:0; color:var(--white);">👑 Panel Supremo</h3>
       </div>
       
-      <!-- NUEVO: CREAR OFERTAS PÚBLICAS (POKEMON GO) -->
+      <!-- CREAR OFERTAS PÚBLICAS (POKEMON GO) -->
       <div class="neo-card" style="background: var(--sky-light); border-color: var(--pokeball-red);">
         <h4>📍 Crear Oferta Pública (Estilo Pokémon GO)</h4>
         <p style="font-size: 12px; margin-top:0;">Estas ofertas aparecen en el radar de todos los clientes. Deben estar geolocalizadas.</p>
         <input type="text" id="admin-public-title" placeholder="Título (ej: 2x1 en Heladería)">
         <textarea id="admin-public-desc" placeholder="Descripción de la oferta" rows="2"></textarea>
+        <select id="admin-public-select-comercio"><option value="">Seleccionar comercio...</option></select>
+        <input type="number" id="admin-public-precio" placeholder="Costo por canje al comercio (opcional)">
         <div style="display:flex; gap:10px;">
           <input type="number" id="admin-public-lat" placeholder="Latitud (ej: -38.000)" step="any">
           <input type="number" id="admin-public-lng" placeholder="Longitud (ej: -57.55)" step="any">
@@ -528,7 +358,7 @@
     </div>
   </div>
 
-  <!-- MODAL ENVOLVENTE QR PROMOTOR -->
+  <!-- MODAL QR PROMOTOR -->
   <div id="qr-backdrop" class="hidden">
     <div style="background:var(--sand); width:90%; max-width:400px; border:var(--border-width) solid var(--navy); border-radius:var(--radius-lg); padding:20px; box-shadow: 8px 8px 0 var(--navy);">
       <div class="neo-banner success">
@@ -540,16 +370,13 @@
     </div>
   </div>
 
-  <!-- PANTALLA CLIENTE (USUARIO FINAL) -->
+  <!-- PANTALLA CLIENTE -->
   <div id="view-cliente" class="hidden">
     <div class="nav-bar">
       <span class="badge" id="cliente-nombre">🛍️ Cliente</span>
       <button onclick="logout()" class="secondary" style="width:auto; padding:8px 15px; margin:0; box-shadow: 2px 2px 0 var(--navy);">Salir</button>
     </div>
-    
-    <div class="view-padding" id="cliente-content-area">
-      <!-- El contenido se carga dinámicamente según si viene de un QR o está en modo Pokémon GO -->
-    </div>
+    <div class="view-padding" id="cliente-content-area"></div>
   </div>
 
   <!-- PANEL COMERCIO -->
@@ -588,15 +415,13 @@
     </div>
   </div>
 
-  <!-- TOAST -->
   <div id="toast" style="position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:var(--navy); color:white; padding:15px 25px; border-radius:50px; border:3px solid var(--sun-orange); box-shadow: 4px 4px 0 var(--sun-orange); font-weight:600; display:none; z-index:100; opacity:0; transition:all 0.3s; max-width: 90%; text-align: center;"></div>
 </div>
 
-<!-- BOTÓN FLOTANTE PWA -->
 <button id="install-btn">⬇️ Instalar App</button>
 
 <script>
-  // CONFIGURACIÓN FIREBASE
+  // ===== FIREBASE (SDK compat: los métodos se llaman sobre las instancias) =====
   const firebaseConfig = {
     apiKey: "AizaSyDBUZ3A_3RtBmdCr_BMagI6cSubmo8gPQ",
     authDomain: "cuponapp-mdp.firebaseapp.com",
@@ -613,11 +438,10 @@
   let activePromo = null;
   let countDownInterval = null;
   let ticketListener = null;
-  let promoListener = null;
-  
+
   const urlParams = new URLSearchParams(window.location.search);
 
-  // --- PWA INSTALACIÓN ---
+  // ===== PWA INSTALL =====
   let deferredPrompt;
   const installBtnFloat = document.getElementById('install-btn');
   const installBtnInline = document.getElementById('install-btn-inline');
@@ -630,48 +454,39 @@
 
     const triggerInstall = () => {
       deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          showToast('¡App instalada! 🎉');
-        }
+      deferredPrompt.userChoice.then((choice) => {
+        if (choice.outcome === 'accepted') showToast('¡App instalada! 🎉');
         deferredPrompt = null;
         if (installBtnFloat) installBtnFloat.style.display = 'none';
         if (installBtnInline) installBtnInline.style.display = 'none';
       });
     };
-
     if (installBtnFloat) installBtnFloat.onclick = triggerInstall;
     if (installBtnInline) installBtnInline.onclick = triggerInstall;
   });
 
   window.addEventListener('appinstalled', () => {
-    console.log('App instalada como PWA');
     if (installBtnFloat) installBtnFloat.style.display = 'none';
     if (installBtnInline) installBtnInline.style.display = 'none';
   });
 
-  // SERVICE WORKER
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then(reg => console.log('SW registrado', reg))
-        .catch(error => console.error('Error SW:', error));
+      navigator.serviceWorker.register('/sw.js').catch(err => console.error('Error SW:', err));
     });
   }
 
+  // ===== AUTH (SINTAXIS COMPAT CORRECTA) =====
   function loginGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth.signInWithPopup(auth, provider)
-      .then('')
-      .catch(error => {
-        showToast('Error al iniciar sesión: ' + error.message);
-      });
+    auth.signInWithPopup(provider)
+      .catch(error => showToast('Error al iniciar sesión: ' + error.message));
   }
 
   function logout() {
-    firebase.auth.signOut(auth)
-      .then(() => { location.reload(); })
-      .catch(error => { showToast('Error al cerrar sesión: ' + error.message); });
+    auth.signOut()
+      .then(() => location.reload())
+      .catch(error => showToast('Error al cerrar sesión: ' + error.message));
   }
 
   function showToast(msg) {
@@ -679,39 +494,29 @@
     toast.innerHTML = msg;
     toast.style.display = 'block';
     setTimeout(() => { toast.style.opacity = '1'; }, 10);
-    setTimeout(() => { 
-      toast.style.opacity = '0'; 
+    setTimeout(() => {
+      toast.style.opacity = '0';
       setTimeout(() => { toast.style.display = 'none'; }, 300);
     }, 3000);
   }
 
   function setRole(role) {
-    const userRef = db.collection('usuarios').doc(currentUser.uid);
-    userRef.set({ rol: role, approbado: false }, { merge: true })
-      .then(() => { window.location.reload(); })
-      .catch(error => { showToast('Error al guardar el rol: ' + error.message); });
+    db.collection('usuarios').doc(currentUser.uid).set({ rol: role, approbado: false }, { merge: true })
+      .then(() => window.location.reload())
+      .catch(error => showToast('Error al guardar el rol: ' + error.message));
   }
 
   function showView(viewId) {
-    const views = ['view-login', 'view-role', 'view-espera', 'view-bloqueado', 'view-admin', 'view-promotor', 'view-cliente', 'view-comercio'];
-    views.forEach(v => {
-      if (v === viewId) {
-        document.getElementById(v).classList.remove('hidden');
-      } else {
-        document.getElementById(v).classList.add('hidden');
-      }
+    ['view-login','view-role','view-espera','view-bloqueado','view-admin','view-promotor','view-cliente','view-comercio'].forEach(v => {
+      document.getElementById(v).classList.toggle('hidden', v !== viewId);
     });
   }
 
-  // ACCESO ADMIN RESTRINGIDO POR CORREO
   const ADMIN_EMAIL_STRING = 'demiancepeda2005@gmail.com';
 
-  auth.onAuthStateChanged((iserBackup) => {
-    currentUser = iserBackup;
-    if (!currentUser) {
-      showView('view-login');
-      return;
-    }
+  auth.onAuthStateChanged((user) => {
+    currentUser = user;
+    if (!currentUser) { showView('view-login'); return; }
 
     db.collection('usuarios').doc(currentUser.uid).get()
       .then(docSnapshot => {
@@ -721,29 +526,16 @@
           if (currentUser.email === ADMIN_EMAIL_STRING) {
             db.collection('usuarios').doc(currentUser.uid).set({ rol: 'admin', approbado: true })
               .then(() => window.location.reload());
-          } else {
-            showView('view-role');
-          }
+          } else { showView('view-role'); }
           return;
         }
 
-        if (userData.rol === 'comercio' && userData.bloqueado === true) {
-          showView('view-bloqueado');
-          return;
-        }
-
-        if (userData.approbado === false && (userData.rol === 'promotor' || userData.rol === 'comercio')) {
-          showView('view-espera');
-          return;
-        }
+        if (userData.rol === 'comercio' && userData.bloqueado === true) { showView('view-bloqueado'); return; }
+        if (userData.approbado === false && (userData.rol === 'promotor' || userData.rol === 'comercio')) { showView('view-espera'); return; }
 
         if (userData.rol === 'admin') {
+          if (currentUser.email !== ADMIN_EMAIL_STRING) { showToast('⚠️ Acceso no autorizado.'); logout(); return; }
           document.getElementById('admin-email').textContent = "👑 " + currentUser.email;
-          if (currentUser.email !== ADMIN_EMAIL_STRING) {
-            showToast('⚠️ Acceso no autorizado.');
-            logout();
-            return;
-          }
           loadAdminDashboard();
           showView('view-admin');
         } else if (userData.rol === 'promotor') {
@@ -759,233 +551,247 @@
           showView('view-cliente');
         }
       })
-      .catch(error => {
-        showToast('Error al cargar datos del usuario: ' + error.message);
-      });
+      .catch(error => showToast('Error al cargar usuario: ' + error.message));
   });
 
-  // ============== LÓGICA ADMIN ==============
-  function createPromo() { /* Lógica original mantenida */ 
+  // ============== ADMIN ==============
+  function loadAdminDashboard() {
+    db.collection('usuarios').where('rol', '==', 'comercio').get().then(q => {
+      const sel1 = document.getElementById('admin-select-comercio');
+      const sel2 = document.getElementById('admin-public-select-comercio');
+      sel1.innerHTML = '<option value="">Seleccionar comercio...</option>';
+      sel2.innerHTML = '<option value="">Seleccionar comercio...</option>';
+      q.docs.forEach(doc => {
+        const d = doc.data();
+        [sel1, sel2].forEach(sel => {
+          const op = document.createElement('option');
+          op.value = doc.id;
+          op.textContent = d.nombre || 'Local sin nombre';
+          sel.appendChild(op);
+        });
+      });
+    });
+    loadAdminPublicPromos();
+    loadAdminLists();
+  }
+
+  function createPromo() {
     const comercioId = document.getElementById('admin-select-comercio').value;
     const titulo = document.getElementById('admin-input-titulo').value.trim();
     const precio = parseFloat(document.getElementById('admin-input-precio').value) || 0;
     const comision = parseFloat(document.getElementById('admin-input-comision').value) || 0;
     const limite = parseInt(document.getElementById('admin-input-limite').value) || null;
 
-    if (!comercioId || !titulo || precio <= 0) {
-      showToast('Completá comercio, título y precio.');
-      return;
+    if (!comercioId || !titulo || precio <= 0 || comision < 0) {
+      showToast('Completá todos los campos correctamente.'); return;
     }
 
-    db.collection('usuarios').doc(comercioId).get()
-      .then(docSnapshot => {
-        const comData = docSnapshot.data();
-        if (!comData) { showToast('Comercio no encontrado.'); return; }
-
-        db.collection('promos').add({
-          titulo: titulo,
-          comercioId: comercioId,
-          nombreComercio: comData.nombre || 'Local',
-          precioComercio: precio,
-          comision: comision,
-          limite: limite,
-          usados: 0,
-          activa: true,
-          creadoEn: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        .then(() => {
-          showToast('¡Promo creada con éxito!');
-          document.getElementById('admin-input-titulo').value = '';
-          document.getElementById('admin-input-precio').value = '';
-          document.getElementById('admin-input-comision').value = '';
-          document.getElementById('admin-input-limite').value = '';
-        })
-        .catch(error => showToast('Error al crear: ' + error.message));
-      });
+    db.collection('usuarios').doc(comercioId).get().then(snap => {
+      const comData = snap.data();
+      if (!comData) { showToast('Comercio no encontrado.'); return; }
+      db.collection('promos').add({
+        titulo, comercioId,
+        nombreComercio: comData.nombre || 'Local',
+        precioComercio: precio, comision, limite,
+        usados: 0, activa: true,
+        creadoEn: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        showToast('¡Promo creada con éxito!');
+        ['admin-input-titulo','admin-input-precio','admin-input-comision','admin-input-limite'].forEach(id => document.getElementById(id).value = '');
+      }).catch(e => showToast('Error al crear la promo: ' + e.message));
+    });
   }
 
   function createPublicPromo() {
-    const title = document.getElementById('admin-public-title').value.trim();
+    const titulo = document.getElementById('admin-public-title').value.trim();
     const desc = document.getElementById('admin-public-desc').value.trim();
+    const comercioId = document.getElementById('admin-public-select-comercio').value;
+    const precio = parseFloat(document.getElementById('admin-public-precio').value) || 0;
     const radio = parseInt(document.getElementById('admin-public-radio').value) || 100;
     const lat = parseFloat(document.getElementById('admin-public-lat').value);
     const lng = parseFloat(document.getElementById('admin-public-lng').value);
-    const limit = parseInt(document.getElementById('admin-public-limit').value) || 50;
+    const limite = parseInt(document.getElementById('admin-public-limit').value) || 50;
 
-    if (!title || !desc || isNaN(lat) || isNaN(lng)) {
-      showToast('Completá todos los campos (Lat/Lng obligatorios).');
-      return;
+    if (!titulo || !desc || !comercioId || isNaN(lat) || isNaN(lng)) {
+      showToast('Completá todos los campos (comercio y Lat/Lng obligatorios).'); return;
     }
 
-    db.collection('publicPromos').add({
-      titulo: title,
-      descripcion: desc,
-      radio: radio,
-      latitud: lat,
-      longitud: lng,
-      limite: limit,
-      usados: 0,
-      activa: true,
-      creadoEn: firebase.firestore.FieldValue.serverTimestamp()
-    })
-    .then(() => {
-      showToast('🎯 ¡Oferta lanzada al mapa!');
-      document.getElementById('admin-public-title').value = '';
-      document.getElementById('admin-public-desc').value = '';
-      document.getElementById('admin-public-lat').value = '';
-      document.getElementById('admin-public-lng').value = '';
-    })
-    .catch(error => showToast('Error: ' + error.message));
-  }
-
-  function loadAdminDashboard() {
-    // Cargar Comercios para el Select
-    db.collection('usuarios').where('rol', '==', 'comercio').get()
-      .then(querySnapshot => {
-        const select = document.getElementById('admin-select-comercio');
-        select.innerHTML = '<option value="">Seleccionar comercio...</option>';
-        querySnapshot.docs.forEach(doc => {
-          const data = doc.data();
-          const option = document.createElement('option');
-          option.value = doc.id;
-          option.textContent = data.nombre || 'Local sin nombre';
-          select.appendChild(option);
-        });
-      });
-
-    loadAdminPublicPromos();
-    loadAdminLists();
+    db.collection('usuarios').doc(comercioId).get().then(snap => {
+      const comData = snap.data();
+      db.collection('publicPromos').add({
+        titulo, descripcion: desc, comercioId,
+        nombreComercio: comData.nombre || 'Local',
+        precioComercio: precio, radio, latitud: lat, longitud: lng,
+        limite, usados: 0, activa: true,
+        creadoEn: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        showToast('🎯 ¡Oferta lanzada al mapa!');
+        ['admin-public-title','admin-public-desc','admin-public-lat','admin-public-lng','admin-public-precio'].forEach(id => document.getElementById(id).value = '');
+      }).catch(e => showToast('Error al crear: ' + e.message));
+    });
   }
 
   function loadAdminPublicPromos() {
     const list = document.getElementById('admin-public-promos-list');
-    list.innerHTML = '<p style="color:gray;">Cargando...</p>';
-    db.collection('publicPromos').orderBy('creadoEn', 'desc').onSnapshot(querySnapshot => {
+    db.collection('publicPromos').orderBy('creadoEn', 'desc').onSnapshot(q => {
       list.innerHTML = '';
-      if (querySnapshot.empty) { list.innerHTML = '<p style="color:gray;">No hay ofertas públicas.</p>'; return; }
-      querySnapshot.docs.forEach(doc => {
-        const data = doc.data();
+      if (q.empty) { list.innerHTML = '<p style="color:gray;">No hay ofertas públicas. ¡Creá una! 🎯</p>'; return; }
+      q.docs.forEach(doc => {
+        const d = doc.data();
         const div = document.createElement('div');
-        div.style = 'padding:15px; background:var(--white); border-radius:16px; border:3px solid var(--navy); margin-bottom:15px; box-shadow: 4px 4px 0 var(--navy);';
+        div.style = 'padding:15px; background:var(--white); border-radius:16px; border:3px solid var(--navy); margin-bottom:15px; box-shadow:4px 4px 0 var(--navy);';
         div.innerHTML = `
-          <h4 style="margin:0 0 5px 0;">${data.titulo}</h4>
-          <p style="margin:0 0 5px 0; font-size:14px;">${data.descripcion}</p>
-          <p style="margin:0 0 5px 0; font-size:13px;"><span class="badge">${data.usados || 0}/${data.limite} intentos</span></p>
-          <p style="margin:0 0 5px 0; font-size:12px; color:gray;">📍 Lat: ${data.latitud.toFixed(4)} | Lng: ${data.longitud.toFixed(4)} | Radio: ${data.radio}m</p>
-          <button onclick="togglePublicPromoStatus('${doc.id}', ${data.activa})" class="secondary" style="font-size:12px; padding:8px; margin-top:8px;">${data.activa ? 'Desactivar' : 'Activar'}</button>
+          <h4 style="margin:0 0 5px 0;">${d.titulo}</h4>
+          <p style="margin:0 0 5px 0; font-size:14px;">${d.descripcion}</p>
+          <p style="margin:0 0 5px 0; font-size:13px;"><span class="badge">${d.usados || 0}/${d.limite} intentos</span></p>
+          <p style="margin:0 0 5px 0; font-size:12px; color:gray;">🏪 ${d.nombreComercio || 'Sin comercio'} | 📍 Radio: ${d.radio} m</p>
+          <button onclick="togglePublicPromoStatus('${doc.id}', ${d.activa})" class="secondary" style="font-size:12px; padding:8px; margin-top:8px;">${d.activa ? 'Desactivar' : 'Activar'}</button>
         `;
         list.appendChild(div);
       });
     });
   }
 
-  function togglePublicPromoStatus(promoId, currentStatus) {
-    db.collection('publicPromos').doc(promoId).update({ activa: !currentStatus })
+  function togglePublicPromoStatus(id, st) {
+    db.collection('publicPromos').doc(id).update({ activa: !st })
       .then(() => showToast('Oferta actualizada!'))
-      .catch(error => showToast('Error: ' + error.message));
+      .catch(e => showToast('Error: ' + e.message));
   }
 
   function loadAdminLists() {
-    // Promotores Pendientes
-    db.collection('usuarios').where('rol', '==', 'promotor').where('approbado', '==', false).onSnapshot(q => {
+    db.collection('usuarios').where('rol','==','comercio').where('approbado','==',false).onSnapshot(q => {
       const list = document.getElementById('admin-pendientes-list');
       list.innerHTML = '';
-      if (q.empty) { list.innerHTML = '<p style="color:gray;">No hay pendientes.</p>'; return; }
+      if (q.empty) { list.innerHTML = '<p style="color:gray; font-size:13px;">No hay comercios pendientes ✅</p>'; return; }
       q.docs.forEach(doc => {
-        const data = doc.data();
+        const d = doc.data();
         const div = document.createElement('div');
         div.style = 'padding:10px; background:var(--sky-light); border-radius:8px; margin-bottom:8px; border:2px solid var(--navy);';
-        div.innerHTML = `
-          <strong>${data.nombre || data.email}</strong>
-          <button onclick="approvePromotor('${doc.id}')" class="primary" style="font-size:12px; padding:6px; margin-top:8px;">Aprobar</button>
-        `;
+        div.innerHTML = `<strong>${d.nombre || d.email}</strong>
+          <button onclick="approveComercio('${doc.id}')" class="primary" style="font-size:12px; padding:6px; margin-top:8px;">Aprobar</button>`;
         list.appendChild(div);
       });
     });
 
-    // Comercios
-    db.collection('usuarios').where('rol', '==', 'comercio').onSnapshot(q => {
-      const list = document.getElementById('admin-comercios-list');
-      list.innerHTML = '';
-      q.docs.forEach(doc => {
-        const data = doc.data();
-        const badge = data.approbado ? '<span class="badge success">Activo</span>' : '<span class="badge dark">Pendiente</span>';
-        const div = document.createElement('div');
-        div.style = 'padding:10px; background:var(--sky-light); border-radius:8px; margin-bottom:8px; border:2px solid var(--navy);';
-        div.innerHTML = `<strong>${data.nombre || data.email}</strong> ${badge}<br>Deuda: $${data.deuda || 0}`;
-        list.appendChild(div);
-      });
-    });
-
-    // Promos de Promotores
-    db.collection('promos').orderBy('creadoEn', 'desc').onSnapshot(q => {
+    db.collection('promos').orderBy('creadoEn','desc').onSnapshot(q => {
       const list = document.getElementById('admin-promos-list');
       list.innerHTML = '';
       q.docs.forEach(doc => {
-        const data = doc.data();
+        const d = doc.data();
+        const badge = d.activa ? '<span class="badge success">Activa</span>' : '<span class="badge dark">Inactiva</span>';
+        const limitText = d.limite ? `${d.usados || 0}/${d.limite} intentos` : 'Sin límite';
         const div = document.createElement('div');
         div.style = 'padding:10px; background:var(--sky-light); border-radius:8px; margin-bottom:8px; border:2px solid var(--navy);';
-        const limitText = data.limite ? `${data.usados || 0}/${data.limite} intentos` : `Sin límite`;
-        div.innerHTML = `<strong>${data.titulo}</strong> <br>${data.nombreComercio} | ${limitText}`;
+        div.innerHTML = `<strong>${d.titulo}</strong> ${badge}<br>
+          <span style="font-size:13px;">En: ${d.nombreComercio} | ${limitText}</span><br>
+          <button onclick="togglePromoStatus('${doc.id}', ${d.activa})" class="secondary" style="font-size:12px; padding:6px; margin-top:8px;">${d.activa ? 'Desactivar' : 'Activar'}</button>`;
         list.appendChild(div);
       });
+      if (q.empty) list.innerHTML = '<p style="color:gray;">No hay promos.</p>';
+    });
+
+    db.collection('usuarios').where('rol','==','promotor').onSnapshot(q => {
+      const list = document.getElementById('admin-promotores-list');
+      list.innerHTML = '';
+      q.docs.forEach(doc => {
+        const d = doc.data();
+        const badge = d.approbado ? '<span class="badge success">Aprobado</span>' : '<span class="badge dark">Pendiente</span>';
+        const div = document.createElement('div');
+        div.style = 'padding:10px; background:var(--sky-light); border-radius:8px; margin-bottom:8px; border:2px solid var(--navy);';
+        div.innerHTML = `<strong>${d.nombre || d.email}</strong> ${badge}<br>
+          <span style="font-size:13px;">Saldo: $${d.saldo || 0}</span><br>
+          <button onclick="approvePromotor('${doc.id}')" class="primary" style="font-size:12px; padding:6px; margin-top:8px; display:${d.approbado ? 'none' : 'inline-block'};">Aprobar</button>
+          <button onclick="sendWhatsApp('${doc.id}')" class="btn-link btn-wsp" style="font-size:12px; padding:6px; margin-top:8px; width:auto;">💬 WhatsApp</button>`;
+        list.appendChild(div);
+      });
+      if (q.empty) list.innerHTML = '<p style="color:gray;">No hay promotores.</p>';
+    });
+
+    db.collection('usuarios').where('rol','==','comercio').onSnapshot(q => {
+      const list = document.getElementById('admin-comercios-list');
+      list.innerHTML = '';
+      q.docs.forEach(doc => {
+        const d = doc.data();
+        const badge = d.approbado ? '<span class="badge success">Activo</span>' : '<span class="badge dark">Pendiente</span>';
+        const bloqueo = d.bloqueado ? '<span class="badge alert">Bloqueado</span>' : '';
+        const div = document.createElement('div');
+        div.style = 'padding:10px; background:var(--sky-light); border-radius:8px; margin-bottom:8px; border:2px solid var(--navy);';
+        div.innerHTML = `<strong>${d.nombre || d.email}</strong> ${badge} ${bloqueo}<br>
+          <span style="font-size:13px;">Deuda: $${d.deuda || 0}</span><br>
+          <button onclick="approveComercio('${doc.id}')" class="primary" style="font-size:12px; padding:6px; margin-top:8px; display:${d.approbado ? 'none' : 'inline-block'};">Aprobar</button>
+          <button onclick="toggleBloqueoComercio('${doc.id}', ${d.bloqueado})" class="secondary" style="font-size:12px; padding:6px; margin-top:8px; display:${d.approbado ? 'inline-block' : 'none'};">${d.bloqueado ? 'Desbloquear' : 'Bloquear'}</button>
+          <button onclick="sendWhatsApp('${doc.id}')" class="btn-link btn-wsp" style="font-size:12px; padding:6px; margin-top:8px; width:auto;">💬 WhatsApp</button>`;
+        list.appendChild(div);
+      });
+      if (q.empty) list.innerHTML = '<p style="color:gray;">No hay comercios.</p>';
     });
   }
 
-  function approvePromotor(promotorId) {
-    db.collection('usuarios').doc(promotorId).update({ approbado: true })
-      .then(() => showToast('Promotor aprobado!'));
+  function togglePromoStatus(id, st) {
+    db.collection('promos').doc(id).update({ activa: !st })
+      .then(() => showToast('Promo actualizada!'))
+      .catch(e => showToast('Error: ' + e.message));
+  }
+  function toggleBloqueoComercio(id, st) {
+    db.collection('usuarios').doc(id).update({ bloqueado: !st })
+      .then(() => showToast('Local actualizado!'))
+      .catch(e => showToast('Error: ' + e.message));
+  }
+  function approvePromotor(id) {
+    db.collection('usuarios').doc(id).update({ approbado: true })
+      .then(() => showToast('Promotor aprobado!'))
+      .catch(e => showToast('Error: ' + e.message));
+  }
+  function approveComercio(id) {
+    db.collection('usuarios').doc(id).update({ approbado: true })
+      .then(() => showToast('Comercio aprobado!'))
+      .catch(e => showToast('Error: ' + e.message));
+  }
+  function sendWhatsApp(uid) {
+    db.collection('usuarios').doc(uid).get().then(s => {
+      const d = s.data() || {};
+      let tel = (d.telefono || '').replace(/\D/g, '');
+      if (!tel) { showToast('El usuario no cargó teléfono.'); return; }
+      if (!tel.startsWith('54')) tel = '54' + tel;
+      window.open('https://wa.me/' + tel + '?text=Hola!%20Te%20escribimos%20de%20Cuponapp%20🌊', '_blank');
+    });
   }
 
-  // ============== LÓGICA PROMOTOR ==============
+  // ============== PROMOTOR ==============
   function loadPromotorDashboard() {
     db.collection('usuarios').doc(currentUser.uid).onSnapshot(doc => {
-      const data = doc.data();
-      document.getElementById('promotor-saldo').textContent = '$' + (data.saldo || 0).toFixed(2);
-      document.getElementById('promotor-input-alias').value = data.cbu || '';
+      const d = doc.data();
+      document.getElementById('promotor-saldo').textContent = '$' + (d.saldo || 0).toFixed(2);
+      document.getElementById('promotor-input-alias').value = d.cbu || '';
     });
 
-    db.collection('promos').where('activa', '==', true).onSnapshot(querySnapshot => {
+    db.collection('promos').where('activa', '==', true).onSnapshot(q => {
       const list = document.getElementById('promotor-promos-list');
       list.innerHTML = '';
-      querySnapshot.docs.forEach(doc => {
-        const data = doc.data();
-        const url = `${window.location.origin}?cliente=1&promo=${doc.id}`;
-        const limitText = data.limite ? `${data.usados || 0}/${data.limite} intentos` : `Sin límite`;
+      q.docs.forEach(doc => {
+        const d = doc.data();
+        const url = `${window.location.origin}?cliente=1&promo=${doc.id}&promotor=${currentUser.uid}`;
+        const limitText = d.limite ? `${d.usados || 0}/${d.limite} intentos` : 'Sin límite';
         const div = document.createElement('div');
         div.className = 'neo-card';
         div.innerHTML = `
-          <h3 style="margin:0 0 10px 0; color:var(--navy);">${data.titulo}</h3>
-          <p style="margin:0 0 8px 0; font-size:14px;"><strong>En:</strong> ${data.nombreComercio}</p>
+          <h3 style="margin:0 0 10px 0;">${d.titulo}</h3>
+          <p style="margin:0 0 8px 0; font-size:14px;"><strong>En:</strong> ${d.nombreComercio}</p>
           <p style="margin:0 0 8px 0; font-size:13px;"><span class="badge">${limitText}</span></p>
-          <button onclick="generateQR('${doc.id}', '${url}')" class="primary" style="padding:12px; margin:0; font-size:14px;">🎯 Generar QR</button>
-        `;
+          <button onclick="generateQR('${doc.id}', '${url}')" class="primary" style="padding:12px; margin:0; font-size:14px;">🎯 Generar QR</button>`;
         list.appendChild(div);
       });
-      
-      if (querySnapshot.empty) {
-        list.innerHTML = '<p style="text-align:center; color:gray; padding:20px;">No hay promos activas.</p>';
-      }
+      if (q.empty) list.innerHTML = '<p style="text-align:center; color:gray; padding:20px;">No hay promos activas por ahora.</p>';
     });
   }
 
   function generateQR(promoId, url) {
     const qrContainer = document.getElementById('qrcode');
     qrContainer.innerHTML = '';
-    
     try {
-      new QRCode(qrContainer, {
-        text: url,
-        width: 256,
-        height: 256,
-        colorDark: "#03045E",
-        colorLight: "#ffffff",
-        correctLevel: 'H'
-      });
+      new QRCode(qrContainer, { text: url, width: 256, height: 256, colorDark: "#03045E", colorLight: "#ffffff", correctLevel: 'H' });
       document.getElementById('qr-backdrop').classList.remove('hidden');
-    } catch (e) {
-      showToast('Error al generar QR');
-    }
+    } catch (e) { showToast('Error al generar el QR.'); }
   }
 
   function savePromotorData() {
@@ -993,55 +799,44 @@
     if (!cbu) { showToast('Ingresá un Alias o CBU válido.'); return; }
     db.collection('usuarios').doc(currentUser.uid).update({ cbu: cbu })
       .then(() => showToast('Datos de cobro actualizados!'))
-      .catch(error => showToast('Error: ' + error.message));
+      .catch(e => showToast('Error: ' + e.message));
   }
 
-  // ============== LÓGICA CLIENTE (POKEMON GO + QR) ==============
+  // ============== CLIENTE (RADAR + QR) ==============
   function loadClienteView() {
     const promoId = urlParams.get('promo');
-    const contentArea = document.getElementById('cliente-content-area');
-    
+    const area = document.getElementById('cliente-content-area');
+
     if (promoId) {
-      // MODO CLIENTE CON PROMO ESPECÍFICO (DESDE QR DE PROMOTOR)
-      contentArea.innerHTML = `
+      area.innerHTML = `
         <div class="neo-card" style="text-align:center;">
           <h3 id="cliente-promo-titulo" style="margin:0;">Cargando...</h3>
           <p id="cliente-promo-desc" style="margin:10px 0; font-weight:600;"></p>
           <p style="margin-bottom:5px; font-weight:700;">El cupón vence en:</p>
           <div class="timer" id="countdown">--:--:--</div>
-          
           <div id="ticket-area" class="hidden" style="margin-top:20px;">
             <p style="margin:0; font-weight:600;">Presentá este código en caja:</p>
-            <div class="timer" id="ticket-code" style="color:var(--navy); text-shadow: 2px 2px 0 var(--sun-orange);">------</div>
+            <div class="timer" id="ticket-code" style="color:var(--navy); text-shadow:2px 2px 0 var(--sun-orange);">------</div>
           </div>
-          
           <button onclick="reclamarCupon()" class="accent" id="btn-reclamar" style="font-size:18px; margin-top:15px;">🎁 Reclamar Ahora</button>
           <p id="cliente-msg" style="margin-top:15px; font-size:14px; font-weight:600;"></p>
-        </div>
-      `;
+        </div>`;
       loadSpecificPromoView(promoId);
     } else {
-      // MODO CLIENTE LIBRE (RADAR POKEMON GO)
-      contentArea.innerHTML = `
+      area.innerHTML = `
         <div class="neo-banner" style="background:linear-gradient(135deg, var(--sun-orange), var(--sun-glow));">
           <h3 style="margin:0; color:var(--navy);">🗺️ Modo Aventura</h3>
-          <p style="margin:5px 0 0; font-size:14px; color:var(--navy);">Recorré la ciudad y encontrá ofertas públicas cercanas para reclamar.</p>
+          <p style="margin:5px 0 0; font-size:14px; color:var(--navy);">Recorré la ciudad y cazá ofertas públicas cercanas.</p>
         </div>
-        
         <div class="neo-card" style="text-align:center;">
           <div class="radar-container">
-            <div class="radar-ring r1"></div>
-            <div class="radar-ring r2"></div>
-            <div class="radar-sweep"></div>
-            <div class="radar-center"></div>
-            <div id="radar-pins"></div>
+            <div class="radar-ring r1"></div><div class="radar-ring r2"></div>
+            <div class="radar-sweep"></div><div class="radar-center"></div>
           </div>
-          <p style="font-weight:700; margin: 15px 0 5px;">📡 Buscando ofertas cerca de ti...</p>
-          <p style="font-size:12px; color:gray; margin:0;">Activa tu GPS para ver la distancia exacta.</p>
+          <p style="font-weight:700; margin:15px 0 5px;">📡 Buscando ofertas cerca tuyo...</p>
+          <p style="font-size:12px; color:gray; margin:0;">Activá tu GPS para ver distancias.</p>
         </div>
-        
-        <div id="cliente-public-promos-list"></div>
-      `;
+        <div id="cliente-public-promos-list"></div>`;
       loadPublicPromos();
       startPokemonGoStyle();
     }
@@ -1050,156 +845,113 @@
   function loadPublicPromos() {
     const list = document.getElementById('cliente-public-promos-list');
     if (!list) return;
-    list.innerHTML = '<p style="color:gray;">Buscando ofertas...</p>';
-
-    db.collection('publicPromos').where('activa', '==', true).onSnapshot(querySnapshot => {
+    db.collection('publicPromos').where('activa', '==', true).onSnapshot(q => {
       list.innerHTML = '';
-      if (querySnapshot.empty) {
-        list.innerHTML = '<p style="color:gray;">No hay ofertas públicas disponibles.</p>';
-        return;
-      }
-      querySnapshot.docs.forEach(doc => {
-        const data = doc.data();
+      if (q.empty) { list.innerHTML = '<p style="color:gray;">No hay ofertas públicas por ahora.</p>'; return; }
+      q.docs.forEach(doc => {
+        const d = doc.data();
+        const agotada = (d.usados || 0) >= d.limite;
         const div = document.createElement('div');
         div.className = 'neo-card';
-        div.style.marginBottom = '15px';
-        const isSoldOut = (data.usados || 0) >= data.limite;
         div.innerHTML = `
-          <h3 style="margin:0 0 5px 0;">${data.titulo}</h3>
-          <p style="margin:0 0 5px 0; font-size:14px;">${data.descripcion}</p>
-          <p style="margin:0 0 5px 0; font-size:13px;"><span class="badge ${isSoldOut ? 'alert' : ''}">${data.usados || 0}/${data.limite} intentos</span></p>
+          <h3 style="margin:0 0 5px 0;">${d.titulo}</h3>
+          <p style="margin:0 0 5px 0; font-size:14px;">${d.descripcion}</p>
+          <p style="margin:0 0 5px 0; font-size:13px;"><span class="badge ${agotada ? 'alert' : ''}">${d.usados || 0}/${d.limite} intentos</span></p>
+          <p style="margin:0 0 5px 0; font-size:12px; color:gray;">🏪 ${d.nombreComercio || ''}</p>
           <div id="distance-${doc.id}" style="font-size:12px; color:gray; margin-top:5px;">📍 Calculando distancia...</div>
-          <button onclick="reclamarPokemon('${doc.id}')" class="accent" style="margin-top:10px; display:${!isSoldOut ? 'inline-block' : 'none'};">🎯 Recolectar Oferta</button>
-        `;
+          <button onclick="reclamarPokemon('${doc.id}')" class="accent" style="margin-top:10px; display:${!agotada ? 'inline-block' : 'none'};">🎯 Recolectar Oferta</button>`;
         list.appendChild(div);
       });
-    }, error => {
-      list.innerHTML = '<p style="color:red;">Error al cargar ofertas.</p>';
     });
   }
 
   function startPokemonGoStyle() {
-    if (navigator.geolocation) {
-      navigator.geolocation.watchPosition((position) => {
-        const userLat = position.coords.latitude;
-        const userLng = position.coords.longitude;
-
-        db.collection('publicPromos').where('activa', '==', true).get()
-          .then(querySnapshot => {
-            const pinsContainer = document.getElementById('radar-pins');
-            if(pinsContainer) pinsContainer.innerHTML = '';
-            
-            querySnapshot.docs.forEach(doc => {
-              const data = doc.data();
-              const promoLat = data.latitud;
-              const promoLng = data.longitud;
-
-              if (promoLat && promoLng) {
-                const distance = getDistanceFromLatLon(userLat, userLng, promoLat, promoLng);
-                const distanceDiv = document.getElementById(`distance-${doc.id}`);
-                if (distanceDiv) {
-                  if (distance <= (data.radio || 100)) {
-                    distanceDiv.innerHTML = `🎯 ¡Estás dentro del radio! (${distance.toFixed(0)} m)`;
-                    distanceDiv.style.color = 'var(--success-green)';
-                    distanceDiv.style.fontWeight = '800';
-                  } else {
-                    distanceDiv.innerHTML = `<span style="color:gray;">🚫 Fuera del radio (${distance.toFixed(0)} m de distancia)</span>`;
-                    const btn = distanceDiv.parentElement.querySelector('button');
-                    if (btn) btn.style.display = 'none';
-                  }
-                }
-              }
-            });
-          });
-      }, error => {
-        console.error('Error GPS:', error);
-        showToast('Activa tu localización para ver ofertas cercanas.');
-      }, {
-        enableHighAccuracy: true,
-        maximumAge: 30000,
-        timeout: 27000
+    if (!navigator.geolocation) { showToast('Tu navegador no soporta geolocalización.'); return; }
+    navigator.geolocation.watchPosition((pos) => {
+      const uLat = pos.coords.latitude, uLng = pos.coords.longitude;
+      db.collection('publicPromos').where('activa', '==', true).get().then(q => {
+        q.docs.forEach(doc => {
+          const d = doc.data();
+          if (!d.latitud || !d.longitud) return;
+          const dist = getDistanceFromLatLon(uLat, uLng, d.latitud, d.longitud);
+          const div = document.getElementById(`distance-${doc.id}`);
+          if (!div) return;
+          if (dist <= (d.radio || 100)) {
+            div.innerHTML = `🎯 ¡Estás dentro del radio! (${dist.toFixed(0)} m)`;
+            div.style.color = 'var(--success-green)';
+            div.style.fontWeight = '800';
+          } else {
+            div.innerHTML = `🚫 Fuera del radio (${dist.toFixed(0)} m de distancia)`;
+            const btn = div.parentElement.querySelector('button');
+            if (btn) btn.style.display = 'none';
+          }
+        });
       });
-    }
+    }, () => showToast('Activá tu ubicación para cazar ofertas.'), { enableHighAccuracy: true, maximumAge: 30000, timeout: 27000 });
   }
 
   function getDistanceFromLatLon(lat1, lon1, lat2, lon2) {
     const R = 6371e3;
-    const φ1 = lat1 * Math.PI / 180;
-    const φ2 = lat2 * Math.PI / 180;
-    const Δφ = (lat2 - lat1) * Math.PI / 180;
-    const Δλ = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2) * Math.sin(Δλ/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c;
+    const f1 = lat1 * Math.PI / 180, f2 = lat2 * Math.PI / 180;
+    const df = (lat2 - lat1) * Math.PI / 180, dl = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(df/2)**2 + Math.cos(f1) * Math.cos(f2) * Math.sin(dl/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   }
 
   function reclamarPokemon(promoId) {
-    db.collection('publicPromos').doc(promoId).get()
-      .then(docSnapshot => {
-        const data = docSnapshot.data();
-        if ((data.usados || 0) >= data.limite) {
-          showToast('Oferta agotada.');
-          return;
-        }
+    db.collection('publicPromos').doc(promoId).get().then(snap => {
+      const d = snap.data();
+      if ((d.usados || 0) >= d.limite) { showToast('Oferta agotada.'); return; }
+      const codigo = Math.floor(100000 + Math.random() * 900000).toString();
 
-        const codigo = Math.floor(100000 + Math.random() * 900000).toString();
-        
-        db.collection('tickets').add({
-          codigo: codigo,
-          promotorId: 'sin_promotor',
-          promoId: promoId,
-          comercioId: 'public_promo',
-          estado: 'emitido',
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
+      db.collection('tickets').add({
+        codigo, promotorId: 'sin_promotor', promoId,
+        comercioId: d.comercioId || 'sin_comercio',
+        estado: 'emitido',
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
 
-        db.collection('publicPromos').doc(promoId).update({
-          usados: firebase.firestore.FieldValue.increment(1)
-        })
+      db.collection('publicPromos').doc(promoId).update({ usados: firebase.firestore.FieldValue.increment(1) })
         .then(() => {
-          showToast('🎉 ¡Oferta Recolectada!');
+          showToast('🎉 ¡Oferta recolectada!');
           document.getElementById('cliente-content-area').innerHTML = `
             <div class="neo-card" style="text-align:center;">
-              <h3 style="margin:0;">🎊 ¡Éxito!</h3>
-              <p style="margin:10px 0; font-weight:600;">${data.titulo}</p>
-              <p style="margin-bottom:5px; font-weight:700;">Tu código es:</p>
-              <div class="timer" style="color:var(--navy); text-shadow: 2px 2px 0 var(--sun-orange);">${codigo}</div>
-              <p style="font-size:14px; margin-top:15px;">Activa el cajero y mostralo. ¡Expira a la medianoche!</p>
-            </div>
-          `;
+              <h3 style="margin:0;">🎊 ¡Oferta Desbloqueada!</h3>
+              <p style="margin:10px 0; font-weight:600;">${d.titulo}</p>
+              <p style="margin-bottom:5px; font-weight:700;">Presentá este código en caja:</p>
+              <div class="timer" style="color:var(--navy); text-shadow:2px 2px 0 var(--sun-orange);">${codigo}</div>
+              <p style="font-size:13px;">🏪 En: ${d.nombreComercio || ''} · Expira a la medianoche.</p>
+            </div>`;
         });
-      });
+    }).catch(e => showToast('Error: ' + e.message));
   }
 
   function loadSpecificPromoView(promoId) {
     db.collection('promos').doc(promoId).get().then(doc => {
-      if (!doc.exists) {
-        document.getElementById('cliente-promo-titulo').innerText = "🚫 Oferta no disponible"; return;
-      }
+      if (!doc.exists) { document.getElementById('cliente-promo-titulo').innerText = "🚫 Oferta no disponible"; return; }
       activePromo = doc.data();
 
       if (activePromo.limite && (activePromo.usados || 0) >= activePromo.limite) {
         document.getElementById('cliente-promo-titulo').innerText = "🚫 Promoción Agotada";
+        document.getElementById('cliente-promo-desc').innerText = "Ya no quedan cupones para esta promo.";
         document.getElementById('btn-reclamar').classList.add('hidden');
         return;
       }
 
       const now = new Date();
       const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0).getTime();
-      const savedTicket = localStorage.getItem('cuponapp_ticket_' + promoId);
+      const saved = localStorage.getItem('cuponapp_ticket_' + promoId);
 
-      if (savedTicket) {
-        const ticketData = JSON.parse(savedTicket);
-        if (Date.now() >= midnight || Date.now() >= ticketData.expiresAt) {
-          localStorage.removeItem('cuponapp_ticket_' + promoId);
-        } else {
+      if (saved) {
+        const t = JSON.parse(saved);
+        if (Date.now() < midnight && Date.now() < t.expiresAt) {
           document.getElementById('btn-reclamar').classList.add('hidden');
           document.getElementById('ticket-area').classList.remove('hidden');
-          document.getElementById('ticket-code').innerText = ticketData.codigo;
-          startCountdown(ticketData.expiresAt);
-          escucharEstadoTicket(ticketData.codigo);
+          document.getElementById('ticket-code').innerText = t.codigo;
+          startCountdown(t.expiresAt);
+          escucharEstadoTicket(t.codigo);
           return;
-        }
+        } else localStorage.removeItem('cuponapp_ticket_' + promoId);
       }
 
       document.getElementById('cliente-promo-titulo').innerText = activePromo.titulo;
@@ -1209,89 +961,87 @@
   }
 
   function reclamarCupon() {
+    const btn = document.getElementById('btn-reclamar');
+    if (btn.disabled) return;
     const promoId = urlParams.get('promo');
-    const doc = db.collection('promos').doc(promoId);
-    doc.get().then(snap => {
-      const promo = snap.data();
+    const qrToken = urlParams.get('token');
+
+    db.collection('promos').doc(promoId).get().then(doc => {
+      const promo = doc.data();
       if (promo.limite && (promo.usados || 0) >= promo.limite) {
-        document.getElementById('cliente-msg').innerHTML = '<span style="color:var(--alert-red);">🚫 Agotada.</span>'; return;
+        document.getElementById('cliente-msg').innerHTML = "<span style='color:var(--alert-red);'>🚫 Promoción Agotada.</span>"; return;
       }
 
-      document.getElementById('btn-reclamar').disabled = true;
+      btn.disabled = true;
+      btn.innerText = "Generando...";
       const codigo = Math.floor(100000 + Math.random() * 900000).toString();
-      
+
       db.collection('tickets').add({
-        codigo: codigo,
+        codigo,
         promotorId: urlParams.get('promotor') || 'sin_promotor',
-        promoId: promoId,
+        promoId,
         comercioId: activePromo.comercioId,
         estado: 'emitido',
+        qrToken: qrToken || null,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
 
-      doc.update({ usados: firebase.firestore.FieldValue.increment(1) });
+      db.collection('promos').doc(promoId).update({ usados: firebase.firestore.FieldValue.increment(1) });
 
       const now = new Date();
       const expiresAt = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0).getTime();
-      
       localStorage.setItem('cuponapp_ticket_' + promoId, JSON.stringify({ codigo, expiresAt }));
 
-      document.getElementById('btn-reclamar').classList.add('hidden');
+      btn.classList.add('hidden');
       document.getElementById('ticket-area').classList.remove('hidden');
       document.getElementById('ticket-code').innerText = codigo;
       startCountdown(expiresAt);
-      escucharEstadoTicket(codigo); 
+      escucharEstadoTicket(codigo);
     });
   }
 
-  function escucharEstadoTicket(codigoTicket) {
-    if (ticketListener) ticketListener(); 
-    ticketListener = db.collection('tickets').where('codigo', '==', codigoTicket).onSnapshot(snapshot => {
-      if (!snapshot.empty) {
-        const ticketData = snapshot.docs[0].data();
-        if (ticketData.estado === 'validado') {
-          clearInterval(countDownInterval);
-          document.getElementById('ticket-area').className = "neo-banner success";
-          document.getElementById('ticket-area').style.border = "4px solid var(--success-green)";
-          document.getElementById('cliente-msg').innerHTML = "<span style='color:var(--success-green); font-size: 20px;'>✅ ¡CUPÓN CANJEADO!</span>";
-          document.getElementById('countdown').innerText = "00:00:00";
-          localStorage.removeItem('cuponapp_ticket_' + urlParams.get('promo'));
-        }
+  function escucharEstadoTicket(codigo) {
+    if (ticketListener) ticketListener();
+    ticketListener = db.collection('tickets').where('codigo', '==', codigo).onSnapshot(snap => {
+      if (!snap.empty && snap.docs[0].data().estado === 'validado') {
+        clearInterval(countDownInterval);
+        const area = document.getElementById('ticket-area');
+        area.className = "neo-banner success";
+        area.style.border = "4px solid var(--success-green)";
+        document.getElementById('cliente-msg').innerHTML = "<span style='color:var(--success-green); font-size:20px;'>✅ ¡CUPÓN CANJEADO CON ÉXITO!</span>";
+        const cd = document.getElementById('countdown');
+        if (cd) cd.innerText = "00:00:00";
+        localStorage.removeItem('cuponapp_ticket_' + urlParams.get('promo'));
       }
     });
   }
 
   function startCountdown(expiresAt) {
-    const cdElement = document.getElementById('countdown');
+    const cd = document.getElementById('countdown');
     clearInterval(countDownInterval);
-    
     countDownInterval = setInterval(() => {
-      let timeLeft = Math.floor((expiresAt - Date.now()) / 1000);
-      
-      if(timeLeft <= 0) { 
-        clearInterval(countDownInterval); 
-        cdElement.innerText = "00:00:00"; 
-        const btn = document.getElementById('btn-reclamar');
-        if(btn) btn.disabled = true;
-        return; 
+      let t = Math.floor((expiresAt - Date.now()) / 1000);
+      if (t <= 0) {
+        clearInterval(countDownInterval);
+        cd.innerText = "00:00:00";
+        const b = document.getElementById('btn-reclamar');
+        if (b) b.disabled = true;
+        return;
       }
-      
-      let h = Math.floor(timeLeft / 3600); 
-      let m = Math.floor((timeLeft % 3600) / 60); 
-      let s = timeLeft % 60;
-      cdElement.innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+      const h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), s = t % 60;
+      cd.innerText = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
     }, 1000);
   }
 
-  // ============== LÓGICA COMERCIO ==============
+  // ============== COMERCIO ==============
   function loadComercioData() {
     db.collection('usuarios').doc(currentUser.uid).onSnapshot(doc => {
-      const data = doc.data();
-      document.getElementById('comercio-nombre').innerText = "🏪 " + (data.nombre || 'Local');
-      document.getElementById('comercio-deuda').innerText = '$' + (data.deuda || 0);
-      document.getElementById('comercio-input-contacto').value = data.contacto || '';
-      document.getElementById('comercio-input-telefono').value = data.telefono || '';
-      document.getElementById('comercio-input-direccion').value = data.direccion || '';
+      const d = doc.data();
+      document.getElementById('comercio-nombre').innerText = "🏪 " + (d.nombre || 'Local');
+      document.getElementById('comercio-deuda').innerText = '$' + (d.deuda || 0);
+      document.getElementById('comercio-input-contacto').value = d.contacto || '';
+      document.getElementById('comercio-input-telefono').value = d.telefono || '';
+      document.getElementById('comercio-input-direccion').value = d.direccion || '';
     });
   }
 
@@ -1299,68 +1049,59 @@
     const input = document.getElementById('input-ticket');
     const msg = document.getElementById('comercio-msg');
     const codigo = input.value.trim();
-    if(codigo.length !== 6) { msg.innerHTML = "<span style='color:var(--alert-red);'>🚫 Ingrese 6 números</span>"; return; }
-    
+    if (codigo.length !== 6) { msg.innerHTML = "<span style='color:var(--alert-red);'>🚫 Ingresá 6 números</span>"; return; }
+
     const btn = document.getElementById('btn-validar');
     btn.disabled = true;
-    
     try {
-      const snap = await db.collection('tickets').where('codigo', '==', codigo).where('comercioId', '==', currentUser.uid).get();
-      if(snap.empty){
-        msg.innerHTML = "<span style='color:var(--alert-red);'>🚫 Código Inválido</span>"; btn.disabled = false; return;
-      }
+      const snap = await db.collection('tickets').where('codigo','==',codigo).where('comercioId','==',currentUser.uid).get();
+      if (snap.empty) { msg.innerHTML = "<span style='color:var(--alert-red);'>🚫 Código inválido o no pertenece a tu local</span>"; btn.disabled = false; return; }
 
       const ticketDoc = snap.docs[0];
-      if(ticketDoc.data().estado === 'validado') {
-        msg.innerHTML = "<span style='color:var(--alert-red);'>🚫 Ya fue usado</span>"; btn.disabled = false; return;
-      }
+      if (ticketDoc.data().estado === 'validado') { msg.innerHTML = "<span style='color:var(--alert-red);'>🚫 Este código ya fue usado</span>"; btn.disabled = false; return; }
 
       await ticketDoc.ref.update({ estado: 'validado', validadoEn: firebase.firestore.FieldValue.serverTimestamp() });
-      
+
       const promoId = ticketDoc.data().promoId;
       const promotorId = ticketDoc.data().promotorId;
-      
-      const promoDoc = await db.collection('promos').doc(promoId).get();
-      const promoData = promoDoc.exists ? promoDoc.data() : null;
-      
-      if (promoData) {
-        const comRef = db.collection('usuarios').doc(currentUser.uid);
-        await db.runTransaction(async (transaction) => {
-          const comDoc = await transaction.get(comRef);
-          const nDeuda = (comDoc.data().deuda || 0) + (promoData.precioComercio || 0);
-          
-          if (promotorId && promotorId !== 'sin_promotor') {
-            const promRef = db.collection('usuarios').doc(promotorId);
-            const promDoc = await transaction.get(promRef);
-            if (promDoc.exists) {
-              const nSaldo = (promDoc.data().saldo || 0) + (promoData.comision || 0);
-              transaction.update(promRef, { saldo: nSaldo });
-            }
-          }
-          transaction.update(comRef, { deuda: nDeuda });
-        });
+
+      let pData = null;
+      const p1 = await db.collection('promos').doc(promoId).get();
+      if (p1.exists) pData = p1.data();
+      else {
+        const p2 = await db.collection('publicPromos').doc(promoId).get();
+        if (p2.exists) pData = p2.data();
       }
 
-      msg.innerHTML = "<span style='color:var(--success-green); font-size:24px;'>✅ ¡Descuento Aplicado!</span>";
+      const comRef = db.collection('usuarios').doc(currentUser.uid);
+      await db.runTransaction(async (tx) => {
+        const comDoc = await tx.get(comRef);
+        const nDeuda = (comDoc.data().deuda || 0) + (pData ? (pData.precioComercio || 0) : 0);
+        if (promotorId && promotorId !== 'sin_promotor' && pData) {
+          const promRef = db.collection('usuarios').doc(promotorId);
+          const promDoc = await tx.get(promRef);
+          if (promDoc.exists) tx.update(promRef, { saldo: (promDoc.data().saldo || 0) + (pData.comision || 0) });
+        }
+        tx.update(comRef, { deuda: nDeuda });
+      });
+
+      msg.innerHTML = "<span style='color:var(--success-green); font-size:24px;'>✅ ¡Descuento Aplicado! Venta registrada.</span>";
       input.value = '';
       setTimeout(() => msg.innerHTML = "", 5000);
-      
-    } catch(err) {
+    } catch (err) {
       msg.innerHTML = `<span style='color:var(--alert-red);'>Error: ${err.message}</span>`;
     }
     btn.disabled = false;
   }
 
   function saveComercioData() {
-    const contacto = document.getElementById('comercio-input-contacto').value.trim();
-    const telefono = document.getElementById('comercio-input-telefono').value.trim();
-    const direccion = document.getElementById('comercio-input-direccion').value.trim();
-    
-    db.collection('usuarios').doc(currentUser.uid).update({ contacto, telefono, direccion })
-      .then(() => showToast('Perfil actualizado!'))
-      .catch(error => showToast('Error: ' + error.message));
+    db.collection('usuarios').doc(currentUser.uid).update({
+      contacto: document.getElementById('comercio-input-contacto').value.trim(),
+      telefono: document.getElementById('comercio-input-telefono').value.trim(),
+      direccion: document.getElementById('comercio-input-direccion').value.trim()
+    }).then(() => showToast('Perfil actualizado!'))
+      .catch(e => showToast('Error: ' + e.message));
   }
-
 </script>
 
 </body>
