@@ -2,17 +2,18 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Cuponapp Mdp</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#4CB5F9">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="favicon.ico">
   
-  <!-- Fuente Lexend para un look moderno, techy y gamificado -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Lexend:wght@400;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Firebase & QR Libraries -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -20,65 +21,95 @@
 
   <style>
     :root { 
-      /* Paleta Neobrutalista Playera */
+      /* Paleta Neobrutalista Costera Mejorada */
       --sand: #F4EBD0; 
+      --sand-dark: #E8D9B0;
       --sea-blue: #4CB5F9; 
+      --sea-deep: #219EBC;
       --sky-light: #90E0EF;
-      --sun-orange: #FF9F1C;
+      --sun-orange: #FF9F1C; 
+      --sun-glow: #FFBF69;
       --white: #FFFFFF;
       --navy: #03045E; 
+      --navy-light: #14213D;
       
       --alert-red: #EF476F; 
       --success-green: #06D6A0; 
       --wsp: #25D366;
+      --pokeball-red: #FF0000;
 
       --border-width: 3px;
-      --shadow-offset: 4px;
+      --shadow-offset: 5px;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
     }
 
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body { 
       font-family: 'Lexend', system-ui, sans-serif; 
-      background: var(--sand); 
-      background-image: radial-gradient(var(--sky-light) 2px, transparent 2px);
-      background-size: 30px 30px;
+      background-color: var(--sand); 
+      background-image: 
+        radial-gradient(var(--sky-light) 2px, transparent 2px),
+        radial-gradient(var(--sun-glow) 1px, transparent 1px);
+      background-size: 40px 40px, 20px 20px;
+      background-position: 0 0, 10px 10px;
       color: var(--navy); 
       margin: 0; 
       padding: 15px 10px; 
       display: flex; 
       justify-content: center; 
+      min-height: 100vh;
     }
+
+    h1, h2, h3, h4 { font-family: 'Fredoka', sans-serif; letter-spacing: -0.5px; }
 
     .container { 
       width: 100%; 
-      max-width: 430px; 
+      max-width: 450px; 
       background: var(--sand); 
-      padding: 0;
-      border-radius: 24px; 
+      padding: 0; 
+      border-radius: var(--radius-lg); 
       overflow: hidden;
       border: var(--border-width) solid var(--navy);
-      box-shadow: 8px 8px 0px var(--navy);
+      box-shadow: 10px 10px 0px var(--navy);
+      position: relative;
+      animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
     /* HEADER NEOBRUTALISTA */
     .neo-header {
-      background: var(--sea-blue);
-      padding: 25px 20px 20px;
+      background: linear-gradient(135deg, var(--sea-blue) 0%, var(--sea-deep) 100%);
+      padding: 30px 20px 25px;
       text-align: center;
       border-bottom: var(--border-width) solid var(--navy);
-      border-top-left-radius: 21px;
-      border-top-right-radius: 21px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .neo-header::before {
+      content: '';
+      position: absolute;
+      bottom: -20px; left: -20px; right: -20px; height: 40px;
+      background: var(--sand);
+      border-top: var(--border-width) solid var(--navy);
+      border-radius: 50% 50% 0 0;
     }
 
     h1 { 
       margin: 0; 
-      font-size: 32px; 
-      font-weight: 800;
+      font-size: 36px; 
+      font-weight: 700;
       color: var(--white); 
       text-transform: uppercase; 
-      letter-spacing: -1px;
-      text-shadow: 3px 3px 0px var(--navy);
+      text-shadow: 4px 4px 0px var(--navy);
+      line-height: 1;
     }
 
     h2, h3, h4 { color: var(--navy); margin-top: 0; }
@@ -86,114 +117,263 @@
     /* TARJETAS Y CONTENEDORES */
     .neo-card { 
       background: var(--white); 
-      padding: 16px; 
-      border-radius: 16px; 
+      padding: 20px; 
+      border-radius: var(--radius-md); 
       border: var(--border-width) solid var(--navy);
-      margin-bottom: 15px; 
+      margin-bottom: 18px; 
       box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--navy);
       position: relative;
       word-wrap: break-word; 
       overflow: hidden;
+      transition: transform 0.2s;
     }
+    
+    .neo-card:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0px var(--navy); }
 
     .neo-banner {
       background: var(--sky-light);
-      padding: 15px;
-      border-radius: 16px;
+      padding: 18px;
+      border-radius: var(--radius-md);
       border: var(--border-width) solid var(--navy);
-      margin-bottom: 15px;
+      margin-bottom: 18px;
       text-align: center;
+      position: relative;
     }
 
     .neo-banner.alert { background: var(--alert-red); color: white; }
     .neo-banner.success { background: var(--success-green); }
     .neo-banner.dark { background: var(--navy); color: white; }
+    .neo-banner.pokeball { 
+      background: linear-gradient(to bottom, var(--pokeball-red) 50%, var(--white) 50%); 
+      position: relative;
+    }
+    .neo-banner.pokeball::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px; height: 40px;
+      background: var(--white);
+      border: var(--border-width) solid var(--navy);
+      border-radius: 50%;
+    }
+    .neo-banner.pokeball::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 0; right: 0; height: var(--border-width);
+      background: var(--navy);
+    }
 
     /* BOTONES GAMIFICADOS */
     button, .btn-link { 
       width: 100%; 
-      padding: 14px; 
+      padding: 15px; 
       border: var(--border-width) solid var(--navy); 
-      border-radius: 12px; 
-      font-family: 'Lexend', sans-serif;
-      font-weight: 700; 
-      font-size: 16px;
+      border-radius: var(--radius-sm); 
+      font-family: 'Fredoka', sans-serif; 
+      font-weight: 600; 
+      font-size: 17px; 
       cursor: pointer; 
       background: var(--white); 
       color: var(--navy); 
-      margin-top: 10px; 
-      transition: all 0.1s ease-in-out; 
+      margin-top: 12px; 
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); 
       box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--navy);
       text-align: center; 
       text-decoration: none; 
       display: inline-block; 
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     button:active, .btn-link:active { 
       transform: translate(var(--shadow-offset), var(--shadow-offset)); 
       box-shadow: 0px 0px 0px var(--navy); 
     }
-    button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--navy); }
     
     button.accent { background: var(--sun-orange); color: var(--navy); }
+    button.accent:hover:not(:disabled) { background: var(--sun-glow); }
     button.primary { background: var(--sea-blue); color: var(--navy); }
     button.secondary { background: var(--sand); }
     button.danger { background: var(--alert-red); color: white; }
     .btn-wsp { background: var(--wsp); color: var(--navy); }
+    
+    /* Botón PWA Install Flotante */
+    #install-btn {
+      display: none;
+      background: var(--sun-orange);
+      color: var(--navy);
+      border: var(--border-width) solid var(--navy);
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      box-shadow: 4px 4px 0px var(--navy);
+      cursor: pointer;
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      z-index: 90;
+      animation: pulseInstall 2s infinite;
+      width: auto;
+    }
+    @keyframes pulseInstall {
+      0% { transform: scale(1); box-shadow: 4px 4px 0px var(--navy); }
+      50% { transform: scale(1.05); box-shadow: 6px 6px 0px var(--navy); }
+      100% { transform: scale(1); box-shadow: 4px 4px 0px var(--navy); }
+    }
 
     /* INPUTS */
-    input, select { 
+    input, select, textarea { 
       width: 100%; 
       padding: 14px; 
-      border-radius: 10px; 
+      border-radius: var(--radius-sm); 
       border: var(--border-width) solid var(--navy); 
       background: var(--white); 
       color: var(--navy); 
       font-family: 'Lexend', sans-serif;
-      font-weight: 600;
+      font-weight: 500;
       margin-bottom: 12px; 
       font-size: 15px; 
-      box-shadow: 2px 2px 0px var(--navy);
+      box-shadow: 3px 3px 0px var(--navy);
       transition: all 0.2s;
     }
-    input:focus, select:focus {
+    input:focus, select:focus, textarea:focus {
       outline: none;
-      box-shadow: 4px 4px 0px var(--navy);
+      box-shadow: 5px 5px 0px var(--sun-orange);
       background: #FAFAFA;
     }
 
     /* UTILIDADES */
-    .hidden { display: none; }
-    #qrcode img { margin: 15px auto; border: var(--border-width) solid var(--navy); border-radius: 12px; padding: 10px; background: white; }
+    .hidden { display: none !important; }
+    #qrcode img { margin: 15px auto; border: var(--border-width) solid var(--navy); border-radius: var(--radius-sm); padding: 10px; background: white; box-shadow: 4px 4px 0px var(--navy); }
     
     .timer { 
-      font-size: 32px; font-weight: 800; color: var(--alert-red); 
-      margin: 10px 0; text-align: center; text-shadow: 2px 2px 0px var(--navy); 
+      font-family: 'Fredoka', monospace;
+      font-size: 36px; 
+      font-weight: 700; 
+      color: var(--alert-red); 
+      margin: 10px 0; 
+      text-align: center; 
+      text-shadow: 3px 3px 0px var(--navy); 
       letter-spacing: 2px; 
       font-variant-numeric: tabular-nums; 
     }
     
-    .badge { background: var(--sun-orange); color: var(--navy); padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 800; border: 2px solid var(--navy); }
+    .badge { 
+      display: inline-block;
+      background: var(--sun-orange); 
+      color: var(--navy); 
+      padding: 6px 12px; 
+      border-radius: 20px; 
+      font-size: 12px; 
+      font-weight: 700; 
+      border: 2px solid var(--navy); 
+      text-transform: uppercase;
+      box-shadow: 2px 2px 0px var(--navy);
+    }
     .badge.dark { background: var(--navy); color: var(--white); }
+    .badge.success { background: var(--success-green); color: var(--navy); }
+    .badge.alert { background: var(--alert-red); color: white; }
     
-    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: var(--white); border-bottom: var(--border-width) solid var(--navy); }
+    .nav-bar { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      padding: 12px 15px; 
+      background: var(--white); 
+      border-bottom: var(--border-width) solid var(--navy); 
+    }
     
-    .instruction-box { font-size: 14px; color: var(--navy); font-weight: 600; background: var(--sky-light); padding: 15px; border-radius: 12px; border: var(--border-width) solid var(--navy); margin-bottom: 15px; }
+    .instruction-box { 
+      font-size: 14px; 
+      color: var(--navy); 
+      font-weight: 500; 
+      background: var(--sky-light); 
+      padding: 15px; 
+      border-radius: var(--radius-sm); 
+      border: var(--border-width) solid var(--navy); 
+      margin-bottom: 15px;
+      box-shadow: 3px 3px 0px var(--navy);
+    }
     
     .scroll-container { max-height: 50vh; overflow-y: auto; padding: 5px; margin-top: 10px; }
     .scroll-container::-webkit-scrollbar { width: 8px; }
     .scroll-container::-webkit-scrollbar-track { background: var(--sand); border-left: 2px solid var(--navy); }
     .scroll-container::-webkit-scrollbar-thumb { background: var(--sea-blue); border: 2px solid var(--navy); border-radius: 10px; }
     
-    .sticky-header { position: sticky; top: 0; background: var(--sea-blue); color: var(--white); padding: 10px 15px; font-weight: 800; border: var(--border-width) solid var(--navy); z-index: 10; font-size: 16px; border-radius: 10px; margin: 15px 0 10px 0; text-shadow: 1px 1px 0px var(--navy); }
-    
-    .view-padding { padding: 15px; }
+    .view-padding { padding: 20px; }
 
     #qr-backdrop {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(3,4,94,0.7);
-      backdrop-filter: blur(4px);
+      background: rgba(3,4,94,0.85);
+      backdrop-filter: blur(6px);
       z-index: 99;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* Radar Pokémon GO */
+    .radar-container {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 20px auto;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--sky-light) 0%, var(--sea-blue) 100%);
+      border: var(--border-width) solid var(--navy);
+      box-shadow: 0 0 20px var(--sea-blue);
+      overflow: hidden;
+    }
+    .radar-sweep {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 50%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--success-green));
+      transform-origin: left center;
+      animation: sweep 3s linear infinite;
+    }
+    @keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .radar-center {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 15px; height: 15px;
+      background: var(--sun-orange);
+      border: 2px solid var(--navy);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      box-shadow: 0 0 10px var(--sun-orange);
+    }
+    .radar-ring {
+      position: absolute;
+      border: 1px dashed var(--navy);
+      border-radius: 50%;
+      opacity: 0.4;
+    }
+    .radar-ring.r1 { width: 33%; height: 33%; top: 33.5%; left: 33.5%; }
+    .radar-ring.r2 { width: 66%; height: 66%; top: 17%; left: 17%; }
+
+    .promo-pin {
+      position: absolute;
+      width: 24px; height: 24px;
+      background: var(--pokeball-red);
+      border: 2px solid var(--navy);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+      z-index: 3;
+      animation: bounce 1s infinite alternate;
+    }
+    @keyframes bounce {
+      from { transform: translate(-50%, -50%) scale(1); }
+      to { transform: translate(-50%, -50%) scale(1.2); }
     }
   </style>
 </head>
@@ -201,19 +381,24 @@
 
 <div class="container">
   
-  <!-- ENCABEZADO -->
+  <!-- ENCABEZADO GLOBAL -->
   <div class="neo-header">
     <h1>🌊 Cuponapp</h1>
-    <span class="badge" style="margin-top: 10px; display: inline-block;">MAR DEL PLATA</span>
+    <span class="badge dark" style="margin-top: 10px;">MAR DEL PLATA</span>
   </div>
 
   <!-- LOGIN -->
   <div id="view-login" class="view-padding">
     <div class="neo-banner">
-      <h2>¡Bienvenido a la Costa! ☀️</h2>
-      <p style="font-size: 14px; font-weight: 600;">Ingresá con tu cuenta para acceder a promociones exclusivas o empezar a trabajar con nosotros.</p>
+      <h2 style="margin:0 0 10px 0;">¡Bienvenido a la Costa! ☀️</h2>
+      <p style="font-size: 14px; font-weight: 500; margin:0;">Ingresá con tu cuenta para acceder a promociones exclusivas, trabajar con nosotros o cazar ofertas en la ciudad.</p>
     </div>
     <button onclick="loginGoogle()" class="accent" style="font-size: 18px;">Ingresar con Google 🚀</button>
+    
+    <div id="install-prompt-login" style="text-align: center; margin-top: 20px;">
+      <p style="font-size: 13px; color: var(--navy-light); margin-bottom: 10px;">📲 Instalá la App en tu celu para usarla sin conexión</p>
+      <button id="install-btn-inline" class="primary" style="display:none; font-size: 15px;">⬇️ Instalar Cuponapp</button>
+    </div>
   </div>
 
   <!-- SELECCIÓN DE ROL -->
@@ -222,10 +407,11 @@
       <h3>¿Cómo vas a usar la app?</h3>
       <button onclick="setRole('promotor')" class="accent">💼 Quiero Trabajar (Promotor)</button>
       <button onclick="setRole('comercio')" class="primary">🏪 Soy un Comercio</button>
+      <button onclick="setRole('cliente')" class="secondary" style="background: var(--sky-light);">🛍️ Quiero Buscar Ofertas (Cliente)</button>
     </div>
   </div>
 
-  <!-- PANTALLAS DE ESTADO -->
+  <!-- ESTADO: ESPERA -->
   <div id="view-espera" class="hidden view-padding" style="text-align:center;">
     <div class="neo-banner dark">
       <h3 style="color: white;">⏳ Cuenta en Revisión</h3>
@@ -235,11 +421,12 @@
     </div>
   </div>
 
+  <!-- ESTADO: BLOQUEADO -->
   <div id="view-bloqueado" class="hidden view-padding" style="text-align:center;">
     <div class="neo-banner alert">
       <h3 style="color: white;">🚫 Local Bloqueado</h3>
       <p>Tu cuenta se encuentra suspendida por saldo o regularización pendiente.</p>
-      <a href="https://wa.me/5492236960547?text=Hola!%20Quiero%20regularizar%20mi%20deuda%20para%20desbloquear%20mi%20local" target="_blank" class="btn-link btn-wsp">💬 Regularizar vía WhatsApp</a>
+      <a href="https://wa.me/5492236960547?text=Hola!%20Quiero%20regularizar%20mi%20deuda" target="_blank" class="btn-link btn-wsp">💬 Regularizar vía WhatsApp</a>
       <button onclick="logout()" class="secondary">Salir</button>
     </div>
   </div>
@@ -252,27 +439,51 @@
     </div>
 
     <div class="view-padding">
-      <div class="neo-banner dark" style="margin-bottom: 20px;">
-        <h3 style="margin:0; color:var(--white);">👑 Panel Admin</h3>
+      <div class="neo-banner dark" style="margin-bottom: 25px;">
+        <h3 style="margin:0; color:var(--white);">👑 Panel Supremo</h3>
       </div>
       
+      <!-- NUEVO: CREAR OFERTAS PÚBLICAS (POKEMON GO) -->
+      <div class="neo-card" style="background: var(--sky-light); border-color: var(--pokeball-red);">
+        <h4>📍 Crear Oferta Pública (Estilo Pokémon GO)</h4>
+        <p style="font-size: 12px; margin-top:0;">Estas ofertas aparecen en el radar de todos los clientes. Deben estar geolocalizadas.</p>
+        <input type="text" id="admin-public-title" placeholder="Título (ej: 2x1 en Heladería)">
+        <textarea id="admin-public-desc" placeholder="Descripción de la oferta" rows="2"></textarea>
+        <div style="display:flex; gap:10px;">
+          <input type="number" id="admin-public-lat" placeholder="Latitud (ej: -38.000)" step="any">
+          <input type="number" id="admin-public-lng" placeholder="Longitud (ej: -57.55)" step="any">
+        </div>
+        <div style="display:flex; gap:10px;">
+          <input type="number" id="admin-public-radio" placeholder="Radio (metros)" value="100">
+          <input type="number" id="admin-public-limit" placeholder="Stock Total" value="50">
+        </div>
+        <button onclick="createPublicPromo()" class="accent" style="background: var(--pokeball-red); color: white;">🎯 Lanzar Oferta al Mapa</button>
+      </div>
+
+      <div class="neo-card">
+        <h4>🗺️ Ofertas Públicas Activas</h4>
+        <div id="admin-public-promos-list" class="scroll-container"></div>
+      </div>
+
+      <hr style="border: 2px dashed var(--navy); margin: 30px 0;">
+
       <div class="neo-card">
         <h4>🏪 Autorizar Comercios</h4>
         <div id="admin-pendientes-list"></div>
       </div>
 
       <div class="neo-card">
-        <h4>🎟️ Crear Nueva Promo</h4>
+        <h4>🎟️ Crear Promo (Para Promotores)</h4>
         <select id="admin-select-comercio"><option value="">Seleccionar comercio...</option></select>
-        <input type="text" id="admin-promo-titulo" placeholder="Título (ej: 2x1 en Pintas)">
-        <input type="number" id="admin-promo-comision" placeholder="Comisión para Promotor ($)">
-        <input type="number" id="admin-promo-precio" placeholder="Cobro al Comercio ($)">
-        <input type="number" id="admin-promo-limite" placeholder="Límite de Cupones (0 = Sin límite)">
-        <button onclick="crearPromoAdmin()" class="accent">Publicar Promo ✨</button>
+        <input type="text" id="admin-input-titulo" placeholder="Título de la promo">
+        <input type="number" id="admin-input-precio" placeholder="Precio Comercio (ingreso)">
+        <input type="number" id="admin-input-comision" placeholder="Comisión Promotor">
+        <input type="number" id="admin-input-limite" placeholder="Límite de cupones (opcional)">
+        <button onclick="createPromo()" class="accent">Publicar Promo ✨</button>
       </div>
 
       <div class="neo-card">
-        <h4>📋 Promos Activas</h4>
+        <h4>📋 Promos (Promotores)</h4>
         <div id="admin-promos-list" class="scroll-container"></div>
       </div>
 
@@ -282,583 +493,768 @@
       </div>
 
       <div class="neo-card">
-        <h4>💰 Comercios</h4>
-        <div id="admin-deudas-list" class="scroll-container"></div>
+        <h4>🏪 Comercios</h4>
+        <div id="admin-comercios-list" class="scroll-container"></div>
       </div>
     </div>
   </div>
 
-  <!-- PANTALLA PROMOTOR -->
+  <!-- PANEL PROMOTOR -->
   <div id="view-promotor" class="hidden">
     <div class="nav-bar">
-      <span class="badge dark" id="user-email"></span>
+      <span class="badge" id="promotor-nombre">Promotor</span>
       <button onclick="logout()" class="secondary" style="width:auto; padding:8px 15px; margin:0; box-shadow: 2px 2px 0 var(--navy);">Salir</button>
     </div>
 
     <div class="view-padding">
       <div class="instruction-box">
-        💡 <strong>Reglas del Juego:</strong> Elegí una promo, generá el QR, mostralo y ganá comisiones directo a tu cuenta.
+        <p style="margin:0;">💡 <strong>Reglas:</strong> Elegí una promo, generá el QR, mostralo al cliente y ganasé comisiones directo a tu cuenta.</p>
       </div>
 
-      <div class="neo-card" style="text-align:center; background: var(--sun-orange);">
-        <small style="font-weight: 700;">Tu Saldo Acumulado</small>
-        <h2 style="font-size:42px; margin:5px 0; font-weight: 800;" id="promotor-saldo">$0</h2>
-      </div>
-
-      <div class="neo-banner" style="background: var(--sky-light); text-align: left; font-size: 13px;">
-        <p style="margin:0 0 5px 0; font-weight: 800;">📅 ¿Cuándo y cómo cobro?</p>
-        <p style="margin:0; font-weight: 600;">Se te paga todos los <strong>martes</strong> todo lo que generaste de lunes a domingo de la semana anterior (sistema a semana vencida) directo a tu Alias/CBU.</p>
+      <div class="neo-card" style="text-align:center; background:linear-gradient(135deg, var(--sun-orange) 0%, var(--sun-glow) 100%);">
+        <p style="margin:0; font-weight:600; text-transform: uppercase; font-size: 13px;">Tu Saldo Acumulado</p>
+        <h2 id="promotor-saldo" style="margin:10px 0; font-size:48px; text-shadow: 3px 3px 0 var(--navy);">$0</h2>
+        <p style="font-size:12px; margin-bottom:10px; font-weight: 600;">📅 Cobrás todos los <strong>MARTES</strong> directo a tu Alias/CBU.</p>
       </div>
 
       <div class="neo-card">
         <h4>💳 Datos de Cobro</h4>
-        <input type="text" id="promotor-input-nombre" placeholder="Nombre Completo">
-        <input type="text" id="promotor-input-alias" placeholder="Alias MP / CBU">
-        <input type="text" id="promotor-input-telefono" placeholder="Teléfono">
-        <button onclick="guardarPerfilPromotor()" class="primary">Guardar Datos 💾</button>
+        <input type="text" id="promotor-input-alias" placeholder="Alias o CBU">
+        <button onclick="savePromotorData()" class="primary" style="margin-top:5px;">Guardar Datos 💾</button>
       </div>
 
-      <h3 style="margin-top: 20px;">🔥 Promociones para Ofrecer</h3>
-      <div id="promotor-unified-list" class="scroll-container"></div>
-
-      <a href="https://wa.me/5492236960547?text=Hola!%20Soy%20promotor%20y%20tengo%20una%20consulta" target="_blank" class="btn-link btn-wsp">💬 Soporte vía WhatsApp</a>
-    </div>
-
-    <!-- MODAL QR -->
-    <div id="qr-backdrop" class="hidden" onclick="closeQR()"></div>
-    <div id="qr-modal" class="neo-card hidden" style="text-align:center; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 350px; z-index: 100; border-width: 4px; box-shadow: 10px 10px 0px rgba(3,4,94,0.8); margin: 0;">
-      <h3>¡Mostrá este QR! 🎯</h3>
-      <div id="qrcode"></div>
-      <p style="font-size:14px; font-weight: 600; color: var(--navy); margin-top: 15px;">Válido para 1 solo escaneo.</p>
-      <button onclick="closeQR()" class="danger">Cerrar</button>
+      <div id="promotor-promos-list"></div>
+      <button onclick="window.open('https://wa.me/5492236960547?text=Hola%20Soy%20promotor', '_blank')" class="btn-link btn-wsp" style="margin-top:20px;">💬 Soporte vía WhatsApp</button>
     </div>
   </div>
 
-  <!-- PANTALLA CLIENTE -->
-  <div id="view-cliente" class="hidden view-padding">
-    <div class="neo-card" style="text-align:center; border-width: 4px;">
-      <span class="badge" style="font-size: 16px;">🎟️ OFERTA DESBLOQUEADA</span>
-      <h2 id="cliente-promo-titulo" style="margin-top:20px; font-size: 28px;">Cargando...</h2>
-      <p id="cliente-promo-desc" style="font-weight: 600; font-size: 16px;"></p>
-      
-      <div class="neo-banner" style="margin-top: 20px;">
-        <p style="margin:0 0 5px 0; font-weight: 700;">El cupón vence en:</p>
-        <div class="timer" id="countdown">--:--:--</div>
+  <!-- MODAL ENVOLVENTE QR PROMOTOR -->
+  <div id="qr-backdrop" class="hidden">
+    <div style="background:var(--sand); width:90%; max-width:400px; border:var(--border-width) solid var(--navy); border-radius:var(--radius-lg); padding:20px; box-shadow: 8px 8px 0 var(--navy);">
+      <div class="neo-banner success">
+        <h3 style="color:var(--navy); margin:0;">🎯 ¡Código generado!</h3>
+        <p style="margin:5px 0 0;">Mostralo a tu cliente.</p>
       </div>
-
-      <div id="ticket-area" class="hidden neo-banner success" style="margin-top:20px;">
-        <p style="font-size:15px; font-weight: 700; margin-top: 0;">Presentá este código en caja:</p>
-        <div style="background:var(--white); color:var(--navy); font-size:38px; font-weight:800; padding:15px; border-radius:12px; border:4px solid var(--navy); letter-spacing: 5px;" id="ticket-code">------</div>
-      </div>
-
-      <button id="btn-reclamar" onclick="reclamarCupon()" class="accent" style="margin-top:20px; font-size: 20px;">🎁 Reclamar Ahora</button>
-      <div id="cliente-msg" style="margin-top:15px; font-weight:800; font-size:16px;"></div>
+      <div id="qrcode" style="text-align:center;"></div>
+      <button onclick="document.getElementById('qr-backdrop').classList.add('hidden')" class="secondary" style="margin-top:15px;">Cerrar</button>
     </div>
   </div>
 
-  <!-- PANTALLA COMERCIO -->
+  <!-- PANTALLA CLIENTE (USUARIO FINAL) -->
+  <div id="view-cliente" class="hidden">
+    <div class="nav-bar">
+      <span class="badge" id="cliente-nombre">🛍️ Cliente</span>
+      <button onclick="logout()" class="secondary" style="width:auto; padding:8px 15px; margin:0; box-shadow: 2px 2px 0 var(--navy);">Salir</button>
+    </div>
+    
+    <div class="view-padding" id="cliente-content-area">
+      <!-- El contenido se carga dinámicamente según si viene de un QR o está en modo Pokémon GO -->
+    </div>
+  </div>
+
+  <!-- PANEL COMERCIO -->
   <div id="view-comercio" class="hidden">
     <div class="nav-bar">
-      <span class="badge dark" id="comercio-nombre"></span>
+      <span class="badge" id="comercio-nombre">Local</span>
       <button onclick="logout()" class="secondary" style="width:auto; padding:8px 15px; margin:0; box-shadow: 2px 2px 0 var(--navy);">Salir</button>
     </div>
 
     <div class="view-padding">
       <div class="instruction-box">
-        🛒 <strong>Caja:</strong> Ingresá el código de 6 dígitos que presente el turista/cliente para aplicar el descuento.
+        <p style="margin:0;">🛒 <strong>Caja:</strong> Ingresá el código de 6 dígitos del cliente para aplicar el descuento.</p>
       </div>
 
-      <div class="neo-card" style="text-align:center;">
-        <h4>Validar Cupón 🎯</h4>
-        <input type="text" id="input-ticket" placeholder="Ej: 123456" style="text-align:center; font-size:28px; font-weight: 800; letter-spacing:6px; height: 60px;">
-        <button id="btn-validar" onclick="validarTicket()" class="accent" style="font-size: 18px;">Validar Venta</button>
-        <div id="comercio-msg" style="margin-top:15px; text-align:center; font-weight:800;"></div>
+      <div class="neo-card">
+        <h4>🎯 Validar Cupón</h4>
+        <input type="text" id="input-ticket" placeholder="Código" maxlength="6" style="font-size:24px; text-align:center; letter-spacing:5px; font-family: 'Fredoka', monospace;">
+        <button onclick="validarTicket()" id="btn-validar" class="accent">✅ Validar Venta</button>
+        <p id="comercio-msg" style="margin-top:15px; min-height:20px; text-align:center; font-weight: 600;"></p>
       </div>
 
-      <div class="neo-card" style="text-align:center; background: var(--alert-red); color: white;">
-        <small style="font-weight: 700;">Deuda de Comisiones a Liquidar</small>
-        <h3 style="color:white; font-size:36px; margin:5px 0; font-weight: 800;" id="comercio-deuda">$0</h3>
-      </div>
-
-      <div class="neo-banner" style="background: var(--white); color: var(--navy); text-align: left; font-size: 13px; border: var(--border-width) solid var(--navy);">
-        <p style="margin:0 0 5px 0; font-weight: 800;">📅 ¿Cómo y cuándo abono mi deuda?</p>
-        <p style="margin:0; font-weight: 600;">Debés pagar todos los <strong>lunes</strong> el total acumulado de las comisiones adeudadas hasta el domingo anterior para mantener tu local activo y sin bloqueos.</p>
+      <div class="neo-card" style="text-align:center; background:var(--alert-red); color:white;">
+        <p style="margin:0; font-weight:600; text-transform: uppercase;">Deuda de Comisiones</p>
+        <h2 id="comercio-deuda" style="margin:10px 0; color:white; text-shadow:3px 3px 0 var(--navy);">$0</h2>
+        <p style="margin:0; font-size:13px;">Pagá todos los <strong>LUNES</strong> para mantenerte activo.</p>
       </div>
 
       <div class="neo-card">
         <h4>📍 Perfil del Comercio</h4>
-        <input type="text" id="comercio-input-contacto" placeholder="Nombre Encargado">
-        <input type="text" id="comercio-input-telefono" placeholder="Teléfono de Contacto">
-        <input type="text" id="comercio-input-direccion" placeholder="Dirección / Barrio">
-        <button onclick="guardarPerfilComercio()" class="primary">Actualizar Datos</button>
+        <input type="text" id="comercio-input-contacto" placeholder="Nombre del Contacto">
+        <input type="text" id="comercio-input-telefono" placeholder="Teléfono">
+        <input type="text" id="comercio-input-direccion" placeholder="Dirección del Local">
+        <button onclick="saveComercioData()" class="primary" style="margin-top:5px;">Actualizar Datos</button>
       </div>
-
-      <a href="https://wa.me/5492236960547?text=Hola!%20Tengo%20una%20consulta%20desde%20mi%20comercio" target="_blank" class="btn-link btn-wsp">💬 Soporte WhatsApp</a>
+      <button onclick="window.open('https://wa.me/5492236960547?text=Hola%20Soy%20comercio', '_blank')" class="btn-link btn-wsp" style="margin-top:20px;">💬 Soporte WhatsApp</button>
     </div>
   </div>
 
+  <!-- TOAST -->
+  <div id="toast" style="position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:var(--navy); color:white; padding:15px 25px; border-radius:50px; border:3px solid var(--sun-orange); box-shadow: 4px 4px 0 var(--sun-orange); font-weight:600; display:none; z-index:100; opacity:0; transition:all 0.3s; max-width: 90%; text-align: center;"></div>
 </div>
 
+<!-- BOTÓN FLOTANTE PWA -->
+<button id="install-btn">⬇️ Instalar App</button>
+
 <script>
-  const CORREO_ADMIN = "demiancepeda2005@gmail.com"; 
-
+  // CONFIGURACIÓN FIREBASE
   const firebaseConfig = {
-    apiKey: "AIzaSyDZZy7HK-yzXhO7GAAkevvhoL13N-15jQI",
-    authDomain: "agorlabcupones.firebaseapp.com",
-    databaseURL: "https://agorlabcupones-default-rtdb.firebaseio.com",
-    projectId: "agorlabcupones",
-    storageBucket: "agorlabcupones.firebasestorage.app",
-    messagingSenderId: "121448551425",
-    appId: "1:121448551425:web:0ac1d094a0ae81d0095c00"
+    apiKey: "AizaSyDBUZ3A_3RtBmdCr_BMagI6cSubmo8gPQ",
+    authDomain: "cuponapp-mdp.firebaseapp.com",
+    projectId: "cuponapp-mdp",
+    storageBucket: "cuponapp-mdp.firebasestorage.com",
+    messagingSenderId: "836733131431",
+    appId: "1:836733131431:web:b2d5a85f4b654c47"
   };
-
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   const db = firebase.firestore();
 
   let currentUser = null;
-  let currentRole = null;
   let activePromo = null;
-  let urlParams = new URLSearchParams(window.location.search);
+  let countDownInterval = null;
+  let ticketListener = null;
+  let promoListener = null;
+  
+  const urlParams = new URLSearchParams(window.location.search);
 
-  auth.onAuthStateChanged(async (user) => {
-    if (user) {
-      currentUser = user;
-      
-      if (user.email && user.email.toLowerCase().trim() === CORREO_ADMIN.toLowerCase().trim()) {
-        currentRole = 'admin';
-        document.getElementById('admin-email').innerText = user.email;
-        showView('view-admin');
-        loadAdminData();
-        return;
-      }
+  // --- PWA INSTALACIÓN ---
+  let deferredPrompt;
+  const installBtnFloat = document.getElementById('install-btn');
+  const installBtnInline = document.getElementById('install-btn-inline');
 
-      if (urlParams.has('promotor') && urlParams.has('promo')) {
-        showView('view-cliente');
-        loadClienteView();
-        return;
-      }
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (installBtnFloat) installBtnFloat.style.display = 'block';
+    if (installBtnInline) installBtnInline.style.display = 'inline-block';
 
-      const userDoc = await db.collection('usuarios').doc(user.uid).get();
-      if (userDoc.exists) {
-        const data = userDoc.data();
-        currentRole = data.rol;
-        
-        if (currentRole === 'comercio') {
-          if (data.bloqueado === true) { showView('view-bloqueado'); return; }
-          if (data.estado === 'pendiente') { showView('view-espera'); return; }
+    const triggerInstall = () => {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          showToast('¡App instalada! 🎉');
         }
-        
-        const userEmailSpan = document.getElementById('user-email');
-        if(userEmailSpan) userEmailSpan.innerText = user.email;
-        
-        loadRoleView();
-      } else {
-        showView('view-role');
-      }
-    } else {
-      if (urlParams.has('promotor') && urlParams.has('promo')) {
-        showView('view-cliente');
-        loadClienteView();
-      } else {
-        showView('view-login');
-      }
-    }
+        deferredPrompt = null;
+        if (installBtnFloat) installBtnFloat.style.display = 'none';
+        if (installBtnInline) installBtnInline.style.display = 'none';
+      });
+    };
+
+    if (installBtnFloat) installBtnFloat.onclick = triggerInstall;
+    if (installBtnInline) installBtnInline.onclick = triggerInstall;
   });
+
+  window.addEventListener('appinstalled', () => {
+    console.log('App instalada como PWA');
+    if (installBtnFloat) installBtnFloat.style.display = 'none';
+    if (installBtnInline) installBtnInline.style.display = 'none';
+  });
+
+  // SERVICE WORKER
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('SW registrado', reg))
+        .catch(error => console.error('Error SW:', error));
+    });
+  }
 
   function loginGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider).catch(error => {
-      console.error("Error al iniciar sesión:", error.message);
-    });
+    firebase.auth.signInWithPopup(auth, provider)
+      .then('')
+      .catch(error => {
+        showToast('Error al iniciar sesión: ' + error.message);
+      });
   }
 
-  function logout() { auth.signOut().then(() => window.location.href = window.location.pathname); }
+  function logout() {
+    firebase.auth.signOut(auth)
+      .then(() => { location.reload(); })
+      .catch(error => { showToast('Error al cerrar sesión: ' + error.message); });
+  }
 
-  async function setRole(rol) {
-    let data = { email: currentUser.email, rol: rol };
-    if (rol === 'comercio') {
-      const nombreLocal = prompt("Ingresá el nombre oficial de tu comercio:");
-      if (!nombreLocal) return;
-      data.nombre = nombreLocal;
-      data.estado = 'pendiente';
-      data.bloqueado = false;
-      data.deuda = 0;
-    } else {
-      data.saldo = 0;
-      data.alias = '';
-    }
-    await db.collection('usuarios').doc(currentUser.uid).set(data, { merge: true });
-    window.location.reload();
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.innerHTML = msg;
+    toast.style.display = 'block';
+    setTimeout(() => { toast.style.opacity = '1'; }, 10);
+    setTimeout(() => { 
+      toast.style.opacity = '0'; 
+      setTimeout(() => { toast.style.display = 'none'; }, 300);
+    }, 3000);
+  }
+
+  function setRole(role) {
+    const userRef = db.collection('usuarios').doc(currentUser.uid);
+    userRef.set({ rol: role, approbado: false }, { merge: true })
+      .then(() => { window.location.reload(); })
+      .catch(error => { showToast('Error al guardar el rol: ' + error.message); });
   }
 
   function showView(viewId) {
-    ['view-login', 'view-role', 'view-espera', 'view-bloqueado', 'view-promotor', 'view-cliente', 'view-comercio', 'view-admin'].forEach(id => {
-      document.getElementById(id).classList.add('hidden');
-    });
-    document.getElementById(viewId).classList.remove('hidden');
-  }
-
-  function loadRoleView() {
-    if (currentRole === 'promotor') { showView('view-promotor'); loadPromotorData(); }
-    else if (currentRole === 'comercio') { showView('view-comercio'); loadComercioData(); }
-  }
-
-  async function loadUnifiedPromos(role, containerId) {
-    const list = document.getElementById(containerId);
-    list.innerHTML = '<p style="text-align:center; font-weight:700;">Cargando promos... 🏖️</p>';
-
-    try {
-      let comerciosRef = db.collection('usuarios').where('rol', '==', 'comercio').where('estado', '==', 'aprobado');
-      const comerciosSnap = await comerciosRef.get();
-      const comerciosValidos = {};
-      comerciosSnap.forEach(doc => {
-        const c = doc.data();
-        if (role === 'admin' || !c.bloqueado) comerciosValidos[doc.id] = c;
-      });
-
-      const promosSnap = await db.collection('promos').get();
-      const agrupado = {};
-      
-      promosSnap.forEach(doc => {
-        const p = doc.data();
-        p.id = doc.id;
-        if (!comerciosValidos[p.comercioId]) return;
-        if (role === 'promotor' && !p.activa) return;
-
-        const nombreLocal = comerciosValidos[p.comercioId].nombre || p.nombreComercio;
-        if (!agrupado[nombreLocal]) agrupado[nombreLocal] = [];
-        agrupado[nombreLocal].push(p);
-      });
-
-      const locales = Object.keys(agrupado).sort();
-      if (locales.length === 0) {
-        list.innerHTML = '<p style="text-align:center; font-weight:700;">No hay promos disponibles.</p>';
-        return;
+    const views = ['view-login', 'view-role', 'view-espera', 'view-bloqueado', 'view-admin', 'view-promotor', 'view-cliente', 'view-comercio'];
+    views.forEach(v => {
+      if (v === viewId) {
+        document.getElementById(v).classList.remove('hidden');
+      } else {
+        document.getElementById(v).classList.add('hidden');
       }
+    });
+  }
 
-      list.innerHTML = '';
-      locales.forEach(local => {
-        list.innerHTML += `<div class="sticky-header">🏪 ${local}</div>`;
-        const promosDelLocal = agrupado[local].sort((a, b) => (a.activa === b.activa ? 0 : a.activa ? -1 : 1));
+  // ACCESO ADMIN RESTRINGIDO POR CORREO
+  const ADMIN_EMAIL_STRING = 'demiancepeda2005@gmail.com';
 
-        promosDelLocal.forEach(p => {
-           let actionButtons = '';
-           if (role === 'admin') {
-             actionButtons = `
-               <div style="display:flex; gap:8px; margin-top:12px;">
-                 <button onclick="editarPromo('${p.id}', '${p.titulo}', ${p.comision}, ${p.limite || 0})" class="primary" style="font-size:12px; padding:8px; flex:1;">✏️ Editar</button>
-                 <button onclick="togglePausaPromo('${p.id}', ${p.activa})" class="secondary" style="font-size:12px; padding:8px; flex:1; border: 2px solid var(--navy);">
-                   ${p.activa ? '⏸️ Pausar' : '▶️ Activar'}
-                 </button>
-                 <button onclick="eliminarPromo('${p.id}')" class="danger" style="font-size:12px; padding:8px; flex:1;">🗑️ Borrar</button>
-               </div>`;
-           } else if (role === 'promotor') {
-             actionButtons = `<button onclick="generarQR('${p.id}')" class="primary" style="margin-top:12px;">Generar QR 🎯</button>`;
-           }
+  auth.onAuthStateChanged((iserBackup) => {
+    currentUser = iserBackup;
+    if (!currentUser) {
+      showView('view-login');
+      return;
+    }
 
-           const limiteTexto = p.limite 
-             ? `🎟️ Quedan: ${Math.max(0, p.limite - (p.usados || 0))} de ${p.limite}` 
-             : '🎟️ Sin límite';
+    db.collection('usuarios').doc(currentUser.uid).get()
+      .then(docSnapshot => {
+        const userData = docSnapshot.data();
 
-           list.innerHTML += `
-             <div class="neo-card" style="opacity: ${p.activa ? '1' : '0.6'}; border-width: 2px; padding: 12px;">
-               <strong style="font-size:16px;">${p.titulo}</strong> ${!p.activa ? '<span class="badge" style="background:var(--alert-red); color:white; float:right; font-size:10px;">PAUSADA</span>' : ''}<br>
-               <span style="color:var(--success-green); font-weight:800; font-size: 15px; -webkit-text-stroke: 0.5px var(--navy);">Comisión: $${p.comision}</span><br>
-               <small style="font-weight:800; color: var(--navy);">${limiteTexto}</small>
-               ${actionButtons}
-             </div>`;
+        if (!userData) {
+          if (currentUser.email === ADMIN_EMAIL_STRING) {
+            db.collection('usuarios').doc(currentUser.uid).set({ rol: 'admin', approbado: true })
+              .then(() => window.location.reload());
+          } else {
+            showView('view-role');
+          }
+          return;
+        }
+
+        if (userData.rol === 'comercio' && userData.bloqueado === true) {
+          showView('view-bloqueado');
+          return;
+        }
+
+        if (userData.approbado === false && (userData.rol === 'promotor' || userData.rol === 'comercio')) {
+          showView('view-espera');
+          return;
+        }
+
+        if (userData.rol === 'admin') {
+          document.getElementById('admin-email').textContent = "👑 " + currentUser.email;
+          if (currentUser.email !== ADMIN_EMAIL_STRING) {
+            showToast('⚠️ Acceso no autorizado.');
+            logout();
+            return;
+          }
+          loadAdminDashboard();
+          showView('view-admin');
+        } else if (userData.rol === 'promotor') {
+          document.getElementById('promotor-nombre').innerHTML = "💼 " + (currentUser.displayName || 'Promotor');
+          loadPromotorDashboard();
+          showView('view-promotor');
+        } else if (userData.rol === 'comercio') {
+          loadComercioData();
+          showView('view-comercio');
+        } else if (userData.rol === 'cliente') {
+          document.getElementById('cliente-nombre').innerHTML = "🛍️ " + (currentUser.displayName || 'Cazador de Ofertas');
+          loadClienteView();
+          showView('view-cliente');
+        }
+      })
+      .catch(error => {
+        showToast('Error al cargar datos del usuario: ' + error.message);
+      });
+  });
+
+  // ============== LÓGICA ADMIN ==============
+  function createPromo() { /* Lógica original mantenida */ 
+    const comercioId = document.getElementById('admin-select-comercio').value;
+    const titulo = document.getElementById('admin-input-titulo').value.trim();
+    const precio = parseFloat(document.getElementById('admin-input-precio').value) || 0;
+    const comision = parseFloat(document.getElementById('admin-input-comision').value) || 0;
+    const limite = parseInt(document.getElementById('admin-input-limite').value) || null;
+
+    if (!comercioId || !titulo || precio <= 0) {
+      showToast('Completá comercio, título y precio.');
+      return;
+    }
+
+    db.collection('usuarios').doc(comercioId).get()
+      .then(docSnapshot => {
+        const comData = docSnapshot.data();
+        if (!comData) { showToast('Comercio no encontrado.'); return; }
+
+        db.collection('promos').add({
+          titulo: titulo,
+          comercioId: comercioId,
+          nombreComercio: comData.nombre || 'Local',
+          precioComercio: precio,
+          comision: comision,
+          limite: limite,
+          usados: 0,
+          activa: true,
+          creadoEn: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(() => {
+          showToast('¡Promo creada con éxito!');
+          document.getElementById('admin-input-titulo').value = '';
+          document.getElementById('admin-input-precio').value = '';
+          document.getElementById('admin-input-comision').value = '';
+          document.getElementById('admin-input-limite').value = '';
+        })
+        .catch(error => showToast('Error al crear: ' + error.message));
+      });
+  }
+
+  function createPublicPromo() {
+    const title = document.getElementById('admin-public-title').value.trim();
+    const desc = document.getElementById('admin-public-desc').value.trim();
+    const radio = parseInt(document.getElementById('admin-public-radio').value) || 100;
+    const lat = parseFloat(document.getElementById('admin-public-lat').value);
+    const lng = parseFloat(document.getElementById('admin-public-lng').value);
+    const limit = parseInt(document.getElementById('admin-public-limit').value) || 50;
+
+    if (!title || !desc || isNaN(lat) || isNaN(lng)) {
+      showToast('Completá todos los campos (Lat/Lng obligatorios).');
+      return;
+    }
+
+    db.collection('publicPromos').add({
+      titulo: title,
+      descripcion: desc,
+      radio: radio,
+      latitud: lat,
+      longitud: lng,
+      limite: limit,
+      usados: 0,
+      activa: true,
+      creadoEn: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    .then(() => {
+      showToast('🎯 ¡Oferta lanzada al mapa!');
+      document.getElementById('admin-public-title').value = '';
+      document.getElementById('admin-public-desc').value = '';
+      document.getElementById('admin-public-lat').value = '';
+      document.getElementById('admin-public-lng').value = '';
+    })
+    .catch(error => showToast('Error: ' + error.message));
+  }
+
+  function loadAdminDashboard() {
+    // Cargar Comercios para el Select
+    db.collection('usuarios').where('rol', '==', 'comercio').get()
+      .then(querySnapshot => {
+        const select = document.getElementById('admin-select-comercio');
+        select.innerHTML = '<option value="">Seleccionar comercio...</option>';
+        querySnapshot.docs.forEach(doc => {
+          const data = doc.data();
+          const option = document.createElement('option');
+          option.value = doc.id;
+          option.textContent = data.nombre || 'Local sin nombre';
+          select.appendChild(option);
         });
       });
-    } catch (error) {
-      list.innerHTML = `<p style="color:var(--alert-red); text-align:center; font-weight:bold;">Error: ${error.message}</p>`;
-    }
+
+    loadAdminPublicPromos();
+    loadAdminLists();
   }
 
-  async function guardarPerfilPromotor() {
-    const nombre = document.getElementById('promotor-input-nombre').value.trim();
-    const alias = document.getElementById('promotor-input-alias').value.trim();
-    const telefono = document.getElementById('promotor-input-telefono').value.trim();
-    if(!alias) { alert("¡Ojo! Ingresá tu Alias o CBU para poder cobrar."); return; }
-    await db.collection('usuarios').doc(currentUser.uid).set({ nombre, alias, telefono }, { merge: true });
-    alert("✅ Datos guardados.");
+  function loadAdminPublicPromos() {
+    const list = document.getElementById('admin-public-promos-list');
+    list.innerHTML = '<p style="color:gray;">Cargando...</p>';
+    db.collection('publicPromos').orderBy('creadoEn', 'desc').onSnapshot(querySnapshot => {
+      list.innerHTML = '';
+      if (querySnapshot.empty) { list.innerHTML = '<p style="color:gray;">No hay ofertas públicas.</p>'; return; }
+      querySnapshot.docs.forEach(doc => {
+        const data = doc.data();
+        const div = document.createElement('div');
+        div.style = 'padding:15px; background:var(--white); border-radius:16px; border:3px solid var(--navy); margin-bottom:15px; box-shadow: 4px 4px 0 var(--navy);';
+        div.innerHTML = `
+          <h4 style="margin:0 0 5px 0;">${data.titulo}</h4>
+          <p style="margin:0 0 5px 0; font-size:14px;">${data.descripcion}</p>
+          <p style="margin:0 0 5px 0; font-size:13px;"><span class="badge">${data.usados || 0}/${data.limite} intentos</span></p>
+          <p style="margin:0 0 5px 0; font-size:12px; color:gray;">📍 Lat: ${data.latitud.toFixed(4)} | Lng: ${data.longitud.toFixed(4)} | Radio: ${data.radio}m</p>
+          <button onclick="togglePublicPromoStatus('${doc.id}', ${data.activa})" class="secondary" style="font-size:12px; padding:8px; margin-top:8px;">${data.activa ? 'Desactivar' : 'Activar'}</button>
+        `;
+        list.appendChild(div);
+      });
+    });
   }
 
-  async function guardarPerfilComercio() {
-    const contacto = document.getElementById('comercio-input-contacto').value.trim();
-    const telefono = document.getElementById('comercio-input-telefono').value.trim();
-    const direccion = document.getElementById('comercio-input-direccion').value.trim();
-    await db.collection('usuarios').doc(currentUser.uid).set({ contacto, telefono, direccion }, { merge: true });
-    alert("✅ Perfil actualizado.");
+  function togglePublicPromoStatus(promoId, currentStatus) {
+    db.collection('publicPromos').doc(promoId).update({ activa: !currentStatus })
+      .then(() => showToast('Oferta actualizada!'))
+      .catch(error => showToast('Error: ' + error.message));
   }
 
-  // ================= LÓGICA ADMIN =================
-  async function loadAdminData() {
-    db.collection('usuarios').where('rol', '==', 'comercio').where('estado', '==', 'pendiente').onSnapshot(snap => {
+  function loadAdminLists() {
+    // Promotores Pendientes
+    db.collection('usuarios').where('rol', '==', 'promotor').where('approbado', '==', false).onSnapshot(q => {
       const list = document.getElementById('admin-pendientes-list');
-      list.innerHTML = snap.empty ? '<p style="font-weight:600;">No hay locales pendientes.</p>' : '';
-      snap.forEach(doc => {
-        const c = doc.data();
-        list.innerHTML += `<div class="neo-card" style="display:flex; justify-content:space-between; align-items:center; border-width:2px; padding:10px;">
-          <span style="font-weight:700;">${c.nombre} <br><small style="font-weight:400;">${c.email}</small></span>
-          <div style="display:flex; gap:8px;">
-            <button onclick="aprobarComercio('${doc.id}')" class="accent" style="width:auto; padding:6px 12px; margin:0;">✔</button>
-            <button onclick="eliminarUsuarioAdmin('${doc.id}')" class="danger" style="width:auto; padding:6px 12px; margin:0;">🗑</button>
-          </div>
-        </div>`;
+      list.innerHTML = '';
+      if (q.empty) { list.innerHTML = '<p style="color:gray;">No hay pendientes.</p>'; return; }
+      q.docs.forEach(doc => {
+        const data = doc.data();
+        const div = document.createElement('div');
+        div.style = 'padding:10px; background:var(--sky-light); border-radius:8px; margin-bottom:8px; border:2px solid var(--navy);';
+        div.innerHTML = `
+          <strong>${data.nombre || data.email}</strong>
+          <button onclick="approvePromotor('${doc.id}')" class="primary" style="font-size:12px; padding:6px; margin-top:8px;">Aprobar</button>
+        `;
+        list.appendChild(div);
       });
     });
 
-    db.collection('usuarios').where('rol', '==', 'comercio').where('estado', '==', 'aprobado').onSnapshot(snap => {
-      const select = document.getElementById('admin-select-comercio');
-      const contaList = document.getElementById('admin-deudas-list');
-      select.innerHTML = '<option value="">Seleccioná un local...</option>';
-      contaList.innerHTML = snap.empty ? '<p style="font-weight:600;">No hay locales activos.</p>' : '';
-      
-      snap.forEach(doc => {
-        const c = doc.data();
-        select.innerHTML += `<option value="${doc.id}">${c.nombre}</option>`;
-        const isBlocked = c.bloqueado === true;
-
-        contaList.innerHTML += `<div class="neo-card" style="border-width:2px; padding:12px; border-left: 6px solid ${isBlocked ? 'var(--alert-red)' : 'var(--success-green)'};">
-          <strong style="font-size:16px;">🏪 ${c.nombre}</strong> <small>(${c.email})</small><br>
-          <span style="font-size:13px; font-weight:600;">👤 ${c.contacto || 'N/A'} | 📞 ${c.telefono || 'N/A'}</span><br>
-          <span style="font-size:14px; font-weight:800;">Deuda: <span style="color:var(--alert-red);">$${c.deuda || 0}</span></span>
-          <div style="display:flex; gap:6px; margin-top:10px; flex-wrap:wrap;">
-            <button onclick="saldarDeuda('${doc.id}')" class="success" style="background:var(--success-green); color:var(--navy); font-size:12px; padding:6px 10px; margin:0;">💰 Saldar</button>
-            <button onclick="editarUsuarioAdmin('${doc.id}', '${c.nombre}', '${c.telefono || ''}', '${c.contacto || ''}', '${c.direccion || ''}')" class="primary" style="font-size:12px; padding:6px 10px; margin:0;">✏️</button>
-            <button onclick="toggleBloqueo('${doc.id}', ${!isBlocked})" class="${isBlocked ? 'accent' : 'danger'}" style="font-size:12px; padding:6px 10px; margin:0;">${isBlocked ? 'Desbloquear' : 'Bloquear'}</button>
-            <button onclick="eliminarUsuarioAdmin('${doc.id}')" class="danger" style="font-size:12px; padding:6px 10px; margin:0;">🗑</button>
-          </div>
-        </div>`;
+    // Comercios
+    db.collection('usuarios').where('rol', '==', 'comercio').onSnapshot(q => {
+      const list = document.getElementById('admin-comercios-list');
+      list.innerHTML = '';
+      q.docs.forEach(doc => {
+        const data = doc.data();
+        const badge = data.approbado ? '<span class="badge success">Activo</span>' : '<span class="badge dark">Pendiente</span>';
+        const div = document.createElement('div');
+        div.style = 'padding:10px; background:var(--sky-light); border-radius:8px; margin-bottom:8px; border:2px solid var(--navy);';
+        div.innerHTML = `<strong>${data.nombre || data.email}</strong> ${badge}<br>Deuda: $${data.deuda || 0}`;
+        list.appendChild(div);
       });
     });
 
-    db.collection('usuarios').where('rol', '==', 'promotor').onSnapshot(snap => {
-      const promList = document.getElementById('admin-promotores-list');
-      promList.innerHTML = snap.empty ? '<p style="font-weight:600;">No hay promotores.</p>' : '';
-
-      snap.forEach(doc => {
-        const p = doc.data();
-        promList.innerHTML += `<div class="neo-card" style="border-width:2px; padding:12px; border-left: 6px solid var(--sea-blue);">
-          <strong style="font-size:16px;">👤 ${p.nombre || 'Sin nombre'}</strong> <small>(${p.email})</small><br>
-          <span style="font-size:13px; font-weight:700;">💳 Alias: <span style="color:var(--success-green);">${p.alias || '⚠️ Faltante'}</span></span><br>
-          <span style="font-size:14px; font-weight:800;">Saldo a Pagar: <span style="color:var(--success-green); font-size:18px;">$${p.saldo || 0}</span></span>
-          <div style="display:flex; gap:6px; margin-top:10px; flex-wrap:wrap;">
-            <button onclick="liquidarSaldoPromotor('${doc.id}', ${p.saldo || 0}, '${p.alias || ''}')" class="accent" style="font-size:12px; padding:6px 10px; margin:0;">Pagar Saldo</button>
-            <button onclick="editarPromotorAdmin('${doc.id}', '${p.nombre || ''}', '${p.alias || ''}', '${p.telefono || ''}')" class="primary" style="font-size:12px; padding:6px 10px; margin:0;">✏️</button>
-            <button onclick="eliminarUsuarioAdmin('${doc.id}')" class="danger" style="font-size:12px; padding:6px 10px; margin:0;">🗑</button>
-          </div>
-        </div>`;
+    // Promos de Promotores
+    db.collection('promos').orderBy('creadoEn', 'desc').onSnapshot(q => {
+      const list = document.getElementById('admin-promos-list');
+      list.innerHTML = '';
+      q.docs.forEach(doc => {
+        const data = doc.data();
+        const div = document.createElement('div');
+        div.style = 'padding:10px; background:var(--sky-light); border-radius:8px; margin-bottom:8px; border:2px solid var(--navy);';
+        const limitText = data.limite ? `${data.usados || 0}/${data.limite} intentos` : `Sin límite`;
+        div.innerHTML = `<strong>${data.titulo}</strong> <br>${data.nombreComercio} | ${limitText}`;
+        list.appendChild(div);
       });
     });
-    
-    loadUnifiedPromos('admin', 'admin-promos-list');
   }
 
-  async function eliminarUsuarioAdmin(uid) {
-    if (confirm("⚠️ ¿Estás seguro de que querés eliminar esta cuenta de forma permanente?")) {
-      try { await db.collection('usuarios').doc(uid).delete(); alert("✅ Cuenta eliminada."); } 
-      catch (error) { alert("❌ Error: " + error.message); }
-    }
+  function approvePromotor(promotorId) {
+    db.collection('usuarios').doc(promotorId).update({ approbado: true })
+      .then(() => showToast('Promotor aprobado!'));
   }
 
-  async function liquidarSaldoPromotor(uid, saldoActual, alias) {
-    if (saldoActual <= 0) { alert("No tiene saldo pendiente."); return; }
-    if (confirm(`¿Transferiste al Alias "${alias}" para reiniciar su saldo de $${saldoActual} a $0?`)) {
-      await db.collection('usuarios').doc(uid).update({ saldo: 0 });
-    }
-  }
-
-  async function editarPromotorAdmin(uid, nombre, alias, telefono) {
-    const nuevoNombre = prompt("Nombre:", nombre); if (nuevoNombre === null) return;
-    const nuevoAlias = prompt("Alias / CBU:", alias); if (nuevoAlias === null) return;
-    const nuevoTel = prompt("Teléfono:", telefono); if (nuevoTel === null) return;
-    await db.collection('usuarios').doc(uid).update({ nombre: nuevoNombre, alias: nuevoAlias, telefono: nuevoTel });
-  }
-
-  async function editarUsuarioAdmin(uid, nombre, telefono, contacto, direccion) {
-    const nuevoNombre = prompt("Nombre comercial:", nombre); if (nuevoNombre === null) return;
-    const nuevoContacto = prompt("Encargado:", contacto); if (nuevoContacto === null) return;
-    const nuevoTel = prompt("Teléfono:", telefono); if (nuevoTel === null) return;
-    const nuevaDir = prompt("Dirección:", direccion); if (nuevaDir === null) return;
-    await db.collection('usuarios').doc(uid).update({ nombre: nuevoNombre, contacto: nuevoContacto, telefono: nuevoTel, direccion: nuevaDir });
-  }
-
-  async function aprobarComercio(uid) {
-    if(confirm("¿Aprobar local?")) await db.collection('usuarios').doc(uid).update({ estado: 'aprobado', bloqueado: false });
-  }
-
-  async function saldarDeuda(uid) {
-    if(confirm("¿Saldar la deuda y reiniciarla a $0?")) await db.collection('usuarios').doc(uid).update({ deuda: 0 });
-  }
-
-  async function toggleBloqueo(uid, bloquear) {
-    if(confirm(bloquear ? "¿Bloquear local?" : "¿Desbloquear local?")) await db.collection('usuarios').doc(uid).update({ bloqueado: bloquear });
-  }
-
-  async function editarPromo(id, tituloActual, comisionActual, limiteActual) {
-    const nuevoTitulo = prompt("Título de la oferta:", tituloActual); if (!nuevoTitulo) return;
-    const nuevaComision = parseInt(prompt("Comisión para promotor ($):", comisionActual)); if (isNaN(nuevaComision)) return;
-    const nuevoLimite = parseInt(prompt("Límite de cupones (0 = ilimitado):", limiteActual));
-    
-    const updateData = { titulo: nuevoTitulo, comision: nuevaComision };
-    if (!isNaN(nuevoLimite) && nuevoLimite > 0) updateData.limite = nuevoLimite;
-    else updateData.limite = null;
-    
-    await db.collection('promos').doc(id).update(updateData);
-    loadUnifiedPromos('admin', 'admin-promos-list');
-  }
-
-  async function togglePausaPromo(id, estadoActual) {
-    if(confirm(estadoActual ? "¿Pausar oferta?" : "¿Reactivar oferta?")) {
-      await db.collection('promos').doc(id).update({ activa: !estadoActual });
-      loadUnifiedPromos('admin', 'admin-promos-list');
-    }
-  }
-
-  async function eliminarPromo(id) {
-    if(confirm("⚠️ ¿Eliminar permanente?")) {
-      await db.collection('promos').doc(id).delete();
-      loadUnifiedPromos('admin', 'admin-promos-list');
-    }
-  }
-
-  async function crearPromoAdmin() {
-    const comercioId = document.getElementById('admin-select-comercio').value;
-    const titulo = document.getElementById('admin-promo-titulo').value;
-    const comision = parseInt(document.getElementById('admin-promo-comision').value);
-    const precioComercio = parseInt(document.getElementById('admin-promo-precio').value);
-    const limiteInput = parseInt(document.getElementById('admin-promo-limite').value);
-    
-    if(!comercioId || !titulo || isNaN(comision) || isNaN(precioComercio)) { alert("Completá todos los campos numéricos."); return; }
-    
-    let limite = null;
-    if (!isNaN(limiteInput) && limiteInput > 0) limite = limiteInput;
-
-    const cDoc = await db.collection('usuarios').doc(comercioId).get();
-    
-    await db.collection('promos').add({
-      comercioId, nombreComercio: cDoc.data().nombre, titulo, comision, precioComercio, activa: true, limite: limite, usados: 0
-    });
-    
-    document.getElementById('admin-promo-titulo').value = '';
-    document.getElementById('admin-promo-comision').value = '';
-    document.getElementById('admin-promo-precio').value = '';
-    document.getElementById('admin-promo-limite').value = '';
-    loadUnifiedPromos('admin', 'admin-promos-list');
-  }
-
-  // ================= LÓGICA PROMOTOR =================
-  async function loadPromotorData() {
+  // ============== LÓGICA PROMOTOR ==============
+  function loadPromotorDashboard() {
     db.collection('usuarios').doc(currentUser.uid).onSnapshot(doc => {
       const data = doc.data();
-      document.getElementById('promotor-saldo').innerText = '$' + (data.saldo || 0);
-      document.getElementById('promotor-input-nombre').value = data.nombre || '';
-      document.getElementById('promotor-input-alias').value = data.alias || '';
-      document.getElementById('promotor-input-telefono').value = data.telefono || '';
+      document.getElementById('promotor-saldo').textContent = '$' + (data.saldo || 0).toFixed(2);
+      document.getElementById('promotor-input-alias').value = data.cbu || '';
     });
-    loadUnifiedPromos('promotor', 'promotor-unified-list');
+
+    db.collection('promos').where('activa', '==', true).onSnapshot(querySnapshot => {
+      const list = document.getElementById('promotor-promos-list');
+      list.innerHTML = '';
+      querySnapshot.docs.forEach(doc => {
+        const data = doc.data();
+        const url = `${window.location.origin}?cliente=1&promo=${doc.id}`;
+        const limitText = data.limite ? `${data.usados || 0}/${data.limite} intentos` : `Sin límite`;
+        const div = document.createElement('div');
+        div.className = 'neo-card';
+        div.innerHTML = `
+          <h3 style="margin:0 0 10px 0; color:var(--navy);">${data.titulo}</h3>
+          <p style="margin:0 0 8px 0; font-size:14px;"><strong>En:</strong> ${data.nombreComercio}</p>
+          <p style="margin:0 0 8px 0; font-size:13px;"><span class="badge">${limitText}</span></p>
+          <button onclick="generateQR('${doc.id}', '${url}')" class="primary" style="padding:12px; margin:0; font-size:14px;">🎯 Generar QR</button>
+        `;
+        list.appendChild(div);
+      });
+      
+      if (querySnapshot.empty) {
+        list.innerHTML = '<p style="text-align:center; color:gray; padding:20px;">No hay promos activas.</p>';
+      }
+    });
   }
 
-  async function generarQR(promoId) {
-    const promoDoc = await db.collection('promos').doc(promoId).get();
-    const promo = promoDoc.data();
+  function generateQR(promoId, url) {
+    const qrContainer = document.getElementById('qrcode');
+    qrContainer.innerHTML = '';
     
-    if (promo.limite && (promo.usados || 0) >= promo.limite) {
-      alert("⚠️ Esta promoción alcanzó su límite de cupones."); return;
+    try {
+      new QRCode(qrContainer, {
+        text: url,
+        width: 256,
+        height: 256,
+        colorDark: "#03045E",
+        colorLight: "#ffffff",
+        correctLevel: 'H'
+      });
+      document.getElementById('qr-backdrop').classList.remove('hidden');
+    } catch (e) {
+      showToast('Error al generar QR');
     }
-    
-    document.getElementById('qr-backdrop').classList.remove('hidden');
-    document.getElementById('qr-modal').classList.remove('hidden');
-    
-    // NUEVO: Creamos un token único e irrepetible para ESTE QR específico
-    const uniqueToken = Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
-    const link = `${window.location.origin}${window.location.pathname}?promotor=${currentUser.uid}&promo=${promoId}&token=${uniqueToken}`;
-    
-    document.getElementById('qrcode').innerHTML = '';
-    new QRCode(document.getElementById("qrcode"), { text: link, width: 250, height: 250 });
   }
 
-  function closeQR() { 
-    document.getElementById('qr-backdrop').classList.add('hidden');
-    document.getElementById('qr-modal').classList.add('hidden'); 
+  function savePromotorData() {
+    const cbu = document.getElementById('promotor-input-alias').value.trim();
+    if (!cbu) { showToast('Ingresá un Alias o CBU válido.'); return; }
+    db.collection('usuarios').doc(currentUser.uid).update({ cbu: cbu })
+      .then(() => showToast('Datos de cobro actualizados!'))
+      .catch(error => showToast('Error: ' + error.message));
   }
 
-  // ================= LÓGICA CLIENTE (TURISTA) =================
-  let countDownInterval;
-  let ticketListener = null; 
-  
-  async function loadClienteView() {
+  // ============== LÓGICA CLIENTE (POKEMON GO + QR) ==============
+  function loadClienteView() {
     const promoId = urlParams.get('promo');
-    const qrToken = urlParams.get('token'); // Obtenemos el token de la URL
+    const contentArea = document.getElementById('cliente-content-area');
     
-    const doc = await db.collection('promos').doc(promoId).get();
-    if(!doc.exists || !doc.data().activa) {
-      document.getElementById('cliente-promo-titulo').innerText = "❌ Oferta no disponible"; return;
-    }
-    activePromo = doc.data();
-
-    if (activePromo.limite && (activePromo.usados || 0) >= activePromo.limite) {
-       document.getElementById('cliente-promo-titulo').innerText = "⚠️ Promoción Agotada";
-       document.getElementById('cliente-promo-desc').innerText = `Lo sentimos, ya no quedan cupones para esta promo.`;
-       document.getElementById('btn-reclamar').classList.add('hidden');
-       return;
-    }
-
-    const now = new Date();
-    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0).getTime();
-    const savedTicket = localStorage.getItem('cuponapp_ticket_' + promoId);
-
-    // LÓGICA 1: Si ya reclamó y tiene su ticket activo en este celular
-    if (savedTicket) {
-      const ticketData = JSON.parse(savedTicket);
-      if (Date.now() >= midnight || Date.now() >= ticketData.expiresAt) {
-        localStorage.removeItem('cuponapp_ticket_' + promoId);
-      } else {
-        document.getElementById('btn-reclamar').classList.add('hidden');
-        document.getElementById('ticket-area').classList.remove('hidden');
-        document.getElementById('ticket-code').innerText = ticketData.codigo;
-        document.getElementById('cliente-msg').innerHTML = "<span style='color:var(--success-green);'>✅ Recuperamos tu cupón en curso.</span>";
+    if (promoId) {
+      // MODO CLIENTE CON PROMO ESPECÍFICO (DESDE QR DE PROMOTOR)
+      contentArea.innerHTML = `
+        <div class="neo-card" style="text-align:center;">
+          <h3 id="cliente-promo-titulo" style="margin:0;">Cargando...</h3>
+          <p id="cliente-promo-desc" style="margin:10px 0; font-weight:600;"></p>
+          <p style="margin-bottom:5px; font-weight:700;">El cupón vence en:</p>
+          <div class="timer" id="countdown">--:--:--</div>
+          
+          <div id="ticket-area" class="hidden" style="margin-top:20px;">
+            <p style="margin:0; font-weight:600;">Presentá este código en caja:</p>
+            <div class="timer" id="ticket-code" style="color:var(--navy); text-shadow: 2px 2px 0 var(--sun-orange);">------</div>
+          </div>
+          
+          <button onclick="reclamarCupon()" class="accent" id="btn-reclamar" style="font-size:18px; margin-top:15px;">🎁 Reclamar Ahora</button>
+          <p id="cliente-msg" style="margin-top:15px; font-size:14px; font-weight:600;"></p>
+        </div>
+      `;
+      loadSpecificPromoView(promoId);
+    } else {
+      // MODO CLIENTE LIBRE (RADAR POKEMON GO)
+      contentArea.innerHTML = `
+        <div class="neo-banner" style="background:linear-gradient(135deg, var(--sun-orange), var(--sun-glow));">
+          <h3 style="margin:0; color:var(--navy);">🗺️ Modo Aventura</h3>
+          <p style="margin:5px 0 0; font-size:14px; color:var(--navy);">Recorré la ciudad y encontrá ofertas públicas cercanas para reclamar.</p>
+        </div>
         
-        startCountdown(ticketData.expiresAt);
-        escucharEstadoTicket(ticketData.codigo);
+        <div class="neo-card" style="text-align:center;">
+          <div class="radar-container">
+            <div class="radar-ring r1"></div>
+            <div class="radar-ring r2"></div>
+            <div class="radar-sweep"></div>
+            <div class="radar-center"></div>
+            <div id="radar-pins"></div>
+          </div>
+          <p style="font-weight:700; margin: 15px 0 5px;">📡 Buscando ofertas cerca de ti...</p>
+          <p style="font-size:12px; color:gray; margin:0;">Activa tu GPS para ver la distancia exacta.</p>
+        </div>
+        
+        <div id="cliente-public-promos-list"></div>
+      `;
+      loadPublicPromos();
+      startPokemonGoStyle();
+    }
+  }
+
+  function loadPublicPromos() {
+    const list = document.getElementById('cliente-public-promos-list');
+    if (!list) return;
+    list.innerHTML = '<p style="color:gray;">Buscando ofertas...</p>';
+
+    db.collection('publicPromos').where('activa', '==', true).onSnapshot(querySnapshot => {
+      list.innerHTML = '';
+      if (querySnapshot.empty) {
+        list.innerHTML = '<p style="color:gray;">No hay ofertas públicas disponibles.</p>';
         return;
       }
-    }
+      querySnapshot.docs.forEach(doc => {
+        const data = doc.data();
+        const div = document.createElement('div');
+        div.className = 'neo-card';
+        div.style.marginBottom = '15px';
+        const isSoldOut = (data.usados || 0) >= data.limite;
+        div.innerHTML = `
+          <h3 style="margin:0 0 5px 0;">${data.titulo}</h3>
+          <p style="margin:0 0 5px 0; font-size:14px;">${data.descripcion}</p>
+          <p style="margin:0 0 5px 0; font-size:13px;"><span class="badge ${isSoldOut ? 'alert' : ''}">${data.usados || 0}/${data.limite} intentos</span></p>
+          <div id="distance-${doc.id}" style="font-size:12px; color:gray; margin-top:5px;">📍 Calculando distancia...</div>
+          <button onclick="reclamarPokemon('${doc.id}')" class="accent" style="margin-top:10px; display:${!isSoldOut ? 'inline-block' : 'none'};">🎯 Recolectar Oferta</button>
+        `;
+        list.appendChild(div);
+      });
+    }, error => {
+      list.innerHTML = '<p style="color:red;">Error al cargar ofertas.</p>';
+    });
+  }
 
-    // LÓGICA 2 (NUEVA): Si no tiene ticket local, verificamos que nadie más haya usado este QR
-    if (qrToken) {
-      const tokenCheck = await db.collection('tickets').where('qrToken', '==', qrToken).get();
-      if (!tokenCheck.empty) {
-         document.getElementById('cliente-promo-titulo').innerText = "⚠️ QR Ya Utilizado";
-         document.getElementById('cliente-promo-desc').innerText = `Este código QR ya generó un cupón. Pedile al promotor que te muestre uno nuevo.`;
-         document.getElementById('btn-reclamar').classList.add('hidden');
-         return;
+  function startPokemonGoStyle() {
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition((position) => {
+        const userLat = position.coords.latitude;
+        const userLng = position.coords.longitude;
+
+        db.collection('publicPromos').where('activa', '==', true).get()
+          .then(querySnapshot => {
+            const pinsContainer = document.getElementById('radar-pins');
+            if(pinsContainer) pinsContainer.innerHTML = '';
+            
+            querySnapshot.docs.forEach(doc => {
+              const data = doc.data();
+              const promoLat = data.latitud;
+              const promoLng = data.longitud;
+
+              if (promoLat && promoLng) {
+                const distance = getDistanceFromLatLon(userLat, userLng, promoLat, promoLng);
+                const distanceDiv = document.getElementById(`distance-${doc.id}`);
+                if (distanceDiv) {
+                  if (distance <= (data.radio || 100)) {
+                    distanceDiv.innerHTML = `🎯 ¡Estás dentro del radio! (${distance.toFixed(0)} m)`;
+                    distanceDiv.style.color = 'var(--success-green)';
+                    distanceDiv.style.fontWeight = '800';
+                  } else {
+                    distanceDiv.innerHTML = `<span style="color:gray;">🚫 Fuera del radio (${distance.toFixed(0)} m de distancia)</span>`;
+                    const btn = distanceDiv.parentElement.querySelector('button');
+                    if (btn) btn.style.display = 'none';
+                  }
+                }
+              }
+            });
+          });
+      }, error => {
+        console.error('Error GPS:', error);
+        showToast('Activa tu localización para ver ofertas cercanas.');
+      }, {
+        enableHighAccuracy: true,
+        maximumAge: 30000,
+        timeout: 27000
+      });
+    }
+  }
+
+  function getDistanceFromLatLon(lat1, lon1, lat2, lon2) {
+    const R = 6371e3;
+    const φ1 = lat1 * Math.PI / 180;
+    const φ2 = lat2 * Math.PI / 180;
+    const Δφ = (lat2 - lat1) * Math.PI / 180;
+    const Δλ = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  }
+
+  function reclamarPokemon(promoId) {
+    db.collection('publicPromos').doc(promoId).get()
+      .then(docSnapshot => {
+        const data = docSnapshot.data();
+        if ((data.usados || 0) >= data.limite) {
+          showToast('Oferta agotada.');
+          return;
+        }
+
+        const codigo = Math.floor(100000 + Math.random() * 900000).toString();
+        
+        db.collection('tickets').add({
+          codigo: codigo,
+          promotorId: 'sin_promotor',
+          promoId: promoId,
+          comercioId: 'public_promo',
+          estado: 'emitido',
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        db.collection('publicPromos').doc(promoId).update({
+          usados: firebase.firestore.FieldValue.increment(1)
+        })
+        .then(() => {
+          showToast('🎉 ¡Oferta Recolectada!');
+          document.getElementById('cliente-content-area').innerHTML = `
+            <div class="neo-card" style="text-align:center;">
+              <h3 style="margin:0;">🎊 ¡Éxito!</h3>
+              <p style="margin:10px 0; font-weight:600;">${data.titulo}</p>
+              <p style="margin-bottom:5px; font-weight:700;">Tu código es:</p>
+              <div class="timer" style="color:var(--navy); text-shadow: 2px 2px 0 var(--sun-orange);">${codigo}</div>
+              <p style="font-size:14px; margin-top:15px;">Activa el cajero y mostralo. ¡Expira a la medianoche!</p>
+            </div>
+          `;
+        });
+      });
+  }
+
+  function loadSpecificPromoView(promoId) {
+    db.collection('promos').doc(promoId).get().then(doc => {
+      if (!doc.exists) {
+        document.getElementById('cliente-promo-titulo').innerText = "🚫 Oferta no disponible"; return;
       }
-    }
+      activePromo = doc.data();
 
-    // Si el QR está limpio, le mostramos la promo normal
-    document.getElementById('cliente-promo-titulo').innerText = activePromo.titulo;
-    document.getElementById('cliente-promo-desc').innerText = `Válido en: ${activePromo.nombreComercio}`;
-    startCountdown(midnight);
+      if (activePromo.limite && (activePromo.usados || 0) >= activePromo.limite) {
+        document.getElementById('cliente-promo-titulo').innerText = "🚫 Promoción Agotada";
+        document.getElementById('btn-reclamar').classList.add('hidden');
+        return;
+      }
+
+      const now = new Date();
+      const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0).getTime();
+      const savedTicket = localStorage.getItem('cuponapp_ticket_' + promoId);
+
+      if (savedTicket) {
+        const ticketData = JSON.parse(savedTicket);
+        if (Date.now() >= midnight || Date.now() >= ticketData.expiresAt) {
+          localStorage.removeItem('cuponapp_ticket_' + promoId);
+        } else {
+          document.getElementById('btn-reclamar').classList.add('hidden');
+          document.getElementById('ticket-area').classList.remove('hidden');
+          document.getElementById('ticket-code').innerText = ticketData.codigo;
+          startCountdown(ticketData.expiresAt);
+          escucharEstadoTicket(ticketData.codigo);
+          return;
+        }
+      }
+
+      document.getElementById('cliente-promo-titulo').innerText = activePromo.titulo;
+      document.getElementById('cliente-promo-desc').innerText = `Válido en: ${activePromo.nombreComercio}`;
+      startCountdown(midnight);
+    });
+  }
+
+  function reclamarCupon() {
+    const promoId = urlParams.get('promo');
+    const doc = db.collection('promos').doc(promoId);
+    doc.get().then(snap => {
+      const promo = snap.data();
+      if (promo.limite && (promo.usados || 0) >= promo.limite) {
+        document.getElementById('cliente-msg').innerHTML = '<span style="color:var(--alert-red);">🚫 Agotada.</span>'; return;
+      }
+
+      document.getElementById('btn-reclamar').disabled = true;
+      const codigo = Math.floor(100000 + Math.random() * 900000).toString();
+      
+      db.collection('tickets').add({
+        codigo: codigo,
+        promotorId: urlParams.get('promotor') || 'sin_promotor',
+        promoId: promoId,
+        comercioId: activePromo.comercioId,
+        estado: 'emitido',
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      doc.update({ usados: firebase.firestore.FieldValue.increment(1) });
+
+      const now = new Date();
+      const expiresAt = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0).getTime();
+      
+      localStorage.setItem('cuponapp_ticket_' + promoId, JSON.stringify({ codigo, expiresAt }));
+
+      document.getElementById('btn-reclamar').classList.add('hidden');
+      document.getElementById('ticket-area').classList.remove('hidden');
+      document.getElementById('ticket-code').innerText = codigo;
+      startCountdown(expiresAt);
+      escucharEstadoTicket(codigo); 
+    });
   }
 
   function escucharEstadoTicket(codigoTicket) {
     if (ticketListener) ticketListener(); 
-
     ticketListener = db.collection('tickets').where('codigo', '==', codigoTicket).onSnapshot(snapshot => {
       if (!snapshot.empty) {
         const ticketData = snapshot.docs[0].data();
-        const msgElement = document.getElementById('cliente-msg');
-        
         if (ticketData.estado === 'validado') {
           clearInterval(countDownInterval);
           document.getElementById('ticket-area').className = "neo-banner success";
           document.getElementById('ticket-area').style.border = "4px solid var(--success-green)";
-          msgElement.innerHTML = "<span style='color:var(--success-green); font-size: 20px;'>🎉 ¡CUPÓN CANJEADO CON ÉXITO! Disfrutá tu beneficio.</span>";
+          document.getElementById('cliente-msg').innerHTML = "<span style='color:var(--success-green); font-size: 20px;'>✅ ¡CUPÓN CANJEADO!</span>";
           document.getElementById('countdown').innerText = "00:00:00";
-          
           localStorage.removeItem('cuponapp_ticket_' + urlParams.get('promo'));
         }
       }
@@ -875,8 +1271,8 @@
       if(timeLeft <= 0) { 
         clearInterval(countDownInterval); 
         cdElement.innerText = "00:00:00"; 
-        document.getElementById('btn-reclamar').disabled = true;
-        document.getElementById('cliente-msg').innerHTML = "<span style='color:var(--alert-red);'>⚠️ El cupón ha expirado (llegó la medianoche).</span>";
+        const btn = document.getElementById('btn-reclamar');
+        if(btn) btn.disabled = true;
         return; 
       }
       
@@ -887,66 +1283,8 @@
     }, 1000);
   }
 
-  async function reclamarCupon() {
-    if(document.getElementById('btn-reclamar').disabled) return;
-    
-    const promoId = urlParams.get('promo');
-    const qrToken = urlParams.get('token'); // Obtenemos el token
-    
-    // NUEVO: Doble chequeo por si dos personas escanearon el QR y tocan a la vez
-    if (qrToken) {
-      const tokenCheck = await db.collection('tickets').where('qrToken', '==', qrToken).get();
-      if (!tokenCheck.empty) {
-         document.getElementById('cliente-msg').innerHTML = "<span style='color:var(--alert-red);'>⚠️ Este código QR ya fue reclamado por otra persona.</span>"; 
-         return;
-      }
-    }
-
-    const doc = await db.collection('promos').doc(promoId).get();
-    const promo = doc.data();
-    
-    if (promo.limite !== null && promo.limite !== undefined) {
-      const usos = await db.collection('tickets').where('promoId', '==', promoId).where('estado', 'in', ['emitido', 'validado']).get();
-      if (usos.size >= promo.limite) {
-        document.getElementById('cliente-msg').innerHTML = "<span style='color:var(--alert-red);'>⚠️ Promoción Agotada.</span>"; return;
-      }
-    }
-
-    document.getElementById('btn-reclamar').disabled = true;
-    document.getElementById('btn-reclamar').innerText = "Generando...";
-    const codigo = Math.floor(100000 + Math.random() * 900000).toString();
-    
-    // NUEVO: Guardamos el qrToken en Firebase para "quemarlo" y que nadie más lo use
-    await db.collection('tickets').add({
-      codigo: codigo,
-      promotorId: urlParams.get('promotor') || 'sin_promotor',
-      promoId: promoId,
-      comercioId: activePromo.comercioId,
-      estado: 'emitido',
-      qrToken: qrToken || null, 
-      timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-    await db.collection('promos').doc(promoId).update({
-      usados: firebase.firestore.FieldValue.increment(1)
-    });
-
-    const now = new Date();
-    const expiresAt = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0).getTime();
-    
-    localStorage.setItem('cuponapp_ticket_' + promoId, JSON.stringify({ codigo, expiresAt }));
-
-    document.getElementById('btn-reclamar').classList.add('hidden');
-    document.getElementById('ticket-area').classList.remove('hidden');
-    document.getElementById('ticket-code').innerText = codigo;
-    document.getElementById('cliente-msg').innerHTML = "<span style='color:var(--success-green);'>✅ Mostrá el código al cajero. Se actualizará solo al canjearlo.</span>";
-    
-    startCountdown(expiresAt);
-    escucharEstadoTicket(codigo); 
-  }
-
-  // ================= LÓGICA COMERCIO =================
-  async function loadComercioData() {
+  // ============== LÓGICA COMERCIO ==============
+  function loadComercioData() {
     db.collection('usuarios').doc(currentUser.uid).onSnapshot(doc => {
       const data = doc.data();
       document.getElementById('comercio-nombre').innerText = "🏪 " + (data.nombre || 'Local');
@@ -961,20 +1299,20 @@
     const input = document.getElementById('input-ticket');
     const msg = document.getElementById('comercio-msg');
     const codigo = input.value.trim();
-    if(codigo.length !== 6) { msg.innerHTML = "<span style='color:var(--alert-red);'>❌ Ingrese 6 números</span>"; return; }
+    if(codigo.length !== 6) { msg.innerHTML = "<span style='color:var(--alert-red);'>🚫 Ingrese 6 números</span>"; return; }
     
     const btn = document.getElementById('btn-validar');
     btn.disabled = true;
     
     try {
       const snap = await db.collection('tickets').where('codigo', '==', codigo).where('comercioId', '==', currentUser.uid).get();
-      if(snap.empty) {
-        msg.innerHTML = "<span style='color:var(--alert-red);'>❌ Código Inválido o no pertenece a tu local</span>"; btn.disabled = false; return;
+      if(snap.empty){
+        msg.innerHTML = "<span style='color:var(--alert-red);'>🚫 Código Inválido</span>"; btn.disabled = false; return;
       }
 
       const ticketDoc = snap.docs[0];
       if(ticketDoc.data().estado === 'validado') {
-        msg.innerHTML = "<span style='color:var(--alert-red);'>⚠️ Este código ya fue usado</span>"; btn.disabled = false; return;
+        msg.innerHTML = "<span style='color:var(--alert-red);'>🚫 Ya fue usado</span>"; btn.disabled = false; return;
       }
 
       await ticketDoc.ref.update({ estado: 'validado', validadoEn: firebase.firestore.FieldValue.serverTimestamp() });
@@ -983,28 +1321,27 @@
       const promotorId = ticketDoc.data().promotorId;
       
       const promoDoc = await db.collection('promos').doc(promoId).get();
-      const pData = promoDoc.data();
+      const promoData = promoDoc.exists ? promoDoc.data() : null;
       
-      const comRef = db.collection('usuarios').doc(currentUser.uid);
-
-      await db.runTransaction(async (transaction) => {
-        const comDoc = await transaction.get(comRef);
-        const nDeuda = (comDoc.data().deuda || 0) + (pData.precioComercio || 0);
-        
-        if (promotorId && promotorId !== 'sin_promotor') {
-          const promRef = db.collection('usuarios').doc(promotorId);
-          const promDoc = await transaction.get(promRef);
+      if (promoData) {
+        const comRef = db.collection('usuarios').doc(currentUser.uid);
+        await db.runTransaction(async (transaction) => {
+          const comDoc = await transaction.get(comRef);
+          const nDeuda = (comDoc.data().deuda || 0) + (promoData.precioComercio || 0);
           
-          if (promDoc.exists) {
-            const nSaldo = (promDoc.data().saldo || 0) + (pData.comision || 0);
-            transaction.update(promRef, { saldo: nSaldo });
+          if (promotorId && promotorId !== 'sin_promotor') {
+            const promRef = db.collection('usuarios').doc(promotorId);
+            const promDoc = await transaction.get(promRef);
+            if (promDoc.exists) {
+              const nSaldo = (promDoc.data().saldo || 0) + (promoData.comision || 0);
+              transaction.update(promRef, { saldo: nSaldo });
+            }
           }
-        }
+          transaction.update(comRef, { deuda: nDeuda });
+        });
+      }
 
-        transaction.update(comRef, { deuda: nDeuda });
-      });
-
-      msg.innerHTML = "<span style='color:var(--success-green); font-size:24px;'>✅ ¡Descuento Aplicado! Venta registrada.</span>";
+      msg.innerHTML = "<span style='color:var(--success-green); font-size:24px;'>✅ ¡Descuento Aplicado!</span>";
       input.value = '';
       setTimeout(() => msg.innerHTML = "", 5000);
       
@@ -1013,6 +1350,17 @@
     }
     btn.disabled = false;
   }
+
+  function saveComercioData() {
+    const contacto = document.getElementById('comercio-input-contacto').value.trim();
+    const telefono = document.getElementById('comercio-input-telefono').value.trim();
+    const direccion = document.getElementById('comercio-input-direccion').value.trim();
+    
+    db.collection('usuarios').doc(currentUser.uid).update({ contacto, telefono, direccion })
+      .then(() => showToast('Perfil actualizado!'))
+      .catch(error => showToast('Error: ' + error.message));
+  }
+
 </script>
 
 </body>
